@@ -27,27 +27,28 @@ SECRET_KEY = environ.get('SECRET_KEY', '_5@i3yzg%99ootbe@r7w8z-o_0pa(1d*ukphx&5p
 DEBUG = environ.get('DEBUG', 'ON') == 'ON'
 
 AIRBRAKE = dict(
-    project_id=environ.get("AIRBRAKE_PROJECT_ID"),
-    project_key=environ.get("AIRBRAKE_API_KEY"),
+    project_id=environ.get("AIRBRAKE_PROJECT_ID", ""),
+    project_key=environ.get("AIRBRAKE_API_KEY", ""),
 )
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'airbrake': {
-            'level': 'ERROR',
-            'class': 'pybrake.LoggingHandler',
+if DEBUG == False:
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'airbrake': {
+                'level': 'ERROR',
+                'class': 'pybrake.LoggingHandler',
+            },
         },
-    },
-    'loggers': {
-        'app': {
-            'handlers': ['airbrake'],
-            'level': 'ERROR',
-            'propagate': True,
+        'loggers': {
+            'app': {
+                'handlers': ['airbrake'],
+                'level': 'ERROR',
+                'propagate': True,
+            },
         },
-    },
-}
+    }
 
 ALLOWED_HOSTS = [
     "onhyp.com",
