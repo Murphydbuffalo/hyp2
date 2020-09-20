@@ -25,7 +25,9 @@ SECRET_KEY = '_5@i3yzg%99ootbe@r7w8z-o_0pa(1d*ukphx&5pogw27_)ba('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "onhyp.com",
+]
 
 
 # Application definition
