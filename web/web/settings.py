@@ -28,6 +28,8 @@ DEBUG = environ.get('DEBUG', 'ON') == 'ON'
 
 ALLOWED_HOSTS = [
     "onhyp.com",
+    "localhost",
+    "127.0.0.1",
 ]
 
 
