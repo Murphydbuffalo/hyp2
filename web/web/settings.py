@@ -26,6 +26,29 @@ SECRET_KEY = environ.get('SECRET_KEY', '_5@i3yzg%99ootbe@r7w8z-o_0pa(1d*ukphx&5p
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = environ.get('DEBUG', 'ON') == 'ON'
 
+AIRBRAKE = dict(
+    project_id=environ.get("AIRBRAKE_PROJECT_ID"),
+    project_key=environ.get("AIRBRAKE_API_KEY"),
+)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'airbrake': {
+            'level': 'ERROR',
+            'class': 'pybrake.LoggingHandler',
+        },
+    },
+    'loggers': {
+        'app': {
+            'handlers': ['airbrake'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}
+
 ALLOWED_HOSTS = [
     "onhyp.com",
     "localhost",
@@ -55,6 +78,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'pybrake.django.AirbrakeMiddleware',
 ]
 
 ROOT_URLCONF = 'web.urls'
