@@ -1,8 +1,12 @@
+accumulation-tree==0.6.2
 asgiref==3.2.10
 Django==3.1.1
 gunicorn==20.0.4
 numpy==1.19.1
 psycopg2==2.8.5
+pybrake==0.4.6
 pytz==2020.1
+pyudorandom==1.0.0
 sqlparse==0.3.1
+tdigest==0.5.2.2
 whitenoise==5.2.0
