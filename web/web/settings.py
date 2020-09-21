@@ -31,8 +31,10 @@ AIRBRAKE = dict(
 )
 
 if DEBUG == False:
+    SECURE_SSL_REDIRECT=True
     SESSION_COOKIE_SECURE=True
     CSRF_COOKIE_SECURE=True
+    SECURE_HSTS_SECONDS=60
     LOGGING = {
         'version': 1,
         'disable_existing_loggers': False,
@@ -116,7 +118,6 @@ DATABASES = {
         'NAME': environ.get('DB_NAME', 'hyp2'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
