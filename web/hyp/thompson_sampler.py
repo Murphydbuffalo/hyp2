@@ -1,13 +1,11 @@
-from django.db.models import Count, Q
-from hyp.models import Variant
 from types import SimpleNamespace
 import numpy as np
 
 class ThompsonSampler:
-    def __init__(self, experiment_id):
-        self.experiment_id = experiment_id
+    def __init__(self, variants):
+        self.variants = variants
 
-    def variant(self):
+    def winner(self):
         winner = max(
             self.samples(),
             key=lambda dict:dict["sampled_parameter"]
@@ -18,35 +16,17 @@ class ThompsonSampler:
         return SimpleNamespace(**winner)
 
     def samples(self):
-        interactions = self.interactions()
-        conversions = self.conversions()
-
         samples = []
-        for i in range(len(interactions)):
-            alpha = conversions[i]["num_conversions"] + 1
-            beta = interactions[i]["num_interactions"] - conversions[i]["num_conversions"] + 1
+        for i in range(len(self.variants)):
+            variant = variants[i]
+            alpha = variant["num_conversions"] + 1
+            beta = variant["num_interactions"] - variant["num_conversions"] + 1
 
             result = {
-                "variant": interactions[i],
+                "variant": variant,
                 "sampled_parameter": np.random.beta(alpha, beta)
             }
 
             samples.append(result)
 
         return samples
-
-    def interactions(self):
-        return Variant.objects.values("id", "name").filter(
-            experiment_id=self.experiment_id
-        ).annotate(
-            num_interactions=Count("interaction")
-        )
-
-    def conversions(self):
-        return Variant.objects.values("id", "name").filter(
-            experiment_id=self.experiment_id
-        ).annotate(
-            num_conversions=Count(
-                "interaction", filter=Q(interaction__converted=True)
-            )
-        )
