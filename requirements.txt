@@ -2,7 +2,7 @@ accumulation-tree==0.6.2
 asgiref==3.2.10
 Django==3.1.1
 gunicorn==20.0.4
-numpy==1.19.1
+numpy==1.19.4
 psycopg2==2.8.5
 pybrake==0.4.6
 pytz==2020.1

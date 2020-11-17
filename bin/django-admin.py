@@ -1,4 +1,4 @@
-#!/Users/danmurphy/Code/hyp2/bin/python3
+#!/Users/danmurphy/Code/hyp2/bin/python
 # When the django-admin.py deprecation ends, remove this script.
 import warnings
 
