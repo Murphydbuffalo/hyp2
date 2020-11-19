@@ -18,7 +18,7 @@ class ThompsonSampler:
     def samples(self):
         samples = []
         for i in range(len(self.variants)):
-            variant = variants[i]
+            variant = self.variants[i]
             alpha = variant["num_conversions"] + 1
             beta = variant["num_interactions"] - variant["num_conversions"] + 1
 
