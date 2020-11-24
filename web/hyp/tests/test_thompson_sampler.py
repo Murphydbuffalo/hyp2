@@ -5,6 +5,8 @@ from hyp.thompson_sampler import ThompsonSampler
 
 class TestThompsonSampler(TestCase):
     def getVariantsWithConversions(self):
+        # TODO: break this into a service class so that the test and application
+        # code stay in sync
         return Variant.objects.values("id", "name").annotate(
             num_interactions=Count("interaction"),
             num_conversions=Count(
@@ -33,8 +35,6 @@ class TestThompsonSampler(TestCase):
         self.winner_counts[self.var2.id] = 0
         self.winner_counts[self.var3.id] = 0
 
-    # More nuanced, but can also test that early on, after only a few
-    # iterations, even suboptimal variants are getting at least some traffic
     def test_no_conversions(self):
         variants = self.getVariantsWithConversions()
 
@@ -260,8 +260,6 @@ class TestThompsonSampler(TestCase):
             sampler = ThompsonSampler(variants)
             self.winner_counts[sampler.winner().id] += 1
 
-        print("Winner counts:")
-        print(str(self.winner_counts))
         self.assertGreater(
             self.winner_counts[self.var1.id],
             self.winner_counts[self.var2.id],
