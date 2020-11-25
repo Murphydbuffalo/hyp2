@@ -95,9 +95,15 @@ class Interaction(models.Model):
     variant = models.ForeignKey(Variant, on_delete=models.CASCADE)
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
 
-    # TODO: this needs a unique constraint and index
-    # only one interaction for a given experiment/participant combination
     models.Index(fields=["experiment_id", "participant_id"])
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                name="uniq_interaction_per_experiment_and_participant",
+                fields=["experiment_id", "participant_id"]
+            )
+        ]
 
     def __str__(self):
         return f'Experiment {self.experiment_id}, Variant {self.variant_id}, Participant {self.participant_id}. Converted? {self.converted}'

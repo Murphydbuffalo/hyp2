@@ -4,6 +4,16 @@ from hyp.models import Customer, Experiment, Variant, Interaction
 from hyp.thompson_sampler import ThompsonSampler
 
 class TestThompsonSampler(TestCase):
+    def createInteraction(self, variant, converted):
+        self.latest_participant_id += 1
+
+        Interaction(
+            variant=variant,
+            experiment=self.exp,
+            participant_id=self.latest_participant_id,
+            converted=converted
+        ).save()
+
     def getVariantsWithConversions(self):
         # TODO: break this into a service class so that the test and application
         # code stay in sync
@@ -17,6 +27,8 @@ class TestThompsonSampler(TestCase):
     def setUp(self):
         bonusly = Customer(name="Bonusly")
         bonusly.save()
+
+        self.latest_participant_id = 0
 
         self.exp = Experiment(name="Trial lengths", customer=bonusly)
         self.exp.save()
@@ -63,41 +75,14 @@ class TestThompsonSampler(TestCase):
 
     def test_equal_number_of_conversions(self):
         for i in range(50):
-            Interaction(
-                variant=self.var1,
-                experiment=self.exp,
-                participant_id=1
-            ).save()
-            Interaction(
-                variant=self.var2,
-                experiment=self.exp,
-                participant_id=1
-            ).save()
-            Interaction(
-                variant=self.var3,
-                experiment=self.exp,
-                participant_id=1
-            ).save()
+            self.createInteraction(self.var1, converted=False)
+            self.createInteraction(self.var2, converted=False)
+            self.createInteraction(self.var3, converted=False)
 
         for i in range(50):
-            Interaction(
-                variant=self.var1,
-                experiment=self.exp,
-                participant_id=1,
-                converted=True
-            ).save()
-            Interaction(
-                variant=self.var2,
-                experiment=self.exp,
-                participant_id=1,
-                converted=True
-            ).save()
-            Interaction(
-                variant=self.var3,
-                experiment=self.exp,
-                participant_id=1,
-                converted=True
-            ).save()
+            self.createInteraction(self.var1, converted=True)
+            self.createInteraction(self.var2, converted=True)
+            self.createInteraction(self.var3, converted=True)
 
         variants = self.getVariantsWithConversions()
 
@@ -131,45 +116,18 @@ class TestThompsonSampler(TestCase):
         # remaining, and so sampling from them will almost always return something
         # quite close to the true conversion rate.
         for i in range(50):
-            Interaction(
-                variant=self.var1,
-                experiment=self.exp,
-                participant_id=1
-            ).save()
+            self.createInteraction(self.var1, converted=False)
 
         for i in range(50):
-            Interaction(
-                variant=self.var1,
-                experiment=self.exp,
-                participant_id=1,
-                converted=True
-            ).save()
+            self.createInteraction(self.var1, converted=True)
 
         for i in range(75):
-            Interaction(
-                variant=self.var2,
-                experiment=self.exp,
-                participant_id=1
-            ).save()
-            Interaction(
-                variant=self.var3,
-                experiment=self.exp,
-                participant_id=1
-            ).save()
+            self.createInteraction(self.var2, converted=False)
+            self.createInteraction(self.var3, converted=False)
 
         for i in range(25):
-            Interaction(
-                variant=self.var2,
-                experiment=self.exp,
-                participant_id=1,
-                converted=True
-            ).save()
-            Interaction(
-                variant=self.var3,
-                experiment=self.exp,
-                participant_id=1,
-                converted=True
-            ).save()
+            self.createInteraction(self.var2, converted=True)
+            self.createInteraction(self.var3, converted=True)
 
         variants = self.getVariantsWithConversions()
 
@@ -213,45 +171,18 @@ class TestThompsonSampler(TestCase):
         # remaining, and so sampling from them will almost always return something
         # quite close to the true conversion rate.
         for i in range(10):
-            Interaction(
-                variant=self.var1,
-                experiment=self.exp,
-                participant_id=1
-            ).save()
+            self.createInteraction(self.var1, converted=False)
 
         for i in range(10):
-            Interaction(
-                variant=self.var1,
-                experiment=self.exp,
-                participant_id=1,
-                converted=True
-            ).save()
+            self.createInteraction(self.var1, converted=True)
 
         for i in range(15):
-            Interaction(
-                variant=self.var2,
-                experiment=self.exp,
-                participant_id=1
-            ).save()
-            Interaction(
-                variant=self.var3,
-                experiment=self.exp,
-                participant_id=1
-            ).save()
+            self.createInteraction(self.var2, converted=False)
+            self.createInteraction(self.var3, converted=False)
 
         for i in range(5):
-            Interaction(
-                variant=self.var2,
-                experiment=self.exp,
-                participant_id=1,
-                converted=True
-            ).save()
-            Interaction(
-                variant=self.var3,
-                experiment=self.exp,
-                participant_id=1,
-                converted=True
-            ).save()
+            self.createInteraction(self.var2, converted=True)
+            self.createInteraction(self.var3, converted=True)
 
         variants = self.getVariantsWithConversions()
 
