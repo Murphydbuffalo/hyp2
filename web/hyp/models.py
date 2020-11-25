@@ -11,8 +11,7 @@ class Customer(models.Model):
     def __str__(self):
         return self.name
 
-# TODO: do we want to track `last_used_at`?
-# Do we want to go even further and log an event for every API request?
+# TODO: Do we want to go even further and log an event for every API request?
 # When it was made, what the IP was, what the API key was? Why? Slower, more
 # code, less privacy for the user...
 # You'd want that as an audit log, so users can review how their tokens are being
