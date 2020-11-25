@@ -21,7 +21,8 @@ class Customer(models.Model):
 # TODO: We probably want to associate tokens with users at some point.
 # Right now a Customer is the only entity, but it seems likely customers will
 # want separate logins and permissions for various users (eg user management,
-# vs experiment management, vs only being able to manage a specific experiment),
+# vs experiment management, vs only being able to manage a specific experiment
+# vs having read-only access),
 # and we'd need a user model to support that case. Maybe simplest to just go
 # forward with only a Customer entity at this point?
 # They should be able to revoke/cancel their tokens, and once we introduce
@@ -43,15 +44,10 @@ class ApiKey(models.Model):
     access_token = models.CharField(max_length=200, default=uuid1)
     name = models.CharField(max_length=200, unique=True)
     production = models.BooleanField(default=False)
-    # TODO: at some point might want to support read-only keys?
-    # Don't need to worry about it right now, easy to migrate.
     created_at = models.DateTimeField('created at', auto_now_add=True)
     updated_at = models.DateTimeField('updated at', auto_now=True)
-    # TODO: need to add blank=True to skip model-level validations
-    # How to omit this field from the admin forms?
-    # Does Django admin come with soft deletion?
-    deleted_at = models.DateTimeField('deleted at', null=True)
-    # last_used_at = models.DateTimeField('deleted at', null=True, blank=True)
+    deleted_at = models.DateTimeField('deleted at', null=True, blank=True)
+    last_used_at = models.DateTimeField('deleted at', null=True, blank=True)
 
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
 
