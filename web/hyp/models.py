@@ -71,13 +71,19 @@ class Experiment(models.Model):
         return self.name
 
 class Variant(models.Model):
-    # TODO: this needs a unique constraint and index scoped to Experiment
-    # only one variant with a given name for each experiment
     name = models.CharField(max_length=200)
     created_at = models.DateTimeField('created at', auto_now_add=True)
     updated_at = models.DateTimeField('updated at', auto_now=True)
 
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                name="uniq_variant_name_per_experiment",
+                fields=["experiment_id", "name"]
+            )
+        ]
 
     def __str__(self):
         return self.name
