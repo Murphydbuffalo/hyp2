@@ -1,4 +1,3 @@
-from types import SimpleNamespace
 import numpy as np
 
 # TODO: allow user-defined priors to get to a low level of uncertainty faster?
@@ -9,14 +8,10 @@ class ThompsonSampler:
         self.variants = variants
 
     def winner(self):
-        winner = max(
+        return max(
             self.samples(),
             key=lambda dict:dict["sampled_parameter"]
         )["variant"]
-
-        # Convert dictionary to object so we can use dot notation to access its
-        # properties
-        return SimpleNamespace(**winner)
 
     def samples(self):
         samples = []

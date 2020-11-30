@@ -53,7 +53,7 @@ class TestThompsonSampler(TestCase):
         n = 1000
         for i in range(n):
             sampler = ThompsonSampler(variants)
-            self.winner_counts[sampler.winner().id] += 1
+            self.winner_counts[sampler.winner()["id"]] += 1
 
         self.assertAlmostEqual(
             self.winner_counts[self.var1.id],
@@ -89,7 +89,7 @@ class TestThompsonSampler(TestCase):
         n = 1000
         for i in range(n):
             sampler = ThompsonSampler(variants)
-            self.winner_counts[sampler.winner().id] += 1
+            self.winner_counts[sampler.winner()["id"]] += 1
 
         self.assertAlmostEqual(
             self.winner_counts[self.var1.id],
@@ -134,7 +134,7 @@ class TestThompsonSampler(TestCase):
         n = 1000
         for i in range(n):
             sampler = ThompsonSampler(variants)
-            self.winner_counts[sampler.winner().id] += 1
+            self.winner_counts[sampler.winner()["id"]] += 1
 
         self.assertGreater(
             self.winner_counts[self.var1.id],
@@ -189,7 +189,7 @@ class TestThompsonSampler(TestCase):
         n = 1000
         for i in range(n):
             sampler = ThompsonSampler(variants)
-            self.winner_counts[sampler.winner().id] += 1
+            self.winner_counts[sampler.winner()["id"]] += 1
 
         self.assertGreater(
             self.winner_counts[self.var1.id],

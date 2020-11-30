@@ -1,8 +1,11 @@
+import json
+from http import HTTPStatus
 from django.core import serializers
 from django.http import HttpResponse, Http404
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 from django.db.models import Count, Q
-from hyp.models import Experiment, Variant
+from hyp.models import Experiment, Variant, Interaction
 from hyp.thompson_sampler import ThompsonSampler
 
 # TODO: multiple view files! Multiple model files if possible
@@ -33,20 +36,28 @@ def create(request, params):
 # lift because this endpoint needs to be fast...
 #
 # TODO: namespace under... api/v1?
+@csrf_exempt
 def variant_assignment(request, participant_id, experiment_id):
+    if request.method != "POST":
+        return HttpResponse(
+            content_type="application/json",
+            status=HTTPStatus.METHOD_NOT_ALLOWED
+        )
+
+    # TODO: handle 404 when no variants for the given experiment ID
     variant = Variant.objects.filter(
         # something like:
         # customer_token=request.headers["X-HYP-TOKEN"],
         # or
         # experiment__customer_api_token=request.headers["X-HYP-TOKEN"],
         # let's see if there's a big performance diff between the two
-        interaction__experiment_id=experiment_id,
+        experiment_id=experiment_id,
         interaction__participant_id=participant_id,
     ).values("id", "name").first()
 
     if variant == None:
         variants = Variant.objects.values("id", "name").filter(
-            experiment_id=self.experiment_id
+            experiment_id=experiment_id
         ).annotate(
             num_interactions=Count("interaction"),
             num_conversions=Count(
@@ -54,15 +65,16 @@ def variant_assignment(request, participant_id, experiment_id):
             )
         )
 
-        variant = ThompsonSampler(variants).winner
+        variant = ThompsonSampler(variants).winner()
         # TODO: optionally mark Interaction as converted?
+
         interaction = Interaction(
-            variant=variant,
-            experiment=variant.experiment,
-            participant=participant_id
+            variant_id=variant["id"],
+            experiment_id=experiment_id,
+            participant_id=participant_id
         ).save()
 
-    response = json.dumps({ id: variant.id, name: variant.name })
+    response = json.dumps({ "id": variant["id"], "name": variant["name"] })
 
     return HttpResponse(response, content_type="application/json")
 
