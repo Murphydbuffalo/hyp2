@@ -61,6 +61,7 @@ ALLOWED_HOSTS = [
 
 # Application definition
 
+# TODO: separate apps for API vs dashboard?
 INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
     'hyp.apps.HypConfig',

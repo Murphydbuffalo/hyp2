@@ -2,6 +2,9 @@ from django.urls import path
 
 from . import views
 
+# TODO: look into django REST framework
+# might save us a lot of work with authorization, building the API?
+# https://www.django-rest-framework.org/
 urlpatterns = [
     path('', views.index, name='index'),
     path('experiments', views.index, name='index'),

@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+# TODO: separate apps for API vs dashboard?
 urlpatterns = [
     path('', include('hyp.urls')),
     path('admin/', admin.site.urls),
