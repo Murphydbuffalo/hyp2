@@ -82,8 +82,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
-    'pybrake.django.AirbrakeMiddleware',
 ]
+
+if DEBUG == False:
+    MIDDLEWARE.append('pybrake.django.AirbrakeMiddleware')
 
 ROOT_URLCONF = 'web.urls'
 
