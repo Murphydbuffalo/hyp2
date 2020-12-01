@@ -46,18 +46,14 @@ def variant_assignment(request, participant_id, experiment_id):
 
     # TODO: handle 404 when no variants for the given experiment ID
     variant = Variant.objects.filter(
-        # something like:
-        # customer_token=request.headers["X-HYP-TOKEN"],
-        # or
-        # experiment__customer_api_token=request.headers["X-HYP-TOKEN"],
-        # let's see if there's a big performance diff between the two
+        experiment__customer__apikey__access_token=request.headers["X-HYP-TOKEN"],
         experiment_id=experiment_id,
         interaction__participant_id=participant_id,
     ).values("id", "name").first()
 
     if variant == None:
         variants = Variant.objects.values("id", "name").filter(
-            experiment_id=experiment_id
+            experiment__customer__apikey__access_token=request.headers["X-HYP-TOKEN"],
         ).annotate(
             num_interactions=Count("interaction"),
             num_conversions=Count(
