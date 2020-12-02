@@ -83,11 +83,14 @@ def conversion(request, participant_id, experiment_id):
             status=HTTPStatus.METHOD_NOT_ALLOWED
         )
 
-    interaction = Interaction.objects.filter(
+    num_rows_updated = Interaction.objects.filter(
         experiment__customer__apikey__access_token=request.headers["X-HYP-TOKEN"],
         experiment_id=experiment_id,
         participant_id=participant_id
     ).update(converted=True)
+
+    if num_rows_updated == 0:
+        raise Http404("No interaction matches the given query.")
 
     # TODO: let's get all of our JSON responses to adhere to some interface
     # JSON should be an object (I think), so something like:
