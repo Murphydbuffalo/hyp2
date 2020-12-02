@@ -3,7 +3,7 @@ from http import HTTPStatus
 from django.core import serializers
 from django.http import HttpResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render
+from django.shortcuts import render, get_list_or_404, get_object_or_404
 from django.db.models import Count, Q
 from hyp.models import Experiment, Variant, Interaction
 from hyp.thompson_sampler import ThompsonSampler
@@ -18,11 +18,7 @@ def index(request):
     return HttpResponse(json, content_type="application/json")
 
 def show(request, experiment_id):
-    try:
-        experiment = Experiment.objects.get(id = experiment_id)
-    # TODO: there's a built-in Django shortcut function for this...
-    except Experiment.DoesNotExist:
-        raise Http404("We couldn't find that experiment 😱")
+    get_object_or_404(Experiment, id=experiment_id)
 
     return HttpResponse(f'{experiment.name} ({experiment.id})')
 
@@ -44,7 +40,6 @@ def variant_assignment(request, participant_id, experiment_id):
             status=HTTPStatus.METHOD_NOT_ALLOWED
         )
 
-    # TODO: handle 404 when no variants for the given experiment ID
     variant = Variant.objects.filter(
         experiment__customer__apikey__access_token=request.headers["X-HYP-TOKEN"],
         experiment_id=experiment_id,
@@ -52,9 +47,15 @@ def variant_assignment(request, participant_id, experiment_id):
     ).values("id", "name").first()
 
     if variant == None:
-        variants = Variant.objects.values("id", "name").filter(
+        # TODO: custom 404 and 500 handlers for API endpoints
+        # (as opposed to non-api, HTML serving endpoints)
+        # https://stackoverflow.com/questions/17662928/django-creating-a-custom-500-404-error-page
+        variants = get_list_or_404(
+            Variant,
             experiment__customer__apikey__access_token=request.headers["X-HYP-TOKEN"],
             experiment_id=experiment_id,
+        ).values(
+            "id", "name"
         ).annotate(
             num_interactions=Count("interaction"),
             num_conversions=Count(
