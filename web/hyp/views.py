@@ -62,27 +62,31 @@ def variant_assignment(request, participant_id, experiment_id):
         )
 
         variant = ThompsonSampler(variants).winner()
-        # TODO: optionally mark Interaction as converted?
 
         interaction = Interaction(
             variant_id=variant["id"],
             experiment_id=experiment_id,
-            participant_id=participant_id
+            participant_id=participant_id,
         ).save()
 
     response = json.dumps({ "id": variant["id"], "name": variant["name"] })
 
     return HttpResponse(response, content_type="application/json")
 
-def record_conversion(request, participant_id, experiment_id):
-    interaction = Interaction.objects.get(
+@csrf_exempt
+def conversion(request, participant_id, experiment_id):
+    print(request.method)
+    if request.method != "PUT" and request.method != "PATCH":
+        return HttpResponse(
+            content_type="application/json",
+            status=HTTPStatus.METHOD_NOT_ALLOWED
+        )
+
+    interaction = Interaction.objects.filter(
+        experiment__customer__apikey__access_token=request.headers["X-HYP-TOKEN"],
         experiment_id=experiment_id,
         participant_id=participant_id
-    )
-    # TODO: faster to update directly, rather than query and then update?
-    # How do we do that in Django?
-    interaction.converted = True
-    interaction.save() # TODO: (here and everywhere), handle django.core.exceptions.ValidationError s
+    ).update(converted=True)
 
     # TODO: let's get all of our JSON responses to adhere to some interface
     # JSON should be an object (I think), so something like:
