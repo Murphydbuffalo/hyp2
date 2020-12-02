@@ -54,6 +54,7 @@ def variant_assignment(request, participant_id, experiment_id):
     if variant == None:
         variants = Variant.objects.values("id", "name").filter(
             experiment__customer__apikey__access_token=request.headers["X-HYP-TOKEN"],
+            experiment_id=experiment_id,
         ).annotate(
             num_interactions=Count("interaction"),
             num_conversions=Count(
