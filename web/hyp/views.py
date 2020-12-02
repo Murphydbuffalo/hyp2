@@ -32,6 +32,7 @@ def create(request, params):
 # lift because this endpoint needs to be fast...
 #
 # TODO: namespace under... api/v1?
+# TODO: strip out PRODUCTION/SANDBOX prefix from access tokens
 @csrf_exempt
 def variant_assignment(request, participant_id, experiment_id):
     if request.method != "POST":
