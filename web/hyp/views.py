@@ -41,6 +41,13 @@ def variant_assignment(request, participant_id, experiment_id):
             status=HTTPStatus.METHOD_NOT_ALLOWED
         )
 
+    if "X-HYP-TOKEN" not in request.headers.keys():
+        return HttpResponse(
+            "No access token provided",
+            content_type="application/json",
+            status=HTTPStatus.UNAUTHORIZED
+        )
+
     variant = Variant.objects.filter(
         experiment__customer__apikey__access_token=request.headers["X-HYP-TOKEN"],
         experiment_id=experiment_id,
@@ -52,15 +59,16 @@ def variant_assignment(request, participant_id, experiment_id):
         # (as opposed to non-api, HTML serving endpoints)
         # https://stackoverflow.com/questions/17662928/django-creating-a-custom-500-404-error-page
         variants = get_list_or_404(
-            Variant,
-            experiment__customer__apikey__access_token=request.headers["X-HYP-TOKEN"],
-            experiment_id=experiment_id,
-        ).values(
-            "id", "name"
-        ).annotate(
-            num_interactions=Count("interaction"),
-            num_conversions=Count(
-                "interaction", filter=Q(interaction__converted=True)
+            Variant.objects.filter(
+                experiment__customer__apikey__access_token=request.headers["X-HYP-TOKEN"],
+                experiment_id=experiment_id,
+            ).values(
+                "id", "name"
+            ).annotate(
+                num_interactions=Count("interaction"),
+                num_conversions=Count(
+                    "interaction", filter=Q(interaction__converted=True)
+                )
             )
         )
 
