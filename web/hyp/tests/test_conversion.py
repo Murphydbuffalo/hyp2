@@ -51,8 +51,15 @@ class TestConversion(TestCase):
 
         self.assertEqual(response.status_code, 404)
 
-    def test_no_access_token(self):
+    def test_bad_access_token(self):
         response = self.client.patch(f'/convert/danmurphy/{self.exp.id}')
+        self.assertEqual(response.status_code, 401)
+
+        response = self.client.patch(
+            f'/convert/danmurphy/{self.exp.id}',
+            HTTP_X_HYP_TOKEN="FOOEY"
+        )
+
         self.assertEqual(response.status_code, 401)
 
     def test_unsupported_method(self):

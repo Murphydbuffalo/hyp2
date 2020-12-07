@@ -1,5 +1,5 @@
 from django.db import models
-from uuid import uuid1
+from uuid import uuid4
 
 class Customer(models.Model):
     name = models.CharField(max_length=200, unique=True)
@@ -41,7 +41,7 @@ class ApiKey(models.Model):
     # But we can suggest via email that the user rotate them every 6 months or
     # so and make an easy UI/API for doing that
     # TODO: let's include SANDOX/PRODUCTION as part of the access token itself
-    access_token = models.CharField(max_length=200, default=uuid1)
+    access_token = models.CharField(max_length=200, default=lambda : uuid4().hex)
     name = models.CharField(max_length=200, unique=True)
     production = models.BooleanField(default=False)
     created_at = models.DateTimeField('created at', auto_now_add=True)

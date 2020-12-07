@@ -1,5 +1,6 @@
 import json
 from http import HTTPStatus
+from uuid import UUID
 from django.core import serializers
 from django.http import HttpResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
@@ -41,9 +42,9 @@ def variant_assignment(request, participant_id, experiment_id):
             status=HTTPStatus.METHOD_NOT_ALLOWED
         )
 
-    if "X-HYP-TOKEN" not in request.headers.keys():
+    if invalidAccessToken(request):
         return HttpResponse(
-            "No access token provided",
+            "Missing or invalid access token.",
             content_type="application/json",
             status=HTTPStatus.UNAUTHORIZED
         )
@@ -92,9 +93,9 @@ def conversion(request, participant_id, experiment_id):
             status=HTTPStatus.METHOD_NOT_ALLOWED
         )
 
-    if "X-HYP-TOKEN" not in request.headers.keys():
+    if invalidAccessToken(request):
         return HttpResponse(
-            "No access token provided",
+            "Missing or invalid access token.",
             content_type="application/json",
             status=HTTPStatus.UNAUTHORIZED
         )
@@ -142,3 +143,13 @@ def conversion(request, participant_id, experiment_id):
 # feature. Maybe Hyp can provide reasonable, industry standard conversion rates
 # for common types of things like marketing emails vs personal notifications.
 # Use these to supply a prior to the Thompson Sampler. How to do that?
+
+def invalidAccessToken(request):
+    if "X-HYP-TOKEN" not in request.headers.keys():
+        return True
+
+    try:
+        UUID(str(request.headers["X-HYP-TOKEN"]), version=4)
+        return False
+    except ValueError:
+        return True
