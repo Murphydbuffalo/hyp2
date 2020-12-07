@@ -86,11 +86,17 @@ def variant_assignment(request, participant_id, experiment_id):
 
 @csrf_exempt
 def conversion(request, participant_id, experiment_id):
-    print(request.method)
-    if request.method != "PUT" and request.method != "PATCH":
+    if request.method not in ["PUT", "PATCH"]:
         return HttpResponse(
             content_type="application/json",
             status=HTTPStatus.METHOD_NOT_ALLOWED
+        )
+
+    if "X-HYP-TOKEN" not in request.headers.keys():
+        return HttpResponse(
+            "No access token provided",
+            content_type="application/json",
+            status=HTTPStatus.UNAUTHORIZED
         )
 
     num_rows_updated = Interaction.objects.filter(
