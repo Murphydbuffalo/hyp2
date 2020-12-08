@@ -33,17 +33,12 @@ class Customer(models.Model):
 # TODO: should we/how do we build off of Django's built-in user model from the
 # auth module?
 class ApiKey(models.Model):
-    # TODO: make sure you're using these tokens in a secure way. They are an
-    # authorization mechanism only, in the sense that the holder of the token
-    # doesnt need to authenticate to use it. If they have it, we grant them access
-    # SO, do some security best practices:
     # 1. Figure out how to encrypt this at rest in the DB
     # 2. Show them only one time the user
     # 3. Only communicate over TLS
     # 4. Should these auto-expire? Probably not...
     # But we can suggest via email that the user rotate them every 6 months or
     # so and make an easy UI/API for doing that
-    # TODO: let's include SANDOX/PRODUCTION as part of the access token itself
     access_token = models.CharField(max_length=200, default=create_access_token)
     name = models.CharField(max_length=200, unique=True)
     production = models.BooleanField(default=False)

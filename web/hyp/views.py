@@ -26,12 +26,6 @@ def show(request, experiment_id):
 def create(request, params):
     return HttpResponse("This is a no-op for now")
 
-# TODO: need authorization... accept API token from header, check signature?
-# Then if good, scope queries to that API key? First step redundant?
-# Could denormalize to put ApiKey or Customer on every model so that we don't
-# have to do crazy joins to do variant assignment. May well be worth the performance
-# lift because this endpoint needs to be fast...
-#
 # TODO: namespace under... api/v1?
 # TODO: strip out PRODUCTION/SANDBOX prefix from access tokens
 @csrf_exempt
@@ -42,7 +36,9 @@ def variant_assignment(request, participant_id, experiment_id):
             status=HTTPStatus.METHOD_NOT_ALLOWED
         )
 
-    if invalidAccessToken(request):
+    token = accessToken(request)
+
+    if not validAccessToken(token):
         return HttpResponse(
             "Missing or invalid access token.",
             content_type="application/json",
@@ -50,7 +46,7 @@ def variant_assignment(request, participant_id, experiment_id):
         )
 
     variant = Variant.objects.filter(
-        experiment__customer__apikey__access_token=request.headers["X-HYP-TOKEN"],
+        experiment__customer__apikey__access_token=token,
         experiment_id=experiment_id,
         interaction__participant_id=participant_id,
     ).values("id", "name").first()
@@ -61,7 +57,7 @@ def variant_assignment(request, participant_id, experiment_id):
         # https://stackoverflow.com/questions/17662928/django-creating-a-custom-500-404-error-page
         variants = get_list_or_404(
             Variant.objects.filter(
-                experiment__customer__apikey__access_token=request.headers["X-HYP-TOKEN"],
+                experiment__customer__apikey__access_token=token,
                 experiment_id=experiment_id,
             ).values(
                 "id", "name"
@@ -93,7 +89,9 @@ def conversion(request, participant_id, experiment_id):
             status=HTTPStatus.METHOD_NOT_ALLOWED
         )
 
-    if invalidAccessToken(request):
+    token = accessToken(request)
+
+    if not validAccessToken(token):
         return HttpResponse(
             "Missing or invalid access token.",
             content_type="application/json",
@@ -101,7 +99,7 @@ def conversion(request, participant_id, experiment_id):
         )
 
     num_rows_updated = Interaction.objects.filter(
-        experiment__customer__apikey__access_token=request.headers["X-HYP-TOKEN"],
+        experiment__customer__apikey__access_token=token,
         experiment_id=experiment_id,
         participant_id=participant_id
     ).update(converted=True)
@@ -144,12 +142,17 @@ def conversion(request, participant_id, experiment_id):
 # for common types of things like marketing emails vs personal notifications.
 # Use these to supply a prior to the Thompson Sampler. How to do that?
 
-def invalidAccessToken(request):
+def accessToken(request):
     if "X-HYP-TOKEN" not in request.headers.keys():
-        return True
+        return None
 
+    # Clients may send access tokens that are prepended with a namespace like
+    # "SANDBOX/" or "PRODUCTION/" to help them know which keys are which.
+    return request.headers["X-HYP-TOKEN"].split("/")[-1]
+
+def validAccessToken(token):
     try:
-        UUID(str(request.headers["X-HYP-TOKEN"]), version=4)
-        return False
-    except ValueError:
+        UUID(str(token), version=4)
         return True
+    except ValueError:
+        return False
