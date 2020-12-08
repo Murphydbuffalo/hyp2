@@ -59,9 +59,10 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
 ]
 
-# Application definition
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
 
-# TODO: separate apps for API vs dashboard?
 INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
     'hyp.apps.HypConfig',
@@ -71,6 +72,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -82,6 +84,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 if DEBUG == False:
