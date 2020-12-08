@@ -1,6 +1,9 @@
 from django.db import models
 from uuid import uuid4
 
+def create_access_token():
+    return uuid4().hex
+
 class Customer(models.Model):
     name = models.CharField(max_length=200, unique=True)
     created_at = models.DateTimeField('created at', auto_now_add=True)
@@ -41,13 +44,13 @@ class ApiKey(models.Model):
     # But we can suggest via email that the user rotate them every 6 months or
     # so and make an easy UI/API for doing that
     # TODO: let's include SANDOX/PRODUCTION as part of the access token itself
-    access_token = models.CharField(max_length=200, default=lambda : uuid4().hex)
+    access_token = models.CharField(max_length=200, default=create_access_token)
     name = models.CharField(max_length=200, unique=True)
     production = models.BooleanField(default=False)
     created_at = models.DateTimeField('created at', auto_now_add=True)
     updated_at = models.DateTimeField('updated at', auto_now=True)
     deleted_at = models.DateTimeField('deleted at', null=True, blank=True)
-    last_used_at = models.DateTimeField('deleted at', null=True, blank=True)
+    last_used_at = models.DateTimeField('last used at', null=True, blank=True)
 
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
 
