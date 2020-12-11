@@ -9,25 +9,7 @@ from django.db.models import Count, Q
 from hyp.models import Experiment, Variant, Interaction
 from hyp.thompson_sampler import ThompsonSampler
 
-# TODO: multiple view files! Multiple model files if possible
-# TODO: show fun placeholder GIF? https://media.giphy.com/media/FotYmpcs2kWQ0/giphy.gif
-# TODO: Server sends back HTML for the dashboard, but we load up React for
-# interaction-heavy stuff, so will want to set up Webpack + React at some point
-def index(request):
-    json = serializers.serialize('json', Experiment.objects.order_by('-created_at'))
-
-    return HttpResponse(json, content_type="application/json")
-
-def show(request, experiment_id):
-    get_object_or_404(Experiment, id=experiment_id)
-
-    return HttpResponse(f'{experiment.name} ({experiment.id})')
-
-def create(request, params):
-    return HttpResponse("This is a no-op for now")
-
 # TODO: namespace under... api/v1?
-# TODO: strip out PRODUCTION/SANDBOX prefix from access tokens
 @csrf_exempt
 def variant_assignment(request, participant_id, experiment_id):
     if request.method != "POST":
