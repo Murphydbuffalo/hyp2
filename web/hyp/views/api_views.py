@@ -1,10 +1,8 @@
 import json
-from http import HTTPStatus
 from uuid import UUID
-from django.core import serializers
-from django.http import HttpResponse, Http404
+from http import HTTPStatus
+from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render, get_list_or_404, get_object_or_404
 from django.db.models import Count, Q
 from hyp.models import Experiment, Variant, Interaction
 from hyp.thompson_sampler import ThompsonSampler
@@ -14,7 +12,6 @@ from hyp.thompson_sampler import ThompsonSampler
 def variant_assignment(request, participant_id, experiment_id):
     if request.method != "POST":
         return badHTTPMethod()
-
 
     token = accessToken(request)
 
@@ -82,6 +79,8 @@ def conversion(request, participant_id, experiment_id):
         )
 
     return apiResponse(payload={ "id": experiment_id })
+
+# private
 
 def accessToken(request):
     if "X-HYP-TOKEN" not in request.headers.keys():
