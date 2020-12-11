@@ -13,19 +13,13 @@ from hyp.thompson_sampler import ThompsonSampler
 @csrf_exempt
 def variant_assignment(request, participant_id, experiment_id):
     if request.method != "POST":
-        return HttpResponse(
-            content_type="application/json",
-            status=HTTPStatus.METHOD_NOT_ALLOWED
-        )
+        return badHTTPMethod()
+
 
     token = accessToken(request)
 
     if not validAccessToken(token):
-        return HttpResponse(
-            "Missing or invalid access token.",
-            content_type="application/json",
-            status=HTTPStatus.UNAUTHORIZED
-        )
+        return badAccessToken()
 
     variant = Variant.objects.filter(
         experiment__customer__apikey__access_token=token,
@@ -34,22 +28,23 @@ def variant_assignment(request, participant_id, experiment_id):
     ).values("id", "name").first()
 
     if variant == None:
-        # TODO: custom 404 and 500 handlers for API endpoints
-        # (as opposed to non-api, HTML serving endpoints)
-        # https://stackoverflow.com/questions/17662928/django-creating-a-custom-500-404-error-page
-        variants = get_list_or_404(
-            Variant.objects.filter(
-                experiment__customer__apikey__access_token=token,
-                experiment_id=experiment_id,
-            ).values(
-                "id", "name"
-            ).annotate(
-                num_interactions=Count("interaction"),
-                num_conversions=Count(
-                    "interaction", filter=Q(interaction__converted=True)
-                )
+        variants = Variant.objects.filter(
+            experiment__customer__apikey__access_token=token,
+            experiment_id=experiment_id,
+        ).values(
+            "id", "name"
+        ).annotate(
+            num_interactions=Count("interaction"),
+            num_conversions=Count(
+                "interaction", filter=Q(interaction__converted=True)
             )
         )
+
+        if variants.count() == 0:
+            return apiResponse(
+                status=404,
+                message="No experiment variants found with that ID."
+            )
 
         variant = ThompsonSampler(variants).winner()
 
@@ -59,26 +54,20 @@ def variant_assignment(request, participant_id, experiment_id):
             participant_id=participant_id,
         ).save()
 
-    response = json.dumps({ "id": variant["id"], "name": variant["name"] })
-
-    return HttpResponse(response, content_type="application/json")
+    return apiResponse(payload={
+        "id": variant["id"],
+        "name": variant["name"]
+    })
 
 @csrf_exempt
 def conversion(request, participant_id, experiment_id):
     if request.method not in ["PUT", "PATCH"]:
-        return HttpResponse(
-            content_type="application/json",
-            status=HTTPStatus.METHOD_NOT_ALLOWED
-        )
+        return badHTTPMethod()
 
     token = accessToken(request)
 
     if not validAccessToken(token):
-        return HttpResponse(
-            "Missing or invalid access token.",
-            content_type="application/json",
-            status=HTTPStatus.UNAUTHORIZED
-        )
+        return badAccessToken()
 
     num_rows_updated = Interaction.objects.filter(
         experiment__customer__apikey__access_token=token,
@@ -87,42 +76,12 @@ def conversion(request, participant_id, experiment_id):
     ).update(converted=True)
 
     if num_rows_updated == 0:
-        raise Http404("No interaction matches the given query.")
+        return apiResponse(
+            status=404,
+            message="No interaction matches that ID."
+        )
 
-    # TODO: let's get all of our JSON responses to adhere to some interface
-    # JSON should be an object (I think), so something like:
-    # { result: ..., status: ..., error: ... } could be good
-    return HttpResponse(json.dumps(True), content_type="application/json")
-
-# TODO: endpoints to ask questions about specific experiments such as:
-# 1. What's the current split of traffic? Can get a good estimate by running the
-# Thompson Sampler 1000 times or so
-# 2. What's the conversion rate for each variant?
-# 3. Can we be confident in the winner? So need some measure of the *precision*
-# of our prediction of the optimal variant. The narrower the interval of the HDPI
-# the better, find some way to communicate that narrowness to the user as a
-# score out of 100.
-# 4. Post-MVP, what's the value-add of the variants? (based on user defined value
-# of conversions)
-# 5. Post-MVP, what's the grid approximate posterior for each variant? Mayyybe
-# do this, most people won't know or care about this
-
-# TODO: endpoints to query the list of experiments:
-# 1. I want to filter by active vs inactive
-# 2. I want to order by value-add
-# 3. I want to order by conversion rate
-# 4. I want to order by confidence in winner
-
-# TODO: endpoints to modify experiments
-# 1. I want to mark as active or inactive. How to handle this? Return an error
-# any time they try get a participant assignment or do a conversion? Or gracefully
-# handle by still performing assignments but returning warnings that no conversion
-# are being recorded? Maybe always return the default variant? Should we make the
-# user mark one variant as the default? I'd rather not... Let's talk to Elias.
-# 2. I want to provide a baseline guesstimate of the conversion rate for a given
-# feature. Maybe Hyp can provide reasonable, industry standard conversion rates
-# for common types of things like marketing emails vs personal notifications.
-# Use these to supply a prior to the Thompson Sampler. How to do that?
+    return apiResponse(payload={ "id": experiment_id })
 
 def accessToken(request):
     if "X-HYP-TOKEN" not in request.headers.keys():
@@ -138,3 +97,25 @@ def validAccessToken(token):
         return True
     except ValueError:
         return False
+
+def apiResponse(payload="", status=200, message="success"):
+    return HttpResponse(
+        json.dumps({
+            "payload": payload,
+            "message": message,
+        }),
+        content_type="application/json",
+        status=status
+    )
+
+def badAccessToken():
+    return apiResponse(
+        message="Missing or invalid access token.",
+        status=HTTPStatus.UNAUTHORIZED
+    )
+
+def badHTTPMethod():
+    return apiResponse(
+        message="That HTTP method isn't supported on this URL.",
+        status=HTTPStatus.METHOD_NOT_ALLOWED
+    )

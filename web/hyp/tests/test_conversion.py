@@ -42,6 +42,8 @@ class TestConversion(TestCase):
         interaction.refresh_from_db()
 
         self.assertEqual(interaction.converted, True)
+        self.assertEqual(response.json()["message"], "success")
+        self.assertEqual(response.json()["payload"]["id"], self.exp.id)
 
     def test_no_interaction_found(self):
         response = self.client.patch(
@@ -50,6 +52,8 @@ class TestConversion(TestCase):
         )
 
         self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json()["message"], "No interaction matches that ID.")
+        self.assertEqual(response.json()["payload"], "")
 
     def test_bad_access_token(self):
         response = self.client.patch(f'/convert/danmurphy/{self.exp.id}')
@@ -61,10 +65,14 @@ class TestConversion(TestCase):
         )
 
         self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.json()["message"], "Missing or invalid access token.")
+        self.assertEqual(response.json()["payload"], "")
 
     def test_unsupported_method(self):
         response = self.client.get(f'/convert/danmurphy/{self.exp.id}')
         self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.json()["message"], "That HTTP method isn't supported on this URL.")
+        self.assertEqual(response.json()["payload"], "")
 
         response = self.client.post(f'/convert/danmurphy/{self.exp.id}')
         self.assertEqual(response.status_code, 405)

@@ -36,8 +36,9 @@ class TestAssignment(TestCase):
         variant = query.first().variant
         self.assertEqual(response.status_code, 200)
         self.assertEqual(query.count(), 1)
-        self.assertEqual(response.json()["id"], variant.id)
-        self.assertEqual(response.json()["name"], variant.name)
+        self.assertEqual(response.json()["message"], "success")
+        self.assertEqual(response.json()["payload"]["id"], variant.id)
+        self.assertEqual(response.json()["payload"]["name"], variant.name)
 
         # Variant for a given participant does not change once assigned
         response = self.client.post(
@@ -47,8 +48,9 @@ class TestAssignment(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(query.count(), 1)
-        self.assertEqual(response.json()["id"], variant.id)
-        self.assertEqual(response.json()["name"], variant.name)
+        self.assertEqual(response.json()["message"], "success")
+        self.assertEqual(response.json()["payload"]["id"], variant.id)
+        self.assertEqual(response.json()["payload"]["name"], variant.name)
 
     def test_no_variants_found(self):
         response = self.client.post(
@@ -56,6 +58,8 @@ class TestAssignment(TestCase):
             HTTP_X_HYP_TOKEN=self.access_token
         )
         self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json()["message"], "No experiment variants found with that ID.")
+        self.assertEqual(response.json()["payload"], "")
 
     def test_bad_access_token(self):
         response = self.client.patch(f'/convert/danmurphy/{self.exp.id}')
@@ -67,11 +71,14 @@ class TestAssignment(TestCase):
         )
 
         self.assertEqual(response.status_code, 401)
-
+        self.assertEqual(response.json()["message"], "Missing or invalid access token.")
+        self.assertEqual(response.json()["payload"], "")
 
     def test_unsupported_method(self):
         response = self.client.get(f'/assign/danmurphy/{self.exp.id}')
         self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.json()["message"], "That HTTP method isn't supported on this URL.")
+        self.assertEqual(response.json()["payload"], "")
 
         response = self.client.put(f'/assign/danmurphy/{self.exp.id}')
         self.assertEqual(response.status_code, 405)
