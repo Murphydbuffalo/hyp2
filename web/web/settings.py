@@ -72,8 +72,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'debug_toolbar',
 ]
+
+if DEBUG == True:
+    INSTALLED_APPS.append('debug_toolbar')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -84,10 +86,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
-if DEBUG == False:
+if DEBUG == True:
+    MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
+else:
     MIDDLEWARE.append('pybrake.django.AirbrakeMiddleware')
 
 ROOT_URLCONF = 'web.urls'
@@ -109,7 +112,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'web.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
