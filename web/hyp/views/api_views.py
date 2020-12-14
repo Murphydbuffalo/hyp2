@@ -7,7 +7,6 @@ from django.db.models import Count, Q
 from hyp.models import Experiment, Variant, Interaction
 from hyp.thompson_sampler import ThompsonSampler
 
-# TODO: namespace under... api/v1?
 @csrf_exempt
 def variant_assignment(request, participant_id, experiment_id):
     if request.method != "POST":
@@ -57,7 +56,7 @@ def variant_assignment(request, participant_id, experiment_id):
     })
 
 @csrf_exempt
-def conversion(request, participant_id, experiment_id):
+def record_conversion(request, participant_id, experiment_id):
     if request.method not in ["PUT", "PATCH"]:
         return badHTTPMethod()
 
@@ -118,3 +117,6 @@ def badHTTPMethod():
         message="That HTTP method isn't supported on this URL.",
         status=HTTPStatus.METHOD_NOT_ALLOWED
     )
+
+# TODO: still want to define custom 404 and 500 handlers
+# eg for a totally incorrect route or unexpected error

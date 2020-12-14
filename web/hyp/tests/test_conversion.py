@@ -35,7 +35,7 @@ class TestConversion(TestCase):
         self.assertEqual(interaction.converted, False)
 
         response = self.client.patch(
-            f'/convert/danmurphy/{self.exp.id}',
+            f'/api/v1/convert/danmurphy/{self.exp.id}',
             HTTP_X_HYP_TOKEN=self.access_token
         )
 
@@ -47,7 +47,7 @@ class TestConversion(TestCase):
 
     def test_no_interaction_found(self):
         response = self.client.patch(
-            f'/convert/danmurphy/{self.exp.id}',
+            f'/api/v1/convert/danmurphy/{self.exp.id}',
             HTTP_X_HYP_TOKEN=self.access_token
         )
 
@@ -56,11 +56,11 @@ class TestConversion(TestCase):
         self.assertEqual(response.json()["payload"], "")
 
     def test_bad_access_token(self):
-        response = self.client.patch(f'/convert/danmurphy/{self.exp.id}')
+        response = self.client.patch(f'/api/v1/convert/danmurphy/{self.exp.id}')
         self.assertEqual(response.status_code, 401)
 
         response = self.client.patch(
-            f'/convert/danmurphy/{self.exp.id}',
+            f'/api/v1/convert/danmurphy/{self.exp.id}',
             HTTP_X_HYP_TOKEN="FOOEY"
         )
 
@@ -69,13 +69,13 @@ class TestConversion(TestCase):
         self.assertEqual(response.json()["payload"], "")
 
     def test_unsupported_method(self):
-        response = self.client.get(f'/convert/danmurphy/{self.exp.id}')
+        response = self.client.get(f'/api/v1/convert/danmurphy/{self.exp.id}')
         self.assertEqual(response.status_code, 405)
         self.assertEqual(response.json()["message"], "That HTTP method isn't supported on this URL.")
         self.assertEqual(response.json()["payload"], "")
 
-        response = self.client.post(f'/convert/danmurphy/{self.exp.id}')
+        response = self.client.post(f'/api/v1/convert/danmurphy/{self.exp.id}')
         self.assertEqual(response.status_code, 405)
 
-        response = self.client.delete(f'/convert/danmurphy/{self.exp.id}')
+        response = self.client.delete(f'/api/v1/convert/danmurphy/{self.exp.id}')
         self.assertEqual(response.status_code, 405)
