@@ -118,5 +118,14 @@ def badHTTPMethod():
         status=HTTPStatus.METHOD_NOT_ALLOWED
     )
 
-# TODO: still want to define custom 404 and 500 handlers
-# eg for a totally incorrect route or unexpected error
+def handler404(request, *args, **argv):
+    return apiResponse(
+        status=404,
+        message="Not found."
+    )
+
+def handler500(request, *args, **argv):
+    return apiResponse(
+        status=500,
+        message="Unexpected Hyp server error! Our developers have been notified."
+    )

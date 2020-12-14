@@ -17,9 +17,9 @@ from django.contrib import admin
 from django.urls import path, include
 import debug_toolbar
 
-# TODO: separate apps for API vs dashboard?
 urlpatterns = [
-    path('', include('hyp.urls')),
+    path('', include('hyp.urls.dashboard_urls')),
+    path('api/v1/', include('hyp.urls.api_urls')),
     path('admin/', admin.site.urls),
     path('__debug__/', include(debug_toolbar.urls)),
 ]

@@ -1,18 +1,16 @@
 from django.urls import path
-
-from hyp.views import landing_page_views
 from hyp.views import api_views
 
+handler404 = 'hyp.views.api_views.handler404'
+handler500 = 'hyp.views.api_views.handler500'
+
 urlpatterns = [
-    path('', landing_page_views.index, name='index'),
-    path('experiments/', landing_page_views.index, name='index'),
-    path('experiments/<int:experiment_id>/', landing_page_views.show, name='show'),
     path(
-        'api/v1/assign/<str:participant_id>/<int:experiment_id>',
+        'assign/<str:participant_id>/<int:experiment_id>',
         api_views.variant_assignment, name='assign'
     ),
     path(
-        'api/v1/convert/<str:participant_id>/<int:experiment_id>',
+        'convert/<str:participant_id>/<int:experiment_id>',
         api_views.record_conversion, name='convert'
     ),
 
@@ -22,11 +20,11 @@ urlpatterns = [
     # trailing slash is left out. But we can't rely on that for API requests
     # and don't want to incur the performance overhead either.
     path(
-        'api/v1/assign/<str:participant_id>/<int:experiment_id>/',
+        'assign/<str:participant_id>/<int:experiment_id>/',
         api_views.variant_assignment, name='assign'
     ),
     path(
-        'api/v1/convert/<str:participant_id>/<int:experiment_id>/',
+        'convert/<str:participant_id>/<int:experiment_id>/',
         api_views.record_conversion, name='convert'
     ),
 ]
