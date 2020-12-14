@@ -124,6 +124,7 @@ DATABASES = {
         'USER': environ.get('DB_USER', ''),
         'PASSWORD': environ.get('DB_PASSWORD', ''),
         'NAME': environ.get('DB_NAME', 'hyp2'),
+        'OPTIONS': { "sslmode": "require" }
     }
 }
 
