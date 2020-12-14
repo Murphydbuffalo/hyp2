@@ -52,7 +52,7 @@ class TestConversion(TestCase):
         )
 
         self.assertEqual(response.status_code, 404)
-        self.assertEqual(response.json()["message"], "No interaction matches that ID.")
+        self.assertEqual(response.json()["message"], "No interaction visible to your access token matches that ID.")
         self.assertEqual(response.json()["payload"], "")
 
     def test_bad_access_token(self):

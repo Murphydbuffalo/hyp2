@@ -39,7 +39,7 @@ def variant_assignment(request, participant_id, experiment_id):
         if variants.count() == 0:
             return apiResponse(
                 status=404,
-                message="No experiment variants found with that ID."
+                message="No experiment variants visible to your access token match that ID."
             )
 
         variant = ThompsonSampler(variants).winner()
@@ -74,7 +74,7 @@ def record_conversion(request, participant_id, experiment_id):
     if num_rows_updated == 0:
         return apiResponse(
             status=404,
-            message="No interaction matches that ID."
+            message="No interaction visible to your access token matches that ID."
         )
 
     return apiResponse(payload={ "id": experiment_id })

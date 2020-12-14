@@ -58,7 +58,7 @@ class TestAssignment(TestCase):
             HTTP_X_HYP_TOKEN=self.access_token
         )
         self.assertEqual(response.status_code, 404)
-        self.assertEqual(response.json()["message"], "No experiment variants found with that ID.")
+        self.assertEqual(response.json()["message"], "No experiment variants visible to your access token match that ID.")
         self.assertEqual(response.json()["payload"], "")
 
     def test_bad_access_token(self):
