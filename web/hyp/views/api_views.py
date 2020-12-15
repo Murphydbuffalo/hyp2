@@ -117,15 +117,3 @@ def badHTTPMethod():
         message="That HTTP method isn't supported on this URL.",
         status=HTTPStatus.METHOD_NOT_ALLOWED
     )
-
-def handler404(request, *args, **argv):
-    return apiResponse(
-        status=404,
-        message="Not found."
-    )
-
-def handler500(request, *args, **argv):
-    return apiResponse(
-        status=500,
-        message="Unexpected Hyp server error! Our developers have been notified."
-    )

@@ -1,9 +1,6 @@
 from django.urls import path
 from hyp.views import api_views
 
-handler404 = 'hyp.views.api_views.handler404'
-handler500 = 'hyp.views.api_views.handler500'
-
 urlpatterns = [
     path(
         'assign/<str:participant_id>/<int:experiment_id>',

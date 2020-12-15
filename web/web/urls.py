@@ -17,6 +17,9 @@ from django.contrib import admin
 from django.urls import path, include
 import debug_toolbar
 
+handler404 = 'hyp.views.shared_views.handler404'
+handler500 = 'hyp.views.shared_views.handler500'
+
 urlpatterns = [
     path('', include('hyp.urls.dashboard_urls')),
     path('api/v1/', include('hyp.urls.api_urls')),
