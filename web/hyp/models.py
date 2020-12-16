@@ -14,33 +14,20 @@ class Customer(models.Model):
     def __str__(self):
         return self.name
 
-# TODO: Do we want to go even further and log an event for every API request?
-# When it was made, what the IP was, what the API key was? Why? Slower, more
-# code, less privacy for the user...
-# You'd want that as an audit log, so users can review how their tokens are being
-# used
-#
-# TODO: We probably want to associate tokens with users at some point.
-# Right now a Customer is the only entity, but it seems likely customers will
-# want separate logins and permissions for various users (eg user management,
-# vs experiment management, vs only being able to manage a specific experiment
-# vs having read-only access),
-# and we'd need a user model to support that case. Maybe simplest to just go
-# forward with only a Customer entity at this point?
-# They should be able to revoke/cancel their tokens, and once we introduce
-# role-based permissions we can use those to figure out what the API key associated
-# with a user is allowed to do
-# TODO: should we/how do we build off of Django's built-in user model from the
-# auth module?
+
+# TODO: support revoking/canceling tokens
+# TODO: Sign up sign in! Can we use Django's built in module for this?
+# MVP username and password. OAuth with Github & Google would be nice
+# as a second step.
 class ApiKey(models.Model):
-    # 1. Figure out how to encrypt this at rest in the DB
-    # 2. Show them only one time the user
-    # 3. Only communicate over TLS
-    # 4. Should these auto-expire? Probably not...
-    # But we can suggest via email that the user rotate them every 6 months or
-    # so and make an easy UI/API for doing that
-    access_token = models.CharField(max_length=200, default=create_access_token)
+    # TODO: how to encrypt this at rest in the DB?
+    # TODO: page to create access tokens, only show one time.
+    access_token = models.UUIDField(default=create_access_token)
     name = models.CharField(max_length=200, unique=True)
+    # TODO: limited number of sandbox API calls per month?
+    # Should be able to intentionally trigger errors: 500, 404, 401, etc.
+    # What would people want to do with the sandbox? Probably just do a small
+    # number of experiments to make sure they are comfortable using it
     production = models.BooleanField(default=False)
     created_at = models.DateTimeField('created at', auto_now_add=True)
     updated_at = models.DateTimeField('updated at', auto_now=True)
