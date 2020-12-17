@@ -15,8 +15,6 @@ class TestThompsonSampler(TestCase):
         ).save()
 
     def getVariantsWithConversions(self):
-        # TODO: break this into a service class so that the test and application
-        # code stay in sync
         return Variant.objects.values("id", "name").annotate(
             num_interactions=Count("interaction"),
             num_conversions=Count(

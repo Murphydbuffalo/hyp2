@@ -168,5 +168,4 @@ USE_TZ = True
 
 STATIC_ROOT = Path(BASE_DIR, "staticfiles")
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-# TODO: set STATIC_HOST to a CDN like Cloudfront
 STATIC_URL = '/static/'

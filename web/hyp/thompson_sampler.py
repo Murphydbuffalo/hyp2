@@ -1,8 +1,5 @@
 import numpy as np
 
-# TODO: allow user-defined priors to get to a low level of uncertainty faster?
-# Eg could ask the user "do you have a rough estimate of what the conversion rate
-# typically is for this type of feature?"
 class ThompsonSampler:
     def __init__(self, variants):
         self.variants = variants
