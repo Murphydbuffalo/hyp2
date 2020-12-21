@@ -1,0 +1,7 @@
+[flake8]
+select = C,E,F,W,S,B,B9
+exclude = staticfiles,manage.py
+ignore = S106
+max-line-length = 100
+# per-file-ignores = tests/*:S101
+# ignore = E203,E501,W503

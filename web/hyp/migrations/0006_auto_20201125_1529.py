@@ -12,6 +12,9 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddConstraint(
             model_name='variant',
-            constraint=models.UniqueConstraint(fields=('experiment_id', 'name'), name='uniq_variant_name_per_experiment'),
+            constraint=models.UniqueConstraint(
+                fields=('experiment_id', 'name'),
+                name='uniq_variant_name_per_experiment'
+            ),
         ),
     ]

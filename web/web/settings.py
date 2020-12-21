@@ -30,13 +30,13 @@ AIRBRAKE = dict(
     project_key=environ.get("AIRBRAKE_API_KEY", ""),
 )
 
-if DEBUG == False:
-    SECURE_SSL_REDIRECT=True
-    SESSION_COOKIE_SECURE=True
-    CSRF_COOKIE_SECURE=True
-    SECURE_HSTS_SECONDS=60
-    SECURE_HSTS_INCLUDE_SUBDOMAINS=True
-    SECURE_HSTS_PRELOAD=True
+if DEBUG is False:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 60
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
     LOGGING = {
         'version': 1,
         'disable_existing_loggers': False,
@@ -76,7 +76,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
-if DEBUG == True:
+if DEBUG is True:
     INSTALLED_APPS.append('debug_toolbar')
 
 MIDDLEWARE = [
@@ -90,7 +90,7 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
-if DEBUG == True:
+if DEBUG is True:
     MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
 else:
     MIDDLEWARE.append('pybrake.django.AirbrakeMiddleware')
@@ -126,7 +126,7 @@ DATABASES = {
         'USER': environ.get('DB_USER', ''),
         'PASSWORD': environ.get('DB_PASSWORD', ''),
         'NAME': environ.get('DB_NAME', 'hyp2'),
-        'OPTIONS': { "sslmode": "require" }
+        'OPTIONS': {"sslmode": "require"}
     }
 }
 

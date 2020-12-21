@@ -3,6 +3,7 @@ from django.db.models import Count, Q
 from hyp.models import Customer, Experiment, Variant, Interaction
 from hyp.thompson_sampler import ThompsonSampler
 
+
 class TestThompsonSampler(TestCase):
     def createInteraction(self, variant, converted):
         self.latest_participant_id += 1
@@ -49,7 +50,7 @@ class TestThompsonSampler(TestCase):
         variants = self.getVariantsWithConversions()
 
         n = 1000
-        for i in range(n):
+        for _i in range(n):
             sampler = ThompsonSampler(variants)
             self.winner_counts[sampler.winner()["id"]] += 1
 
@@ -72,12 +73,12 @@ class TestThompsonSampler(TestCase):
         )
 
     def test_equal_number_of_conversions(self):
-        for i in range(50):
+        for _i in range(50):
             self.createInteraction(self.var1, converted=False)
             self.createInteraction(self.var2, converted=False)
             self.createInteraction(self.var3, converted=False)
 
-        for i in range(50):
+        for _i in range(50):
             self.createInteraction(self.var1, converted=True)
             self.createInteraction(self.var2, converted=True)
             self.createInteraction(self.var3, converted=True)
@@ -85,7 +86,7 @@ class TestThompsonSampler(TestCase):
         variants = self.getVariantsWithConversions()
 
         n = 1000
-        for i in range(n):
+        for _i in range(n):
             sampler = ThompsonSampler(variants)
             self.winner_counts[sampler.winner()["id"]] += 1
 
@@ -113,24 +114,24 @@ class TestThompsonSampler(TestCase):
         # After 100 trials the posterior distributions will have little uncertainty
         # remaining, and so sampling from them will almost always return something
         # quite close to the true conversion rate.
-        for i in range(50):
+        for _i in range(50):
             self.createInteraction(self.var1, converted=False)
 
-        for i in range(50):
+        for _i in range(50):
             self.createInteraction(self.var1, converted=True)
 
-        for i in range(75):
+        for _i in range(75):
             self.createInteraction(self.var2, converted=False)
             self.createInteraction(self.var3, converted=False)
 
-        for i in range(25):
+        for _i in range(25):
             self.createInteraction(self.var2, converted=True)
             self.createInteraction(self.var3, converted=True)
 
         variants = self.getVariantsWithConversions()
 
         n = 1000
-        for i in range(n):
+        for _i in range(n):
             sampler = ThompsonSampler(variants)
             self.winner_counts[sampler.winner()["id"]] += 1
 
@@ -160,7 +161,6 @@ class TestThompsonSampler(TestCase):
             delta=75
         )
 
-
     def test_higher_conversion_rate_with_much_uncertainty_wins_slightly_more(self):
         # Below we create 20 interactions for each variant, with 5 successes
         # for variants 2 and 3, but 10 successes for variant 1.
@@ -168,24 +168,24 @@ class TestThompsonSampler(TestCase):
         # after 20 trials the posterior distributions will still have some uncertainty
         # remaining, and so sampling from them will almost always return something
         # quite close to the true conversion rate.
-        for i in range(10):
+        for _i in range(10):
             self.createInteraction(self.var1, converted=False)
 
-        for i in range(10):
+        for _i in range(10):
             self.createInteraction(self.var1, converted=True)
 
-        for i in range(15):
+        for _i in range(15):
             self.createInteraction(self.var2, converted=False)
             self.createInteraction(self.var3, converted=False)
 
-        for i in range(5):
+        for _i in range(5):
             self.createInteraction(self.var2, converted=True)
             self.createInteraction(self.var3, converted=True)
 
         variants = self.getVariantsWithConversions()
 
         n = 1000
-        for i in range(n):
+        for _i in range(n):
             sampler = ThompsonSampler(variants)
             self.winner_counts[sampler.winner()["id"]] += 1
 

@@ -15,14 +15,22 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ApiKey',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(
+                    auto_created=True,
+                    primary_key=True,
+                    serialize=False,
+                    verbose_name='ID'
+                )),
                 ('access_token', models.CharField(default=uuid.uuid1, max_length=200)),
                 ('name', models.CharField(max_length=200, unique=True)),
                 ('production', models.BooleanField(default=False)),
                 ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='created at')),
                 ('updated_at', models.DateTimeField(auto_now=True, verbose_name='updated at')),
                 ('deleted_at', models.DateTimeField(verbose_name='deleted at')),
-                ('customer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='hyp.customer')),
+                ('customer', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    to='hyp.customer'
+                )),
             ],
         ),
         migrations.RenameField(
@@ -37,7 +45,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='interaction',
             name='experiment',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='hyp.experiment'),
+            field=models.ForeignKey(
+                default=1,
+                on_delete=django.db.models.deletion.CASCADE,
+                to='hyp.experiment'
+            ),
             preserve_default=False,
         ),
         migrations.AddField(

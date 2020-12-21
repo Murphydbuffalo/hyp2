@@ -15,7 +15,12 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Customer',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(
+                    auto_created=True,
+                    primary_key=True,
+                    serialize=False,
+                    verbose_name='ID'
+                )),
                 ('name', models.CharField(max_length=200, unique=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='created at')),
                 ('updated_at', models.DateTimeField(auto_now=True, verbose_name='updated at')),
@@ -24,45 +29,81 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Experiment',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(
+                    auto_created=True,
+                    primary_key=True,
+                    serialize=False,
+                    verbose_name='ID'
+                )),
                 ('name', models.CharField(max_length=200)),
                 ('finished', models.BooleanField(default=False)),
                 ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='created at')),
                 ('updated_at', models.DateTimeField(auto_now=True, verbose_name='updated at')),
-                ('customer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='hyp.customer')),
+                ('customer', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    to='hyp.customer'
+                )),
             ],
         ),
         migrations.CreateModel(
             name='Variant',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(
+                    auto_created=True,
+                    primary_key=True,
+                    serialize=False,
+                    verbose_name='ID'
+                )),
                 ('name', models.CharField(max_length=200)),
                 ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='created at')),
                 ('updated_at', models.DateTimeField(auto_now=True, verbose_name='updated at')),
-                ('experiment', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='hyp.experiment')),
+                ('experiment', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    to='hyp.experiment'
+                )),
             ],
         ),
         migrations.CreateModel(
             name='Participant',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(
+                    auto_created=True,
+                    primary_key=True, serialize=False, verbose_name='ID'
+                )),
                 ('external_unique_id', models.CharField(max_length=200)),
                 ('external_model_name', models.CharField(max_length=200)),
                 ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='created at')),
-                ('updated_at', models.DateTimeField(auto_now=True, verbose_name='updated at')),
-                ('customer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='hyp.customer')),
+                ('updated_at', models.DateTimeField(
+                    auto_now=True,
+                    verbose_name='updated at'
+                )),
+                ('customer', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    to='hyp.customer'
+                )),
                 ('variants', models.ManyToManyField(to='hyp.Variant')),
             ],
         ),
         migrations.CreateModel(
             name='Interaction',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(
+                    auto_created=True,
+                    primary_key=True,
+                    serialize=False,
+                    verbose_name='ID'
+                )),
                 ('converted', models.BooleanField(default=False)),
                 ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='created at')),
                 ('updated_at', models.DateTimeField(auto_now=True, verbose_name='updated at')),
-                ('participant', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='hyp.participant')),
-                ('variant', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='hyp.variant')),
+                ('participant', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    to='hyp.participant'
+                )),
+                ('variant', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    to='hyp.variant'
+                )),
             ],
         ),
     ]

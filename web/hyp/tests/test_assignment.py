@@ -1,6 +1,7 @@
 from django.test import TestCase, Client
 from hyp.models import ApiKey, Customer, Experiment, Interaction, Variant
 
+
 class TestAssignment(TestCase):
     def setUp(self):
         self.client = Client()
@@ -54,11 +55,13 @@ class TestAssignment(TestCase):
 
     def test_no_variants_found(self):
         response = self.client.post(
-            f'/api/v1/assign/danmurphy/999',
+            '/api/v1/assign/danmurphy/999',
             HTTP_X_HYP_TOKEN=self.access_token
         )
         self.assertEqual(response.status_code, 404)
-        self.assertEqual(response.json()["message"], "No experiment variants visible to your access token match that ID.")
+        self.assertEqual(response.json()["message"], (
+            "No experiment variants visible to your access token match that ID."
+        ))
         self.assertEqual(response.json()["payload"], "")
 
     def test_bad_access_token(self):
@@ -77,7 +80,9 @@ class TestAssignment(TestCase):
     def test_unsupported_method(self):
         response = self.client.get(f'/api/v1/assign/danmurphy/{self.exp.id}')
         self.assertEqual(response.status_code, 405)
-        self.assertEqual(response.json()["message"], "That HTTP method isn't supported on this URL.")
+        self.assertEqual(response.json()["message"], (
+            "That HTTP method isn't supported on this URL."
+        ))
         self.assertEqual(response.json()["payload"], "")
 
         response = self.client.put(f'/api/v1/assign/danmurphy/{self.exp.id}')

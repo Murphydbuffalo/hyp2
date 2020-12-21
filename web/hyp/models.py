@@ -1,8 +1,10 @@
 from django.db import models
 from uuid import uuid4
 
+
 def create_access_token():
     return uuid4().hex
+
 
 class Customer(models.Model):
     name = models.CharField(max_length=200, unique=True)
@@ -13,6 +15,7 @@ class Customer(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class ApiKey(models.Model):
     access_token = models.UUIDField(default=create_access_token)
@@ -30,6 +33,7 @@ class ApiKey(models.Model):
     def __str__(self):
         return f'{"PRODUCTION" if self.production else "SANDBOX"}/{self.access_token}'
 
+
 class Experiment(models.Model):
     name = models.CharField(max_length=200)
     stopped = models.BooleanField(default=False)
@@ -43,6 +47,7 @@ class Experiment(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Variant(models.Model):
     name = models.CharField(max_length=200)
@@ -61,6 +66,7 @@ class Variant(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Interaction(models.Model):
     converted = models.BooleanField(default=False)
@@ -82,4 +88,7 @@ class Interaction(models.Model):
         ]
 
     def __str__(self):
-        return f'Experiment {self.experiment_id}, Variant {self.variant_id}, Participant {self.participant_id}. Converted? {self.converted}'
+        return (
+            f'Experiment {self.experiment_id}, Variant {self.variant_id},'
+            f' Participant {self.participant_id}. Converted? {self.converted}'
+        )

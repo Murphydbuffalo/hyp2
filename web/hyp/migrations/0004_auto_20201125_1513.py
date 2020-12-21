@@ -12,6 +12,9 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddConstraint(
             model_name='interaction',
-            constraint=models.UniqueConstraint(fields=('experiment_id', 'participant_id'), name='uniq_interaction_per_experiment_and_participant'),
+            constraint=models.UniqueConstraint(
+                fields=('experiment_id', 'participant_id'),
+                name='uniq_interaction_per_experiment_and_participant'
+            ),
         ),
     ]

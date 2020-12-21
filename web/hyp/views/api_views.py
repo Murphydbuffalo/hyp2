@@ -4,8 +4,9 @@ from http import HTTPStatus
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Count, Q
-from hyp.models import Experiment, Variant, Interaction
+from hyp.models import Variant, Interaction
 from hyp.thompson_sampler import ThompsonSampler
+
 
 @csrf_exempt
 def variant_assignment(request, participant_id, experiment_id):
@@ -23,7 +24,7 @@ def variant_assignment(request, participant_id, experiment_id):
         interaction__participant_id=participant_id,
     ).values("id", "name").first()
 
-    if variant == None:
+    if variant is None:
         variants = Variant.objects.filter(
             experiment__customer__apikey__access_token=token,
             experiment_id=experiment_id,
@@ -44,7 +45,7 @@ def variant_assignment(request, participant_id, experiment_id):
 
         variant = ThompsonSampler(variants).winner()
 
-        interaction = Interaction(
+        Interaction(
             variant_id=variant["id"],
             experiment_id=experiment_id,
             participant_id=participant_id,
@@ -54,6 +55,7 @@ def variant_assignment(request, participant_id, experiment_id):
         "id": variant["id"],
         "name": variant["name"]
     })
+
 
 @csrf_exempt
 def record_conversion(request, participant_id, experiment_id):
@@ -77,9 +79,10 @@ def record_conversion(request, participant_id, experiment_id):
             message="No interaction visible to your access token matches that ID."
         )
 
-    return apiResponse(payload={ "id": experiment_id })
+    return apiResponse(payload={"id": experiment_id})
 
 # private
+
 
 def accessToken(request):
     if "X-HYP-TOKEN" not in request.headers.keys():
@@ -89,12 +92,14 @@ def accessToken(request):
     # "SANDBOX/" or "PRODUCTION/" to help them know which keys are which.
     return request.headers["X-HYP-TOKEN"].split("/")[-1]
 
+
 def validAccessToken(token):
     try:
         UUID(str(token), version=4)
         return True
     except ValueError:
         return False
+
 
 def apiResponse(payload="", status=200, message="success"):
     return HttpResponse(
@@ -106,11 +111,13 @@ def apiResponse(payload="", status=200, message="success"):
         status=status
     )
 
+
 def badAccessToken():
     return apiResponse(
         message="Missing or invalid access token.",
         status=HTTPStatus.UNAUTHORIZED
     )
+
 
 def badHTTPMethod():
     return apiResponse(

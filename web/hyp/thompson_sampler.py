@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class ThompsonSampler:
     def __init__(self, variants):
         self.variants = variants
@@ -7,7 +8,7 @@ class ThompsonSampler:
     def winner(self):
         return max(
             self.samples(),
-            key=lambda dict:dict["sampled_parameter"]
+            key=lambda dict: dict["sampled_parameter"]
         )["variant"]
 
     def samples(self):

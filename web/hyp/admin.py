@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from hyp.models import *
+from hyp.models import ApiKey, Customer, Experiment, Interaction, Variant
 
 admin.site.register(Customer)
 admin.site.register(ApiKey)
