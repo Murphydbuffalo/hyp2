@@ -8,7 +8,7 @@ jobs:
       postgres:
         image: postgres:13
         env:
-          POSTGRES_USER: postgres
+          POSTGRES_USER: runner
           POSTGRES_PASSWORD: gethyped
         options: >-
           --health-cmd pg_isready
@@ -34,6 +34,7 @@ jobs:
         DB: postgres
         DB_HOST: 127.0.0.1
         DB_PORT: 5432
+        DB_USER: runner
         DB_PASSWORD: gethyped
       working-directory: ./web
       run: python manage.py test hyp/tests
