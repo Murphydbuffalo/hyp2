@@ -1,7 +1,6 @@
 from django.db import models
 from uuid import uuid4
 
-
 def create_access_token():
     return uuid4().hex
 
