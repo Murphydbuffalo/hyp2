@@ -28,7 +28,7 @@ PyYAML==5.3.1
 regex==2020.11.13
 six==1.15.0
 smmap==3.0.4
-sqlparse==0.3.1
+sqlparse==0.4.1
 stevedore==3.3.0
 tdigest==0.5.2.2
 toml==0.10.2
