@@ -126,9 +126,11 @@ DATABASES = {
         'USER': environ.get('DB_USER', ''),
         'PASSWORD': environ.get('DB_PASSWORD', ''),
         'NAME': environ.get('DB_NAME', 'hyp2'),
-        'OPTIONS': {"sslmode": "require"}
     }
 }
+
+if DEBUG is False:
+    DATABASES['default']['OPTIONS'] = {"sslmode": "require"}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
