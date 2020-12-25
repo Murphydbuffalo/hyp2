@@ -67,12 +67,13 @@ jobs:
       SSH_AUTH_SOCK: /tmp/ssh_agent.sock
     steps:
       - uses: actions/checkout@v2
+        fetch-depth: 0
+        ref: master
       - name: push to Heroku
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
           ssh-keyscan heroku.com >> ~/.ssh/known_hosts
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null
           ssh-add - <<< "${{ secrets.HEROKU_SSH_PRIVATE_KEY }}"
           git remote add heroku git@heroku.com:hyyyp.git
-          git push -f heroku master
+          git push heroku master
