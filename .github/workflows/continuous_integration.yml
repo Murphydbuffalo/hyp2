@@ -64,10 +64,15 @@ jobs:
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     env:
-      HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      SSH_AUTH_SOCK: /tmp/ssh_agent.sock
     steps:
       - uses: actions/checkout@v2
       - name: push to Heroku
         run: |
-          git remote add heroku https://git.heroku.com/hyyyp.git
+          mkdir -p ~/.ssh
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          ssh-keyscan heroku.com >> ~/.ssh/known_hosts
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          ssh-add - <<< "${{ secrets.HEROKU_SSH_PRIVATE_KEY }}"
+          git remote add heroku git@heroku.com:hyyyp.git
           git push heroku master
