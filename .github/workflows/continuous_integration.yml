@@ -58,3 +58,16 @@ jobs:
         DB_PASSWORD: gethyped
       working-directory: ./web
       run: python manage.py test hyp/tests
+  deploy:
+    name: Deploy to Heroku
+    needs: [lint, test]
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    env:
+      HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: push to Heroku
+        run: |
+          git remote add heroku https://git.heroku.com/hyyyp.git
+          git push heroku master
