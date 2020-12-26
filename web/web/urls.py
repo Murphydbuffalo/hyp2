@@ -22,7 +22,7 @@ handler500 = 'hyp.views.shared_views.handler500'
 
 urlpatterns = [
     path('', include('hyp.urls.landing_page_urls')),
-    path('experiments', include('hyp.urls.experiment_urls')),
+    path('experiments/', include('hyp.urls.experiment_urls')),
     path('api/v1/', include('hyp.urls.api_urls')),
     path('admin/', admin.site.urls),
     path('__debug__/', include(debug_toolbar.urls)),
