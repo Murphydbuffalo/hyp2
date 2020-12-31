@@ -18,7 +18,6 @@ navbar ul {
   display: flex;
   flex-direction: column;
   list-style-type: none;
-  align-items: center;
   background: lightgrey;
-  padding-top: 25px;
+  padding: 25px 0 0 25px;
 }
