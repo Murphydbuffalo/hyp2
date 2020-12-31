@@ -24,6 +24,8 @@ urlpatterns = [
     path('', include('hyp.urls.landing_page_urls')),
     path('experiments/', include('hyp.urls.experiment_urls')),
     path('api/v1/', include('hyp.urls.api_urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/', include('hyp.urls.account_urls')),
     path('admin/', admin.site.urls),
     path('__debug__/', include(debug_toolbar.urls)),
 ]

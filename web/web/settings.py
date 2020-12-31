@@ -171,3 +171,5 @@ USE_TZ = True
 STATIC_ROOT = Path(BASE_DIR, "staticfiles")
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_URL = '/static/'
+
+LOGOUT_REDIRECT_URL = "/"

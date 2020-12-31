@@ -26,7 +26,27 @@
 </head>
 
 <body>
-  <navbar></navbar>
+  <navbar>
+    <ul>
+      <li tabindex="0">
+        <a href={% url "home" %}>Home</a>
+      </li>
+
+      {% if user.is_authenticated %}
+        <li tabindex="0">
+          <a href={% url "profile" %}>{{ user.first_name }}</a>
+        </li>
+
+        <li tabindex="0">
+          <a href={% url "logout" %}>Sign out</a>
+        </li>
+      {% else %}
+        <li tabindex="0">
+          <a href={% url "login" %}>Sign in</a>
+        </li>
+      {% endif %}
+    </ul>
+  </navbar>
 
   <main role="main" class="container">
     {% block content %}
