@@ -23,22 +23,29 @@
 <link rel="stylesheet" media="all" href={% static "css/normalize.css" %} />
 <link rel="stylesheet" media="all" href={% static "css/skeleton.css" %} />
 <link rel="stylesheet" media="all" href={% static "css/application.css" %} />
+<script async defer src="https://kit.fontawesome.com/936caaa440.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
   <navbar>
     <ul>
       <li tabindex="0">
-        <a href={% url "home" %}>Home</a>
+        <a href={% url "home" %}>
+          <i class="fas fa-home"></i> Home
+        </a>
       </li>
 
       {% if user.is_authenticated %}
         <li tabindex="0">
-          <a href={% url "profile" %}>{{ user.first_name }}</a>
+          <a href={% url "profile" %}>
+            <i class="fas fa-user"></i> Profile
+          </a>
         </li>
 
         <li tabindex="0">
-          <a href={% url "logout" %}>Sign out</a>
+          <a href={% url "logout" %}>
+            <i class="fas fa-door-closed"></i> Sign out
+          </a>
         </li>
       {% else %}
         <li tabindex="0">
