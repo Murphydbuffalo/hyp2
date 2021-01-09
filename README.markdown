@@ -1,14 +1,14 @@
 # Hyp
 ## Table of contents
 1. [Intro](#intro)
-2. [How is work organized?](how-is-work-organized)
-3. [Setting up your local environment](setting-up-your-local-environment)
-4. [Running tests](Running tests)
-5. [Linting](Linting)
-6. [Continuous Integration](Continuous Integration)
-7. [Postman](Postman)
-8. [Accessibility](Accessibility)
-9. [Internationalization](Internationalization)
+2. [How is work organized?](#how-is-work-organized)
+3. [Setting up your local environment](#setting-up-your-local-environment)
+4. [Running tests](#running-tests)
+5. [Linting](#linting)
+6. [Continuous Integration](#continuous-integration)
+7. [Postman](#postman)
+8. [Accessibility](#accessibility)
+9. [Internationalization](#internationalization)
 
 ## Intro
 Low risk, intuitive product experimentation. Inform your product decisions with evidence from your users by trying out multiple variations of your features.
