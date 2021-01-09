@@ -1,14 +1,14 @@
 # Hyp
 ## Table of contents
-[Intro](#intro)
-[How is work organized?](how-is-work-organized)
-[Setting up your local environment](setting-up-your-local-environment)
-[Running tests](Running tests)
-[Linting](Linting)
-[Continuous Integration](Continuous Integration)
-[Postman](Postman)
-[Accessibility](Accessibility)
-[Internationalization](Internationalization)
+1. [Intro](#intro)
+2. [How is work organized?](how-is-work-organized)
+3. [Setting up your local environment](setting-up-your-local-environment)
+4. [Running tests](Running tests)
+5. [Linting](Linting)
+6. [Continuous Integration](Continuous Integration)
+7. [Postman](Postman)
+8. [Accessibility](Accessibility)
+9. [Internationalization](Internationalization)
 
 ## Intro
 Low risk, intuitive product experimentation. Inform your product decisions with evidence from your users by trying out multiple variations of your features.
@@ -105,7 +105,7 @@ for details.
 Postman is great for playing around with the API.
 
 ## Documentation
-Every API endpoint should be documented in Apiary and have tests written for it.
+Every API endpoint should be documented (in Apiary? Postman? It's a TODO) and have tests written for it.
 
 ## Accessibility
 We aim to make all of our UI accessible. This means writing semantic HTML, adding
