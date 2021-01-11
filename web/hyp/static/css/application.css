@@ -2,6 +2,10 @@ a {
   text-decoration: none;
 }
 
+.error {
+  color: red;
+}
+
 navbar.vertical {
   max-width: 12%;
   width: 12%;
