@@ -105,7 +105,8 @@ security vulnerabilities by upgrading dependencies. See `.github/dependabot.yml`
 for details.
 
 ## Postman
-Postman is great for playing around with the API.
+Postman is great for playing around with the API. We have a team account with
+some ready-to-go requests against the API.
 
 ## Documentation
 Every API endpoint should be documented (in Apiary? Postman? It's a TODO) and have tests written for it.
