@@ -1,10 +1,13 @@
-<h1>Welcome to Hyp</h1>
+{% extends "hyp/layout.html" %}
+{% block content %}
+  <h1>Welcome to Hyp</h1>
 
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+  {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
-<form action="{% url 'login' %}" method="post">
-{% csrf_token %}
-<input type="text" name="username" placeholder="Username">
-<input type="password" name="password" placeholder="Password">
-<input type="submit" value="Sign in">
-</form>
+  <form action="{% url 'login' %}" method="post">
+  {% csrf_token %}
+  <input type="text" name="username" placeholder="Username">
+  <input type="password" name="password" placeholder="Password">
+  <input type="submit" value="Sign in">
+  </form>
+{% endblock %}
