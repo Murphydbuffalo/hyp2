@@ -27,37 +27,26 @@
 </head>
 
 <body>
-  <!--
-  let's copy Bonusly and do a simple horizontal nav with buttons for
-  signup / signin on the landing pages, and then a vertical nav with more
-  options for the logged-in pages
-  -->
-  <navbar>
-    <ul>
-      <li tabindex="0">
-        <a href={% url "home" %}>
-          <i class="fas fa-home"></i> Home
-        </a>
-      </li>
+  <navbar class="horizontal">
+    <a class="logo" href="/">Hyp</a>
+
+    <div class="links">
+      <a href={% url "home" %}>
+        <i class="fas fa-home"></i> Home
+      </a>
 
       {% if user.is_authenticated %}
-        <li tabindex="0">
-          <a href={% url "profile" %}>
-            <i class="fas fa-user"></i> Profile
-          </a>
-        </li>
+        <a href={% url "profile" %}>
+          <i class="fas fa-user"></i> Profile
+        </a>
 
-        <li tabindex="0">
-          <a href={% url "logout" %}>
-            <i class="fas fa-door-closed"></i> Sign out
-          </a>
-        </li>
+        <a href={% url "logout" %}>
+          <i class="fas fa-door-closed"></i> Sign out
+        </a>
       {% else %}
-        <li tabindex="0">
-          <a href={% url "login" %}>Sign in</a>
-        </li>
+        <a href={% url "login" %}>Sign in</a>
       {% endif %}
-    </ul>
+    </div>
   </navbar>
 
   <main role="main" class="container">
