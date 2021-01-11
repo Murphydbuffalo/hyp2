@@ -28,13 +28,11 @@
 
 <body>
   <navbar class="horizontal">
-    <a class="logo" href="/">Hyp</a>
+    <a class="logo" href={% url "home" %}>
+      Hyp
+    </a>
 
-    <div class="links">
-      <a href={% url "home" %}>
-        <i class="fas fa-home"></i> Home
-      </a>
-
+    <div class="auth">
       {% if user.is_authenticated %}
         <a href={% url "profile" %}>
           <i class="fas fa-user"></i> Profile

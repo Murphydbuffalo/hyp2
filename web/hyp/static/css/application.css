@@ -36,6 +36,6 @@ navbar.horizontal {
   justify-content: space-between;
 }
 
-navbar.horizontal .links a {
+navbar.horizontal a {
   margin-right: 5px;
 }
