@@ -1,0 +1,11 @@
+{% extends "hyp/layout.html" %}
+{% block content %}
+  <h1>Experiments</h1>
+  <ul class="experiment-list">
+  {% for experiment in experiments %}
+    <li>
+      <a href={% url "experiment" experiment.id %}>{{ experiment.name }}</a>
+    </li>
+  {% endfor %}
+  </ul>
+{% endblock %}
