@@ -31,7 +31,12 @@ conversion_rates = [0.05, 0.10, 0.03]
 x_ticks = np.arange(1000)[::250]
 x = np.arange(1000)[::25]
 bandit_splits = calculate_traffic_splits(conversion_rates, x)
-ab_test_splits = np.ones(x.shape) * (1 / len(conversion_rates))
+ab_test_splits = (np.zeros(bandit_splits.shape) + 1) * (1 / len(conversion_rates))
+
+# After A/B test has completed
+ab_test_splits[35:40, 0] = 0.0
+ab_test_splits[35:40, 1] = 1.0
+ab_test_splits[35:40, 2] = 0.0
 
 style.use("seaborn")
 fig, ax = plt.subplots(1, 3, figsize=(9, 6))
@@ -46,7 +51,7 @@ def animate(i):
 
     for index, lines in enumerate(line_groups):
         lines[0].set_data(x[0:i + 1], bandit_splits[0:i + 1, index])
-        lines[1].set_data(x[0:i + 1], ab_test_splits[0:i + 1])
+        lines[1].set_data(x[0:i + 1], ab_test_splits[0:i + 1, index])
 
 
 def init():
@@ -54,6 +59,7 @@ def init():
         axis.set_xticks(x_ticks)
         axis.set_ylim(-0.05, 1.05)
         axis.set_xlim(0, 1010)
+        axis.legend(["Hyp", "A/B Test"])
 
         if index == 0:
             axis.set_ylabel("Traffic percentage")
