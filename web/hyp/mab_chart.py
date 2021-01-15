@@ -62,7 +62,7 @@ def init():
 animation = FuncAnimation(
     fig,
     animate,
-    interval=10,
+    interval=667,
     repeat=False,
     init_func=init
 )
