@@ -1,24 +1,35 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+from hyp.thompson_sampler import ThompsonSampler
 
 
-# This works
-# fig = plt.figure(figsize=(9,6))
-# x, y = [], []
-# x_points = np.arange(1000)
-# def animate(i):
-#     x.append(x_points[i])
-#     y.append(np.sin(x[i]))
-#     plt.plot(x,y)
-#
-# animation = FuncAnimation(fig, animate, interval=200)
-# fig.show()
+def calculate_traffic_splits(conversion_rates, x_points):
+    splits = []
 
-# This works
+    for num_interactions in x_points:
+        sampler = ThompsonSampler(variants(conversion_rates, num_interactions))
+        traffic_splits = [
+            percentage for percentage in sampler.simulated_traffic_split().values()
+        ]
+        splits.append(traffic_splits)
+
+    return np.array(splits)
+
+
+def variants(conversion_rates, num_interactions):
+    return [
+        {
+            "id": i + 1,
+            "num_conversions": conversion_rates[i] * num_interactions,
+            "num_interactions": num_interactions
+        } for i in range(len(conversion_rates))
+    ]
+
+
 x_ticks = np.arange(1000)[::250]
-x = np.arange(1000)[::10]
-y = np.array([[np.sin(point), np.cos(point), point] for point in x])
+x = np.arange(1000)[::25]
+y = calculate_traffic_splits([0.05, 0.10, 0.03], x)
 
 fig, ax = plt.subplots(1, 3, figsize=(9, 6))
 plt.suptitle("Traffic split by variant")
