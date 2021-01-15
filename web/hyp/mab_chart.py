@@ -27,24 +27,26 @@ def variants(conversion_rates, num_interactions):
     ]
 
 
+conversion_rates = [0.05, 0.10, 0.03]
 x_ticks = np.arange(1000)[::250]
 x = np.arange(1000)[::25]
-y = calculate_traffic_splits([0.05, 0.10, 0.03], x)
+bandit_splits = calculate_traffic_splits(conversion_rates, x)
+ab_test_splits = np.ones(x.shape) * (1 / len(conversion_rates))
 
 style.use("seaborn")
 fig, ax = plt.subplots(1, 3, figsize=(9, 6))
 plt.suptitle("Traffic split by variant")
 
-lines = [line.plot([], [], lw=2) for line in ax]
+line_groups = [axis.plot([], [], 'b-', [], [], 'r--', lw=2) for axis in ax]
 
 
 def animate(i):
     for axis in ax:
         axis.figure.canvas.draw()
 
-    for index, line in enumerate(lines):
-        # Only one line per subplot for now
-        line[0].set_data(x[0:i + 1], y[0:i + 1, index])
+    for index, lines in enumerate(line_groups):
+        lines[0].set_data(x[0:i + 1], bandit_splits[0:i + 1, index])
+        lines[1].set_data(x[0:i + 1], ab_test_splits[0:i + 1])
 
 
 def init():
