@@ -71,8 +71,10 @@ plt.show()
 
 
 def save_as_html():
-    html = animation.to_html5_video()
-    f = open("traffic_splits.html", "w")
-    f.write(html)
-    f.close()
-    plt.close()
+    try:
+        html = animation.to_html5_video()
+        f = open("traffic_splits.html", "w")
+        f.write(html)
+    finally:
+        f.close()
+        plt.close()
