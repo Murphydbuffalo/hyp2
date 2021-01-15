@@ -71,10 +71,10 @@ animation = FuncAnimation(
 plt.show()
 
 
-def save_as_html():
+def save_as_html(filename="traffic_splits.html"):
     try:
         html = animation.to_html5_video()
-        f = open("traffic_splits.html", "w")
+        f = open(filename, "w")
         f.write(html)
     finally:
         f.close()
