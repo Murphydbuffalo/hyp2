@@ -68,3 +68,11 @@ animation = FuncAnimation(
 )
 
 plt.show()
+
+
+def save_as_html():
+    html = animation.to_html5_video()
+    f = open("traffic_splits.html", "w")
+    f.write(html)
+    f.close()
+    plt.close()
