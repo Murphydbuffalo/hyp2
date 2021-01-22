@@ -98,5 +98,6 @@ def save_as_html(filename="traffic_splits.html"):
         plt.close()
 
 
-writer = PillowWriter(fps=30)
-animation.save("traffic_splits.gif", writer=writer)
+def save_as_gif(filename="traffic_splits.gif"):
+    writer = PillowWriter(fps=30)
+    animation.save("traffic_splits.gif", writer=writer)
