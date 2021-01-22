@@ -1,6 +1,6 @@
 import numpy as np
 from matplotlib import style, pyplot as plt
-from matplotlib.animation import FuncAnimation
+from matplotlib.animation import FuncAnimation, PillowWriter
 from hyp.thompson_sampler import ThompsonSampler
 
 
@@ -46,8 +46,16 @@ line_groups = [axis.plot([], [], 'b-', [], [], 'r--', lw=2) for axis in ax]
 
 
 def animate(i):
-    for axis in ax:
+    for _index, axis in enumerate(ax):
         axis.figure.canvas.draw()
+        # axis.fill_between(
+        #     x[0:i + 1],
+        #     bandit_splits[0:i + 1, index],
+        #     ab_test_splits[0:i + 1, index],
+        #     color="yellow",
+        #     alpha=0.3,
+        #     animated=True
+        # )
 
     for index, lines in enumerate(line_groups):
         lines[0].set_data(x[0:i + 1], bandit_splits[0:i + 1, index])
@@ -60,6 +68,7 @@ def init():
         axis.set_ylim(-0.05, 1.05)
         axis.set_xlim(0, 1010)
         axis.legend(["Hyp", "A/B Test"])
+        axis.set_title(f"{conversion_rates[index] * 100}% conversion rate")
 
         if index == 0:
             axis.set_ylabel("Traffic percentage")
@@ -71,8 +80,8 @@ def init():
 animation = FuncAnimation(
     fig,
     animate,
-    interval=333,
-    repeat=False,
+    interval=200,
+    repeat=True,
     init_func=init
 )
 
@@ -87,3 +96,7 @@ def save_as_html(filename="traffic_splits.html"):
     finally:
         f.close()
         plt.close()
+
+
+writer = PillowWriter(fps=30)
+animation.save("traffic_splits.gif", writer=writer)
