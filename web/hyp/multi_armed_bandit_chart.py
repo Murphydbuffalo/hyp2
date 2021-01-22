@@ -1,69 +1,102 @@
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
+from matplotlib import style, pyplot as plt
+from matplotlib.animation import FuncAnimation, PillowWriter
 from hyp.thompson_sampler import ThompsonSampler
 
 
-class MultiArmedBanditChart:
-    def __init__(self, conversion_rates, num_interactions=1000):
-        self.conversion_rates = conversion_rates
-        self.x_ticks = np.arange(0, num_interactions)[::250]
-        self.x_points = np.arange(0, num_interactions)[::10]
+def calculate_traffic_splits(conversion_rates, x_points):
+    splits = []
 
-    def plot(self):
-        self.calculate_traffic_splits()
-
-        fig = plt.figure(figsize=(9, 6))
-        plt.suptitle("Traffic split by variant")
-        plt.ylim(0.0, 1.0)
-        plt.xlim(0, self.x_points[-1] + 10)
-        plt.xticks(self.x_ticks)
-
-        subplots = []
-
-        for i in range(len(self.conversion_rates)):
-            if i == 0:
-                subplots.append(plt.subplot(
-                    1,
-                    len(self.conversion_rates),
-                    i + 1,
-                    xlabel="Unique visitors",
-                    ylabel="Traffic percentage"
-                ))
-            else:
-                subplots.append(plt.subplot(
-                    1,
-                    len(self.conversion_rates),
-                    i + 1,
-                    xlabel="Unique visitors",
-                    sharey=subplots[0]
-                ))
-
-            plt.title(f'{int(self.conversion_rates[i] * 100)}% conversion rate')
-            plt.plot(self.x_points, self.traffic_splits[:, i])
-
-        return plt
-
-    def calculate_traffic_splits(self):
-        splits = []
-
-        for num_interactions in self.x_points:
-            variants = self.variants(num_interactions)
-            sampler = ThompsonSampler(variants)
-            traffic_splits = [
-                percentage for percentage in sampler.simulated_traffic_split().values()
-            ]
-            splits.append(traffic_splits)
-
-        self.traffic_splits = np.array(splits)
-
-        return True
-
-    def variants(self, num_interactions):
-        return [
-            {
-                "id": i + 1,
-                "num_conversions": self.conversion_rates[i] * num_interactions,
-                "num_interactions": num_interactions
-            } for i in range(len(self.conversion_rates))
+    for num_interactions in x_points:
+        sampler = ThompsonSampler(variants(conversion_rates, num_interactions))
+        traffic_splits = [
+            percentage for percentage in sampler.simulated_traffic_split().values()
         ]
+        splits.append(traffic_splits)
+
+    return np.array(splits)
+
+
+def variants(conversion_rates, num_interactions):
+    return [
+        {
+            "id": i + 1,
+            "num_conversions": conversion_rates[i] * num_interactions,
+            "num_interactions": num_interactions
+        } for i in range(len(conversion_rates))
+    ]
+
+
+conversion_rates = [0.05, 0.10, 0.03]
+x_ticks = np.arange(1000)[::250]
+x = np.arange(1000)[::25]
+bandit_splits = calculate_traffic_splits(conversion_rates, x)
+ab_test_splits = (np.zeros(bandit_splits.shape) + 1) * (1 / len(conversion_rates))
+
+# After A/B test has completed
+ab_test_splits[35:40, 0] = 0.0
+ab_test_splits[35:40, 1] = 1.0
+ab_test_splits[35:40, 2] = 0.0
+
+style.use("seaborn")
+fig, ax = plt.subplots(1, 3, figsize=(9, 6))
+plt.suptitle("Traffic split by variant")
+
+line_groups = [axis.plot([], [], 'b-', [], [], 'r--', lw=2) for axis in ax]
+
+
+def animate(i):
+    for _index, axis in enumerate(ax):
+        axis.figure.canvas.draw()
+        # axis.fill_between(
+        #     x[0:i + 1],
+        #     bandit_splits[0:i + 1, index],
+        #     ab_test_splits[0:i + 1, index],
+        #     color="yellow",
+        #     alpha=0.3,
+        #     animated=True
+        # )
+
+    for index, lines in enumerate(line_groups):
+        lines[0].set_data(x[0:i + 1], bandit_splits[0:i + 1, index])
+        lines[1].set_data(x[0:i + 1], ab_test_splits[0:i + 1, index])
+
+
+def init():
+    for index, axis in enumerate(ax):
+        axis.set_xticks(x_ticks)
+        axis.set_ylim(-0.05, 1.05)
+        axis.set_xlim(0, 1010)
+        axis.legend(["Hyp", "A/B Test"])
+        axis.set_title(f"{conversion_rates[index] * 100}% conversion rate")
+
+        if index == 0:
+            axis.set_ylabel("Traffic percentage")
+
+        if index == 1:
+            axis.set_xlabel("Unique visitors")
+
+
+animation = FuncAnimation(
+    fig,
+    animate,
+    interval=200,
+    repeat=True,
+    init_func=init
+)
+
+plt.show()
+
+
+def save_as_html(filename="traffic_splits.html"):
+    try:
+        html = animation.to_html5_video()
+        f = open(filename, "w")
+        f.write(html)
+    finally:
+        f.close()
+        plt.close()
+
+
+writer = PillowWriter(fps=30)
+animation.save("traffic_splits.gif", writer=writer)
