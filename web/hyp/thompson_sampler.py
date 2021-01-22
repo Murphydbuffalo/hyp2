@@ -1,5 +1,4 @@
 import numpy as np
-from scipy.stats import beta
 
 
 class ThompsonSampler:
@@ -39,9 +38,6 @@ class ThompsonSampler:
             samples.append(result)
 
         return samples
-
-    def expected_value(self, variant):
-        beta.mean(self.alpha(variant), self.beta(variant))
 
     def alpha(self, variant):
         return variant["num_conversions"] + 1
