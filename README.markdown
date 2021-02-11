@@ -54,21 +54,26 @@ Django has good docs and guides and is conceptually similar to Ruby on Rails.
 Here's what you need to do to get Hyp running locally on a Mac:
 1. Make sure you have XCode installed and up to date: `xcode-select --install`
 2. Install Homebrew: `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
-3. Install Python 3: `brew install python`. This also gets you `pip`, Python's package manager.
-4. Install Virtualenv: `pip install virtualenv`. This is a library for managing the dependencies in your
+3. Install Python 3 and set it as your default Python version: `brew install python3 && brew link python3`. This should also gets you `pip`, Python's package manager, but if not you can try `python -m ensurepip --upgrade`.
+4. Install Virtualenv: `python -m pip install virtualenv`. This is a library for managing the dependencies in your
 Python project. It lets you install different versions of packages for specific projects.
 5. Clone the Hyp repo. If you have SSH keys added to GitHub run `git clone git@github.com:Murphydbuffalo/hyp2.git`, otherwise run `git clone https://github.com/Murphydbuffalo/hyp2.git`
 6. `cd hyp2` (the original Hyp was a very terrible Ruby Gem, thus the name "Hyp2").
 7. `source/bin/activate`. This "activates" the virtual env, meaning commands you
 run will use the version of Python and dependencies specified by the project.
 The Python version is specified by `pyvenv.cfg` and the dependencies by `requirements.txt`. You can always run `deactivate` to get out of the virtual env.
-8. Install the dependencies: `pip install -r requirements.txt`.
+8. Install the dependencies: `python -m pip install -r requirements.txt`.
 9. `cd web`. Most of the work you do will be inside this directory. The top level
 directory is mainly for configuration files.
 10. Install and run PostgreSQL: `brew install postgresql` and then `brew services start postgresql`.
 If everything is set up correctly you should be able to run the server with `python manage.py runserver`. Congrats!
 11. Debugging issues with your Postgres setup. If something is not working with Postgres you can
 investigate by looking at the log file: `tail -n 500 /usr/local/var/log/postgres.log`.
+
+If you're on a Linux system things should largely be the same, with some key differences being:
+1. You'll be using something like `apt` to fetch dependencies.
+2. You'll need to use something like Ubuntu's `service` command to run Postgres, rather than Homebrew services.
+3. *You'll need to install the Python dev package so that dependencies with native code can compile successfully.* To do this you can run `sudo apt-get install python3-dev`.
 
 ### Useful Django commands
 Django provides `manage.py` script inside `web` that can be used to do things
