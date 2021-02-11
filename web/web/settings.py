@@ -76,6 +76,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
+AUTH_USER_MODEL = 'hyp.HypUser'
+
 if DEBUG is True:
     INSTALLED_APPS.append('debug_toolbar')
 
