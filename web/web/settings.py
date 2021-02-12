@@ -97,6 +97,7 @@ MIDDLEWARE = [
 
 if DEBUG is True:
     MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 else:
     MIDDLEWARE.append('pybrake.django.AirbrakeMiddleware')
 
@@ -180,8 +181,7 @@ STATIC_ROOT = Path(BASE_DIR, "staticfiles")
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_URL = '/static/'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
+# Authentication - django-allauth
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
@@ -190,6 +190,8 @@ AUTHENTICATION_BACKENDS = (
 SITE_ID = 1
 
 ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
 ACCOUNT_SESSION_REMEMBER = True

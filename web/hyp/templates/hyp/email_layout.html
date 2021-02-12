@@ -27,32 +27,6 @@
 </head>
 
 <body>
-  <navbar class="horizontal">
-    <a class="logo" href={% url "home" %}>
-      Hyp
-    </a>
-
-    <div class="auth">
-      {% if user.is_authenticated %}
-        <a href={% url "profile" %}>
-          <i class="fas fa-user"></i> Profile
-        </a>
-
-       <form action="{% url 'account_logout' %}" method="post">
-         {% csrf_token %}
-         {{ form.as_p }}
-         <input class="link" name="logout" type="submit" value="Sign out">
-        </form>
-      {% else %}
-        <p>
-          <a href={% url "account_login" %}>Sign in</a>
-          or
-          <a href={% url "account_signup" %}>Sign up</a>
-        </p>
-      {% endif %}
-    </div>
-  </navbar>
-
   <main role="main" class="container">
     {% block content %}
     {% endblock %}
