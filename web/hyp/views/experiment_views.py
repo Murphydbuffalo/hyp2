@@ -6,16 +6,18 @@ from hyp.models import Experiment
 
 @login_required
 def index(request):
-    # TODO: scope query to user's account
-    experiments = Experiment.objects.order_by('-created_at')
+    experiments = Experiment.objects.filter(
+        customer_id=request.user.customer_id
+    ).order_by('-created_at')
 
     return render(request, 'hyp/experiments/index.html', {"experiments": experiments})
 
 
 @login_required
 def show(request, experiment_id):
-    # TODO: scope query to user's account
-    experiment = get_object_or_404(Experiment, id=experiment_id)
+    experiment = get_object_or_404(
+        Experiment, id=experiment_id, customer_id=request.user.customer_id
+    )
 
     return render(request, 'hyp/experiments/show.html', {"experiment": experiment})
 
