@@ -126,10 +126,10 @@ WSGI_APPLICATION = 'web.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': environ.get('DB_HOST', ''),
+        'HOST': environ.get('DB_HOST', 'localhost'),
         'PORT': environ.get('DB_PORT', ''),
-        'USER': environ.get('DB_USER', ''),
-        'PASSWORD': environ.get('DB_PASSWORD', ''),
+        'USER': environ.get('DB_USER', 'postgres'),
+        'PASSWORD': environ.get('DB_PASSWORD', 'postgres'),
         'NAME': environ.get('DB_NAME', 'hyp2'),
     }
 }
