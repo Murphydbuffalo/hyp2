@@ -39,3 +39,7 @@ navbar.horizontal {
 navbar.horizontal a {
   margin-right: 5px;
 }
+
+navbar.horizontal .auth form {
+  display: inline-block;
+}

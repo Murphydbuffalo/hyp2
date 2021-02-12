@@ -41,10 +41,7 @@
        <form action="{% url 'account_logout' %}" method="post">
          {% csrf_token %}
          {{ form.as_p }}
-          <label for="logout">
-            <i class="fas fa-door-closed"></i>
-          </label>
-          <input name="logout" type="submit" value="Sign out">
+         <input class="link" name="logout" type="submit" value="Sign out">
         </form>
       {% else %}
         <a href={% url "account_login" %}>Sign in</a>

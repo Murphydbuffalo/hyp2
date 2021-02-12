@@ -157,17 +157,22 @@ p {
 
 /* Links
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
-a {
+a, .link {
   color: #1EAEDB; }
-a:hover {
+a:hover, .link:hover {
   color: #0FA0CE; }
 
+input.link {
+  background: transparent;
+  border: none;
+  display: inline;
+}
 
 /* Buttons
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .button,
 button,
-input[type="submit"],
+input[type="submit"]:not(.link),
 input[type="reset"],
 input[type="button"] {
   display: inline-block;
