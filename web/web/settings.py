@@ -107,9 +107,12 @@ else:
     SMTP_PORT = 587
     EMAIL_HOST_USER = environ.get('POSTMARK_ACCESS_TOKEN')
     EMAIL_HOST_PASSWORD = environ.get('POSTMARK_ACCESS_TOKEN')
-    EMAIL_USE_TLS = True
 
     MIDDLEWARE.append('pybrake.django.AirbrakeMiddleware')
+
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = "app@onhyp.com"
+SERVER_EMAIL = "app@onhyp.com"
 
 ROOT_URLCONF = 'web.urls'
 
