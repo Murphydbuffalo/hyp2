@@ -67,14 +67,19 @@ INTERNAL_IPS = [
 
 INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
-    'hyp.apps.HypConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'hyp.apps.HypConfig',
+    'allauth',
+    'allauth.account',
 ]
+
+AUTH_USER_MODEL = 'hyp.HypUser'
 
 if DEBUG is True:
     INSTALLED_APPS.append('debug_toolbar')
@@ -92,6 +97,7 @@ MIDDLEWARE = [
 
 if DEBUG is True:
     MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 else:
     MIDDLEWARE.append('pybrake.django.AirbrakeMiddleware')
 
@@ -121,10 +127,10 @@ WSGI_APPLICATION = 'web.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': environ.get('DB_HOST', ''),
+        'HOST': environ.get('DB_HOST', 'localhost'),
         'PORT': environ.get('DB_PORT', ''),
-        'USER': environ.get('DB_USER', ''),
-        'PASSWORD': environ.get('DB_PASSWORD', ''),
+        'USER': environ.get('DB_USER', 'postgres'),
+        'PASSWORD': environ.get('DB_PASSWORD', 'postgres'),
         'NAME': environ.get('DB_NAME', 'hyp2'),
     }
 }
@@ -150,6 +156,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+LOGIN_REDIRECT_URL = "/experiments"
+LOGOUT_REDIRECT_URL = "/"
+ACCOUNT_LOGOUT_REDIRECT_URL = "/"
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
@@ -171,3 +180,21 @@ USE_TZ = True
 STATIC_ROOT = Path(BASE_DIR, "staticfiles")
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_URL = '/static/'
+
+# Authentication - django-allauth
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
+
+SITE_ID = 1
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
+ACCOUNT_SESSION_REMEMBER = True
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_UNIQUE_EMAIL = True

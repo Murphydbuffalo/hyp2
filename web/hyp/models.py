@@ -1,3 +1,4 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from uuid import uuid4
 
@@ -15,6 +16,14 @@ class Customer(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class HypUser(AbstractUser):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True)
+    email = models.EmailField(unique=True)
+
+    def __str__(self):
+        return self.email
 
 
 class ApiKey(models.Model):
