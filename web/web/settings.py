@@ -99,6 +99,12 @@ if DEBUG is True:
     MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 else:
+    SMTP_HOST = 'smtp.postmarkapp.com'
+    SMTP_PORT = 587
+    EMAIL_HOST_USER = environ.get('SMTP_ACCESS_TOKEN')
+    EMAIL_HOST_PASSWORD = environ.get('SMTP_ACCESS_TOKEN')
+    EMAIL_USE_TLS = True
+
     MIDDLEWARE.append('pybrake.django.AirbrakeMiddleware')
 
 ROOT_URLCONF = 'web.urls'
