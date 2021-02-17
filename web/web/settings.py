@@ -97,7 +97,11 @@ MIDDLEWARE = [
 
 if DEBUG is True:
     MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+    EMAIL_HOST = 'smtp.mailtrap.io'
+    EMAIL_HOST_USER = '2b318f4d13897f'
+    EMAIL_HOST_PASSWORD = environ.get('MAILTRAP_PASSWORD')
+    EMAIL_PORT = '2525'
 else:
     SMTP_HOST = 'smtp.postmarkapp.com'
     SMTP_PORT = 587
