@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from os import environ
 from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -97,9 +99,22 @@ MIDDLEWARE = [
 
 if DEBUG is True:
     MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+    EMAIL_HOST = 'smtp.mailtrap.io'
+    EMAIL_HOST_USER = '2b318f4d13897f'
+    EMAIL_HOST_PASSWORD = environ.get('MAILTRAP_PASSWORD')
+    EMAIL_PORT = '2525'
 else:
+    SMTP_HOST = 'smtp.postmarkapp.com'
+    SMTP_PORT = 587
+    EMAIL_HOST_USER = environ.get('POSTMARK_ACCESS_TOKEN')
+    EMAIL_HOST_PASSWORD = environ.get('POSTMARK_ACCESS_TOKEN')
+
     MIDDLEWARE.append('pybrake.django.AirbrakeMiddleware')
+
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = "app@onhyp.com"
+SERVER_EMAIL = "app@onhyp.com"
 
 ROOT_URLCONF = 'web.urls'
 

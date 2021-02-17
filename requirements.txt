@@ -37,6 +37,7 @@ pycodestyle==2.6.0
 pycparser==2.20
 pyflakes==2.2.0
 PyJWT==2.0.1
+python-dotenv==0.15.0
 python3-openid==3.2.0
 pytz==2020.5
 pyudorandom==1.0.0
@@ -54,7 +55,7 @@ sqlparse==0.4.1
 stevedore==3.3.0
 tdigest==0.5.2.2
 toml==0.10.2
-typed-ast==1.4.1
+typed-ast==1.4.2
 typing-extensions==3.7.4.3
 urllib3==1.26.3
 whitenoise==5.2.0

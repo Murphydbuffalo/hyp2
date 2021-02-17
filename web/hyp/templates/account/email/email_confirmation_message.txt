@@ -1,0 +1,11 @@
+Welcome to Hyp!
+
+You're one step away from better product experimentation.
+
+Please visit {{ activate_url }} to activate your account.
+
+If you run into trouble you can get in touch at support@onhyp.com
+
+Happy experimenting!
+
+- The team at Hyp
