@@ -105,8 +105,8 @@ if DEBUG is True:
 else:
     SMTP_HOST = 'smtp.postmarkapp.com'
     SMTP_PORT = 587
-    EMAIL_HOST_USER = environ.get('SMTP_ACCESS_TOKEN')
-    EMAIL_HOST_PASSWORD = environ.get('SMTP_ACCESS_TOKEN')
+    EMAIL_HOST_USER = environ.get('POSTMARK_ACCESS_TOKEN')
+    EMAIL_HOST_PASSWORD = environ.get('POSTMARK_ACCESS_TOKEN')
     EMAIL_USE_TLS = True
 
     MIDDLEWARE.append('pybrake.django.AirbrakeMiddleware')
