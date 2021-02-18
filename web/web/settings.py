@@ -106,7 +106,7 @@ if DEBUG is True:
     EMAIL_PORT = '2525'
 else:
     SMTP_HOST = 'smtp.postmarkapp.com'
-    SMTP_PORT = 587
+    SMTP_PORT = '587'
     EMAIL_HOST_USER = environ.get('POSTMARK_ACCESS_TOKEN')
     EMAIL_HOST_PASSWORD = environ.get('POSTMARK_ACCESS_TOKEN')
 
