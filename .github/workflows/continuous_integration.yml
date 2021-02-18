@@ -26,6 +26,7 @@ jobs:
         env:
           POSTGRES_USER: runner
           POSTGRES_PASSWORD: gethyped
+          POSTGRES_DB: hyp2
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
