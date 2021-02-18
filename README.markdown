@@ -59,21 +59,23 @@ Here's what you need to do to get Hyp running locally on a Mac:
 Python project. It lets you install different versions of packages for specific projects.
 5. Clone the Hyp repo. If you have SSH keys added to GitHub run `git clone git@github.com:Murphydbuffalo/hyp2.git`, otherwise run `git clone https://github.com/Murphydbuffalo/hyp2.git`
 6. `cd hyp2` (the original Hyp was a very terrible Ruby Gem, thus the name "Hyp2").
-7. `source/bin/activate`. This "activates" the virtual env, meaning commands you
-run will use the version of Python and dependencies specified by the project.
-The Python version is specified by `pyvenv.cfg` and the dependencies by `requirements.txt`. You can always run `deactivate` to get out of the virtual env.
-8. Install the dependencies: `python -m pip install -r requirements.txt`.
-9. `cd web`. Most of the work you do will be inside this directory. The top level
+7. Install the dependencies: `python -m pip install -r requirements.txt`.
+8. `cd web`. Most of the work you do will be inside this directory. The top level
 directory is mainly for configuration files.
-10. Install and run PostgreSQL: `brew install postgresql` and then `brew services start postgresql`.
+9. Install and run PostgreSQL: `brew install postgresql` and then `brew services start postgresql`.
 If everything is set up correctly you should be able to run the server with `python manage.py runserver`. Congrats!
-11. Debugging issues with your Postgres setup. If something is not working with Postgres you can
+10. Debugging issues with your Postgres setup. If something is not working with Postgres you can
 investigate by looking at the log file: `tail -n 500 /usr/local/var/log/postgres.log`.
 
 If you're on a Linux system things should largely be the same, with some key differences being:
 1. You'll be using something like `apt` to fetch dependencies.
 2. You'll need to use something like Ubuntu's `service` command to run Postgres, rather than Homebrew services.
 3. *You'll need to install the Python dev package so that dependencies with native code can compile successfully.* To do this you can run `sudo apt-get install python3-dev`.
+
+### Using a virtual environment
+If you want to use a tool like `venv` to work on the project please feel free to do so!
+
+I (Dan) personally do so. But don't commit files specific to your local dev environment to the repo. For example you'll see that we have directories like `bin` and `lib` added to `.gitignore`. This prevents binaries specific to a developer's local environment from getting added to the repo.
 
 ### Useful Django commands
 Django provides `manage.py` script inside `web` that can be used to do things

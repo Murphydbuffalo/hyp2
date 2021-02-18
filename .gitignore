@@ -1,3 +1,6 @@
+bin/**/*
+pyvenv.cfg
+share/
 lib/**/*
 lib64/**/*
 **/*.pyc
