@@ -15,6 +15,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('hyp', '0002_auto_20210211_2245'),
+        ('sites', '0002_alter_domain_unique')
     ]
 
     operations = [
