@@ -83,7 +83,7 @@ like start the development server, run tests, open up REPLs, create and run migr
 
 1. Run `python manage.py migrate` to run database migrations.
 2. Run `python manage.py runserver` to start your development server.
-3. Run `python manage.py test hyp/tests` to run the test suite.
+3. Run `python manage.py test hyp/tests --settings web.settings.testing` to run the test suite.
 4. Run `python manage.py shell` to run a Python REPL from which you can `import`
 any code you want to play around with.
 

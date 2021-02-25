@@ -16,56 +16,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = environ.get('SECRET_KEY', '_5@i3yzg%99ootbe@r7w8z-o_0pa(1d*ukphx&5pogw27_)ba(')
+SECRET_KEY = '_5@i3yzg%99ootbe@r7w8z-o_0pa(1d*ukphx&5pogw27_)ba(' # noqa S105
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = environ.get('DEBUG', 'ON') == 'ON'
-
-AIRBRAKE = dict(
-    project_id=environ.get("AIRBRAKE_PROJECT_ID", ""),
-    project_key=environ.get("AIRBRAKE_API_KEY", ""),
-)
-
-if DEBUG is False:
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    SECURE_HSTS_SECONDS = 60
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
-    LOGGING = {
-        'version': 1,
-        'disable_existing_loggers': False,
-        'handlers': {
-            'airbrake': {
-                'level': 'ERROR',
-                'class': 'pybrake.LoggingHandler',
-            },
-        },
-        'loggers': {
-            'app': {
-                'handlers': ['airbrake'],
-                'level': 'ERROR',
-                'propagate': True,
-            },
-        },
-    }
-
-ALLOWED_HOSTS = [
-    "onhyp.com",
-    "localhost",
-    "127.0.0.1",
-]
-
-INTERNAL_IPS = [
-    "127.0.0.1",
-]
 
 INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
@@ -83,9 +41,6 @@ INSTALLED_APPS = [
 
 AUTH_USER_MODEL = 'hyp.HypUser'
 
-if DEBUG is True:
-    INSTALLED_APPS.append('debug_toolbar')
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -96,21 +51,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
-if DEBUG is True:
-    MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
-
-    EMAIL_HOST = 'smtp.mailtrap.io'
-    EMAIL_HOST_USER = '2b318f4d13897f'
-    EMAIL_HOST_PASSWORD = environ.get('MAILTRAP_PASSWORD')
-    EMAIL_PORT = '2525'
-else:
-    EMAIL_HOST = 'smtp.postmarkapp.com'
-    EMAIL_PORT = '587'
-    EMAIL_HOST_USER = environ.get('POSTMARK_ACCESS_TOKEN')
-    EMAIL_HOST_PASSWORD = environ.get('POSTMARK_ACCESS_TOKEN')
-
-    MIDDLEWARE.append('pybrake.django.AirbrakeMiddleware')
 
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = "app@onhyp.com"
@@ -149,9 +89,6 @@ DATABASES = {
         'NAME': environ.get('DB_NAME', 'hyp2'),
     }
 }
-
-if DEBUG is False:
-    DATABASES['default']['OPTIONS'] = {"sslmode": "require"}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
