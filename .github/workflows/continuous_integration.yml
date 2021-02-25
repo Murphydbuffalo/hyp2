@@ -67,7 +67,7 @@ jobs:
         DB_USER: runner
         DB_PASSWORD: gethyped
       working-directory: ./web
-      run: python manage.py test hyp/tests
+      run: python manage.py test hyp/tests --settings=web.settings.testing
   deploy:
     name: Deploy to Heroku
     needs: [lint, test]
