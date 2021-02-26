@@ -43,6 +43,5 @@ class TestSignup(TestCase):
         )
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].subject, '[Hyp] Please Confirm Your E-mail Address')
-
-    def test_email_verifies(self):
-        pass
+        self.assertIn('Welcome to Hyp!', mail.outbox[0].body)
+        self.assertIn('/accounts/confirm-email/', mail.outbox[0].body)
