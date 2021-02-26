@@ -9,7 +9,13 @@ class TestSignup(TestCase):
         self.client = Client()
 
     def test_ui_has_form(self):
-        pass
+        response = self.client.get('/accounts/signup/', follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertIn('<form action="/accounts/signup/" method="post">', str(response.content))
+        self.assertIn('<input type="email" name="email"', str(response.content))
+        self.assertIn('<input type="password" name="password1"', str(response.content))
+        self.assertIn('<input type="password" name="password2"', str(response.content))
 
     def test_verification_sends_on_form_submit(self):
         self.assertEqual(EmailAddress.objects.count(), 0)
