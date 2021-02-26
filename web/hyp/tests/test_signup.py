@@ -45,3 +45,54 @@ class TestSignup(TestCase):
         self.assertEqual(mail.outbox[0].subject, '[Hyp] Please Confirm Your E-mail Address')
         self.assertIn('Welcome to Hyp!', mail.outbox[0].body)
         self.assertIn('/accounts/confirm-email/', mail.outbox[0].body)
+
+    # TODO: once we get an internet connection look up some docs on a better
+    # way to assert that a user gets logged in or not. Would be nice to check
+    # user.is_authenticated (or whatever the method is called), rather than
+    # parsing the HTML response.
+    # Ditto with logging out.
+    #
+    # TODO: should we assert that the nav renders the right links for sign up,
+    # sign in, and sign out? May as well make sure the entire flow works.
+    def test_login(self):
+        self.client.post(
+            '/accounts/signup/',
+            {
+                'email': 'bob@example.com',
+                'password1': 'thisisaverynicepasswordfortesting!',
+                'password2': 'thisisaverynicepasswordfortesting!'
+            },
+            follow=True
+        )
+
+        email = EmailAddress.objects.filter(email='bob@example.com', verified=False).first()
+        email.verified = True
+        email.save()
+
+        bad_login_response = self.client.post(
+            '/accounts/login/',
+            {
+                'login': 'bob@example.com',
+                'password': 'notgonnahappen',
+            },
+            follow=True
+        )
+
+        self.assertEqual(bad_login_response.status_code, 200)
+        self.assertIn('errorlist', str(bad_login_response.content))
+        self.assertIn(
+            'The e-mail address and/or password you specified are not correct.',
+            str(bad_login_response.content)
+        )
+
+        response = self.client.post(
+            '/accounts/login/',
+            {
+                'login': 'bob@example.com',
+                'password': 'thisisaverynicepasswordfortesting!',
+            },
+            follow=True
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn('errorlist', str(response.content))
