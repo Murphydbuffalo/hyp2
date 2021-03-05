@@ -1,5 +1,6 @@
 from django.test import TestCase, Client
 from django.core import mail
+from django.contrib import auth
 from hyp.models import HypUser
 from allauth.account.models import EmailAddress
 
@@ -46,11 +47,7 @@ class TestSignup(TestCase):
         self.assertIn('Welcome to Hyp!', mail.outbox[0].body)
         self.assertIn('/accounts/confirm-email/', mail.outbox[0].body)
 
-    # TODO: once we get an internet connection look up some docs on a better
-    # way to assert that a user gets logged in or not. Would be nice to check
-    # user.is_authenticated (or whatever the method is called), rather than
-    # parsing the HTML response.
-    # Ditto with logging out.
+    # TODO: Ditto with logging out.
     #
     # TODO: should we assert that the nav renders the right links for sign up,
     # sign in, and sign out? May as well make sure the entire flow works.
@@ -78,6 +75,9 @@ class TestSignup(TestCase):
             follow=True
         )
 
+        user = auth.get_user(self.client)
+
+        self.assertFalse(user.is_authenticated)
         self.assertEqual(bad_login_response.status_code, 200)
         self.assertIn('errorlist', str(bad_login_response.content))
         self.assertIn(
@@ -96,3 +96,7 @@ class TestSignup(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertNotIn('errorlist', str(response.content))
+
+        user = auth.get_user(self.client)
+
+        self.assertTrue(user.is_authenticated)
