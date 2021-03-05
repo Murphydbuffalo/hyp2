@@ -100,3 +100,44 @@ class TestSignup(TestCase):
         user = auth.get_user(self.client)
 
         self.assertTrue(user.is_authenticated)
+
+    def test_logout(self):
+        self.client.post(
+            '/accounts/signup/',
+            {
+                'email': 'bob@example.com',
+                'password1': 'thisisaverynicepasswordfortesting!',
+                'password2': 'thisisaverynicepasswordfortesting!'
+            },
+            follow=True
+        )
+
+        email = EmailAddress.objects.filter(email='bob@example.com', verified=False).first()
+        email.verified = True
+        email.save()
+
+        response = self.client.post(
+            '/accounts/login/',
+            {
+                'login': 'bob@example.com',
+                'password': 'thisisaverynicepasswordfortesting!',
+            },
+            follow=True
+        )
+
+        user = auth.get_user(self.client)
+
+        self.assertTrue(user.is_authenticated)
+
+        self.client.post(
+            '/accounts/logout/',
+            {
+                'login': 'bob@example.com',
+                'password': 'thisisaverynicepasswordfortesting!',
+            },
+            follow=True
+        )
+
+        user = auth.get_user(self.client)
+
+        self.assertFalse(user.is_authenticated)
