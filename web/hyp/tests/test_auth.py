@@ -3,13 +3,18 @@ from django.core import mail
 from django.contrib import auth
 from hyp.models import HypUser
 from allauth.account.models import EmailAddress
+import re
 
 
-class TestSignup(TestCase):
+class TestAuth(TestCase):
     def setUp(self):
         self.client = Client()
 
-    def test_ui_has_form(self):
+    def test_signup(self):
+        self.assertEqual(EmailAddress.objects.count(), 0)
+        self.assertEqual(HypUser.objects.count(), 0)
+        self.assertEqual(len(mail.outbox), 0)
+
         response = self.client.get('/accounts/signup/', follow=True)
         self.assertEqual(response.status_code, 200)
 
@@ -17,11 +22,6 @@ class TestSignup(TestCase):
         self.assertIn('<input type="email" name="email"', str(response.content))
         self.assertIn('<input type="password" name="password1"', str(response.content))
         self.assertIn('<input type="password" name="password2"', str(response.content))
-
-    def test_verification_sends_on_form_submit(self):
-        self.assertEqual(EmailAddress.objects.count(), 0)
-        self.assertEqual(HypUser.objects.count(), 0)
-        self.assertEqual(len(mail.outbox), 0)
 
         response = self.client.post(
             '/accounts/signup/',
@@ -47,10 +47,17 @@ class TestSignup(TestCase):
         self.assertIn('Welcome to Hyp!', mail.outbox[0].body)
         self.assertIn('/accounts/confirm-email/', mail.outbox[0].body)
 
-    # TODO: Ditto with logging out.
-    #
-    # TODO: should we assert that the nav renders the right links for sign up,
-    # sign in, and sign out? May as well make sure the entire flow works.
+        confirmation_path_regexp = re.compile("(/accounts/confirm-email/.+/)")
+        confirmation_path = confirmation_path_regexp.search(mail.outbox[0].body).group(1)
+
+        response = self.client.get(confirmation_path, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            EmailAddress.objects.filter(email='bob@example.com', verified=True).count(),
+            1
+        )
+
     def test_login(self):
         self.client.post(
             '/accounts/signup/',
@@ -116,7 +123,7 @@ class TestSignup(TestCase):
         email.verified = True
         email.save()
 
-        response = self.client.post(
+        self.client.post(
             '/accounts/login/',
             {
                 'login': 'bob@example.com',
