@@ -7,7 +7,7 @@ DEBUG = False
 SECRET_KEY = environ.get('SECRET_KEY')
 
 ALLOWED_HOSTS = [
-    "onhyp.com",
+    "app.onhyp.com",
 ]
 
 INTERNAL_IPS = []
