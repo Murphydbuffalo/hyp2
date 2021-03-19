@@ -35,7 +35,7 @@ psycopg2==2.8.6
 pybrake==0.4.6
 pycodestyle==2.6.0
 pycparser==2.20
-pyflakes==2.2.0
+pyflakes==2.3.0
 PyJWT==2.0.1
 python-dotenv==0.15.0
 python3-openid==3.2.0
