@@ -103,7 +103,7 @@ We use GitHub Actions for continuous integration. See `.github/workflows` for
 how that is set up.
 
 The test suite and linter will run every time you push to a branch. A script to
-deploy to Heroku will run whenever changes are merged into `master`.
+deploy to Heroku will run whenever changes are merged into `main`.
 
 See `Procfile`, `runtime.txt`, and `heroku.sh` for Heroku-related scripts and config
 
