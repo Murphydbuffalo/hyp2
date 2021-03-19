@@ -71,7 +71,7 @@ jobs:
   deploy:
     name: Deploy to Heroku
     needs: [lint, test]
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     env:
       SSH_AUTH_SOCK: /tmp/ssh_agent.sock
@@ -87,4 +87,4 @@ jobs:
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null
           ssh-add - <<< "${{ secrets.HEROKU_SSH_PRIVATE_KEY }}"
           git remote add heroku git@heroku.com:hyyyp.git
-          git push heroku master
+          git push heroku main
