@@ -3,7 +3,6 @@ from uuid import UUID
 from http import HTTPStatus
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.db.models import Count, Q
 from hyp.models import Variant, Interaction
 from hyp.thompson_sampler import ThompsonSampler
 
@@ -25,16 +24,11 @@ def variant_assignment(request, participant_id, experiment_id):
     ).values("id", "name").first()
 
     if variant is None:
-        variants = Variant.objects.filter(
+        variants = Variant.objects.with_interaction_counts().filter(
             experiment__customer__apikey__access_token=token,
             experiment_id=experiment_id,
         ).values(
-            "id", "name"
-        ).annotate(
-            num_interactions=Count("interaction"),
-            num_conversions=Count(
-                "interaction", filter=Q(interaction__converted=True)
-            )
+            "id", "name", "num_interactions", "num_conversions"
         )
 
         if variants.count() == 0:
