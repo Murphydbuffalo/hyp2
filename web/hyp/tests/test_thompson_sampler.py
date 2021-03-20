@@ -1,5 +1,4 @@
 from django.test import TestCase
-from django.db.models import Count, Q
 from hyp.models import Customer, Experiment, Variant, Interaction
 from hyp.thompson_sampler import ThompsonSampler
 
@@ -16,11 +15,11 @@ class TestThompsonSampler(TestCase):
         ).save()
 
     def getVariantsWithConversions(self):
-        return Variant.objects.values("id", "name").annotate(
-            num_interactions=Count("interaction"),
-            num_conversions=Count(
-                "interaction", filter=Q(interaction__converted=True)
-            )
+        return Variant.objects.with_interaction_counts().values(
+            "id",
+            "name",
+            "num_interactions",
+            "num_conversions"
         )
 
     def setUp(self):
