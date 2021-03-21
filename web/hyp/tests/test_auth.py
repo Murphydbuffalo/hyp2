@@ -45,6 +45,7 @@ class TestAuth(TestCase):
         )
         self.assertEqual(Customer.objects.count(), 1)
         self.assertEqual(HypUser.objects.last().customer, Customer.objects.last())
+        self.assertEqual(HypUser.objects.last().groups.first().name, "Team admins")
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].subject, '[Hyp] Please Confirm Your E-mail Address')
         self.assertIn('Welcome to Hyp!', mail.outbox[0].body)
