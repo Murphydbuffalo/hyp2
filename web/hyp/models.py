@@ -3,10 +3,6 @@ from django.db import models
 from uuid import uuid4
 
 
-def create_access_token():
-    return uuid4().hex
-
-
 class Customer(models.Model):
     name = models.CharField(max_length=200, unique=True)
     created_at = models.DateTimeField('created at', auto_now_add=True)
@@ -21,9 +17,14 @@ class Customer(models.Model):
 class HypUser(AbstractUser):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True)
     email = models.EmailField(unique=True)
+    deactivated_at = models.DateTimeField('deactivated at', null=True, blank=True)
 
     def __str__(self):
         return self.email
+
+
+def create_access_token():
+    return uuid4().hex
 
 
 class ApiKey(models.Model):
@@ -32,7 +33,7 @@ class ApiKey(models.Model):
     production = models.BooleanField(default=False)
     created_at = models.DateTimeField('created at', auto_now_add=True)
     updated_at = models.DateTimeField('updated at', auto_now=True)
-    deleted_at = models.DateTimeField('deleted at', null=True, blank=True)
+    deactivated_at = models.DateTimeField('deactivated at', null=True, blank=True)
     last_used_at = models.DateTimeField('last used at', null=True, blank=True)
 
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)

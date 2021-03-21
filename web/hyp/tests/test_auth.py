@@ -1,7 +1,7 @@
 from django.test import TestCase, Client
 from django.core import mail
 from django.contrib import auth
-from hyp.models import HypUser
+from hyp.models import HypUser, Customer
 from allauth.account.models import EmailAddress
 import re
 
@@ -12,6 +12,7 @@ class TestAuth(TestCase):
 
     def test_signup(self):
         self.assertEqual(EmailAddress.objects.count(), 0)
+        self.assertEqual(Customer.objects.count(), 0)
         self.assertEqual(HypUser.objects.count(), 0)
         self.assertEqual(len(mail.outbox), 0)
 
@@ -42,6 +43,9 @@ class TestAuth(TestCase):
             EmailAddress.objects.filter(email='bob@example.com', verified=False).count(),
             1
         )
+        self.assertEqual(Customer.objects.count(), 1)
+        self.assertEqual(HypUser.objects.last().customer, Customer.objects.last())
+        self.assertEqual(HypUser.objects.last().groups.first().name, "Team admins")
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].subject, '[Hyp] Please Confirm Your E-mail Address')
         self.assertIn('Welcome to Hyp!', mail.outbox[0].body)
