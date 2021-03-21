@@ -5,4 +5,4 @@ class HypConfig(AppConfig):
     name = 'hyp'
 
     def ready(self):
-        from hyp import signals
+        from hyp import signals # noqa F401
