@@ -3,6 +3,7 @@
 from django.db import migrations
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.management import create_permissions
 
 
 def permissions_for_model(model):
@@ -13,6 +14,11 @@ def permissions_for_model(model):
 
 
 def create_groups(apps, schema_editor):
+    for app_config in apps.get_app_configs():
+        app_config.models_module = True
+        create_permissions(app_config, verbosity=0)
+        app_config.models_module = None
+
     Experiment = apps.get_model('hyp', 'Experiment')
     HypUser = apps.get_model('hyp', 'HypUser')
     ApiKey = apps.get_model('hyp', 'ApiKey')
