@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from uuid import uuid4
+from os import environ
 
 
 class Customer(models.Model):
@@ -27,21 +28,29 @@ def create_access_token():
     return uuid4().hex
 
 
+class ApiKeyManager(models.Manager):
+    def active(self):
+        return self.get(deactivated_at=None)
+
+
 class ApiKey(models.Model):
     access_token = models.UUIDField(default=create_access_token)
-    name = models.CharField(max_length=200, unique=True)
-    production = models.BooleanField(default=False)
+    label = models.CharField(max_length=200, unique=True)
     created_at = models.DateTimeField('created at', auto_now_add=True)
     updated_at = models.DateTimeField('updated at', auto_now=True)
     deactivated_at = models.DateTimeField('deactivated at', null=True, blank=True)
     last_used_at = models.DateTimeField('last used at', null=True, blank=True)
 
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    objects = ApiKeyManager()
 
-    models.UniqueConstraint(fields=["customer_id", "production"], name="One key per environment")
+    models.UniqueConstraint(
+        fields=["customer_id", "deactivated_at"], name="Only one active API key"
+    )
 
     def __str__(self):
-        return f'{"PRODUCTION" if self.production else "SANDBOX"}/{self.access_token}'
+        sandbox = environ.get("SANDBOX") == "ON"
+        return f'{"SANDBOX" if sandbox else "PRODUCTION"}/HYP/{self.access_token}'
 
 
 class Experiment(models.Model):
