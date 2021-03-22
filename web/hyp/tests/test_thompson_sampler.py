@@ -10,6 +10,7 @@ class TestThompsonSampler(TestCase):
         Interaction(
             variant=variant,
             experiment=self.exp,
+            customer=self.exp.customer,
             participant_id=self.latest_participant_id,
             converted=converted
         ).save()
@@ -31,13 +32,13 @@ class TestThompsonSampler(TestCase):
         self.exp = Experiment(name="Trial lengths", customer=bonusly)
         self.exp.save()
 
-        self.var1 = Variant(name="14 days", experiment=self.exp)
+        self.var1 = Variant(name="14 days", experiment=self.exp, customer=bonusly)
         self.var1.save()
 
-        self.var2 = Variant(name="30 days", experiment=self.exp)
+        self.var2 = Variant(name="30 days", experiment=self.exp, customer=bonusly)
         self.var2.save()
 
-        self.var3 = Variant(name="60 days", experiment=self.exp)
+        self.var3 = Variant(name="60 days", experiment=self.exp, customer=bonusly)
         self.var3.save()
 
         self.winner_counts = {}

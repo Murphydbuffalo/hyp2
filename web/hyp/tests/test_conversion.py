@@ -9,25 +9,26 @@ class TestConversion(TestCase):
         bonusly = Customer(name="Bonusly")
         bonusly.save()
 
-        api_key = ApiKey(customer=bonusly, name="Assignment test key")
+        api_key = ApiKey(customer=bonusly, label="Assignment test key")
         api_key.save()
         self.access_token = "SANDBOX/" + api_key.access_token
 
         self.exp = Experiment(name="Trial lengths", customer=bonusly)
         self.exp.save()
 
-        self.var1 = Variant(name="14 days", experiment=self.exp)
+        self.var1 = Variant(name="14 days", experiment=self.exp, customer=bonusly)
         self.var1.save()
 
-        self.var2 = Variant(name="30 days", experiment=self.exp)
+        self.var2 = Variant(name="30 days", experiment=self.exp, customer=bonusly)
         self.var2.save()
 
-        self.var3 = Variant(name="60 days", experiment=self.exp)
+        self.var3 = Variant(name="60 days", experiment=self.exp, customer=bonusly)
         self.var3.save()
 
     def test_conversion_updates_interaction(self):
         interaction = Interaction(
             experiment_id=self.exp.id,
+            customer_id=self.exp.customer_id,
             variant_id=self.var1.id,
             participant_id="danmurphy"
         )

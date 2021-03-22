@@ -44,9 +44,15 @@ class ApiKey(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     objects = ApiKeyManager()
 
-    models.UniqueConstraint(
-        fields=["customer_id", "deactivated_at"], name="Only one active API key"
-    )
+    models.Index(fields=["access_token", "deactivated_at"])
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                name="uniq_active_key_per_customer",
+                fields=["customer_id", "deactivated_at"]
+            )
+        ]
 
     def __str__(self):
         sandbox = environ.get("SANDBOX") == "ON"
@@ -79,12 +85,14 @@ class VariantInteractionCountManager(models.Manager):
 
 
 class Variant(models.Model):
+    objects = VariantInteractionCountManager()
+
     name = models.CharField(max_length=200)
     created_at = models.DateTimeField('created at', auto_now_add=True)
     updated_at = models.DateTimeField('updated at', auto_now=True)
 
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
-    objects = VariantInteractionCountManager()
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
 
     class Meta:
         constraints = [
@@ -106,6 +114,7 @@ class Interaction(models.Model):
     participant_id = models.CharField(max_length=200)
     variant = models.ForeignKey(Variant, on_delete=models.CASCADE)
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
 
     models.Index(fields=["experiment_id", "participant_id"])
 
