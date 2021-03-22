@@ -50,7 +50,8 @@ class ApiKey(models.Model):
         constraints = [
             models.UniqueConstraint(
                 name="uniq_active_key_per_customer",
-                fields=["customer_id", "deactivated_at"]
+                fields=["customer_id"],
+                condition=models.Q(deactivated_at=None),
             )
         ]
 
