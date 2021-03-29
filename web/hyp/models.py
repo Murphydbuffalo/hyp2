@@ -9,7 +9,10 @@ class Customer(models.Model):
     created_at = models.DateTimeField('created at', auto_now_add=True)
     updated_at = models.DateTimeField('updated at', auto_now=True)
 
-    models.Index(fields=["name"])
+    class Meta:
+        indexes = [
+            models.Index(fields=["name"])
+        ]
 
     def __str__(self):
         return self.name
@@ -72,7 +75,7 @@ class Experiment(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(fields=["name", "stopped", "company_id"])
+            models.Index(fields=["name", "stopped", "customer_id"])
         ]
 
     def __str__(self):
