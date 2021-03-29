@@ -44,9 +44,11 @@ class ApiKey(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     objects = ApiKeyManager()
 
-    models.Index(fields=["access_token", "deactivated_at"])
-
     class Meta:
+        indexes = [
+            models.Index(fields=["access_token", "deactivated_at", "customer_id"])
+        ]
+
         constraints = [
             models.UniqueConstraint(
                 name="uniq_active_key_per_customer",
