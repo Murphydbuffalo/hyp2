@@ -70,8 +70,10 @@ class Experiment(models.Model):
 
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
 
-    models.Index(fields=["name"])
-    models.Index(fields=["stopped"])
+    class Meta:
+        indexes = [
+            models.Index(fields=["name", "stopped", "company_id"])
+        ]
 
     def __str__(self):
         return self.name
