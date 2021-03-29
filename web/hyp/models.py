@@ -35,7 +35,7 @@ class ApiKeyManager(models.Manager):
 
 class ApiKey(models.Model):
     access_token = models.UUIDField(default=create_access_token)
-    label = models.CharField(max_length=200, unique=True)
+    label = models.CharField(max_length=200)
     created_at = models.DateTimeField('created at', auto_now_add=True)
     updated_at = models.DateTimeField('updated at', auto_now=True)
     deactivated_at = models.DateTimeField('deactivated at', null=True, blank=True)
