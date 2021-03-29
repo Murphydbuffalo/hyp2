@@ -117,9 +117,11 @@ class Interaction(models.Model):
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
 
-    models.Index(fields=["experiment_id", "participant_id"])
-
     class Meta:
+        indexes = [
+            models.Index(fields=["customer_id", "experiment_id", "participant_id", "variant_id"])
+        ]
+
         constraints = [
             models.UniqueConstraint(
                 name="uniq_interaction_per_experiment_and_participant",
