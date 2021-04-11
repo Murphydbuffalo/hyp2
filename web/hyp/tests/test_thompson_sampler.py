@@ -16,6 +16,9 @@ class TestThompsonSampler(TestCase):
 
         i.save()
 
+        # Update `converted` with a separate call to `save()` so that the 
+        # TRIGGER function we have set up in Postgres will fire and update
+        # the counter cache column `num_conversions` on `Variant`
         if converted is True:
             i.converted = True
             i.save()
