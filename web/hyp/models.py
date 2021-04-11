@@ -82,19 +82,7 @@ class Experiment(models.Model):
         return self.name
 
 
-class VariantInteractionCountManager(models.Manager):
-    def with_interaction_counts(self):
-        return self.annotate(
-            num_interactions=models.Count("interaction"),
-            num_conversions=models.Count(
-                "interaction", filter=models.Q(interaction__converted=True)
-            )
-        )
-
-
 class Variant(models.Model):
-    objects = VariantInteractionCountManager()
-
     name = models.CharField(max_length=200)
     created_at = models.DateTimeField('created at', auto_now_add=True)
     updated_at = models.DateTimeField('updated at', auto_now=True)

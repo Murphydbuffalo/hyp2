@@ -28,6 +28,8 @@ class TestAssignment(TestCase):
     def test_consistent_assignment(self):
         query = Interaction.objects.filter(participant_id="danmurphy")
         self.assertEqual(query.count(), 0)
+        self.assertEqual(self.var1.num_interactions, 0)
+        self.assertEqual(self.var1.num_conversions, 0)
 
         response = self.client.post(
             f'/api/v1/assign/danmurphy/{self.exp.id}',
@@ -41,6 +43,10 @@ class TestAssignment(TestCase):
         self.assertEqual(response.json()["payload"]["id"], variant.id)
         self.assertEqual(response.json()["payload"]["name"], variant.name)
 
+        variant.refresh_from_db()
+        self.assertEqual(variant.num_interactions, 1)
+        self.assertEqual(variant.num_conversions, 0)
+
         # Variant for a given participant does not change once assigned
         response = self.client.post(
             f'/api/v1/assign/danmurphy/{self.exp.id}',
@@ -52,6 +58,10 @@ class TestAssignment(TestCase):
         self.assertEqual(response.json()["message"], "success")
         self.assertEqual(response.json()["payload"]["id"], variant.id)
         self.assertEqual(response.json()["payload"]["name"], variant.name)
+
+        variant.refresh_from_db()
+        self.assertEqual(variant.num_interactions, 1)
+        self.assertEqual(variant.num_conversions, 0)
 
     def test_no_variants_found(self):
         response = self.client.post(

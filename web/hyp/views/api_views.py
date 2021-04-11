@@ -22,7 +22,7 @@ def variant_assignment(request, participant_id, experiment_id):
     ).values("id", "name").first()
 
     if variant is None:
-        variants = Variant.objects.with_interaction_counts().filter(
+        variants = Variant.objects.filter(
             customer_id=key.customer_id,
             experiment_id=experiment_id,
         ).values(

@@ -33,7 +33,10 @@ class TestConversion(TestCase):
             participant_id="danmurphy"
         )
         interaction.save()
+        self.var1.refresh_from_db()
 
+        self.assertEqual(self.var1.num_interactions, 1)
+        self.assertEqual(self.var1.num_conversions, 0)
         self.assertEqual(interaction.converted, False)
 
         response = self.client.patch(
@@ -46,6 +49,11 @@ class TestConversion(TestCase):
         self.assertEqual(interaction.converted, True)
         self.assertEqual(response.json()["message"], "success")
         self.assertEqual(response.json()["payload"]["id"], self.exp.id)
+
+        self.var1.refresh_from_db()
+
+        self.assertEqual(self.var1.num_interactions, 1)
+        self.assertEqual(self.var1.num_conversions, 1)
 
     def test_no_interaction_found(self):
         response = self.client.patch(

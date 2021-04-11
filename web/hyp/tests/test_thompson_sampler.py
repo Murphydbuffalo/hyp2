@@ -7,16 +7,21 @@ class TestThompsonSampler(TestCase):
     def createInteraction(self, variant, converted):
         self.latest_participant_id += 1
 
-        Interaction(
+        i = Interaction(
             variant=variant,
             experiment=self.exp,
             customer=self.exp.customer,
             participant_id=self.latest_participant_id,
-            converted=converted
-        ).save()
+        )
+
+        i.save()
+
+        if converted is True:
+            i.converted = True
+            i.save()
 
     def getVariantsWithConversions(self):
-        return Variant.objects.with_interaction_counts().values(
+        return Variant.objects.values(
             "id",
             "name",
             "num_interactions",
@@ -112,8 +117,7 @@ class TestThompsonSampler(TestCase):
         # Below we create 100 interactions for each variant, with 25 successes
         # for variants 2 and 3, but 50 successes for variant 1.
         # After 100 trials the posterior distributions will have little uncertainty
-        # remaining, and so sampling from them will almost always return something
-        # quite close to the true conversion rate.
+        # remaining, and so sampling from them will almost always return variant 1
         for _i in range(50):
             self.createInteraction(self.var1, converted=False)
 
@@ -166,8 +170,8 @@ class TestThompsonSampler(TestCase):
         # for variants 2 and 3, but 10 successes for variant 1.
         # Even though the conversion rates are the same as in the previous test
         # after 20 trials the posterior distributions will still have some uncertainty
-        # remaining, and so sampling from them will almost always return something
-        # quite close to the true conversion rate.
+        # remaining, and so sampling from them will return variant 1 more often than
+        # the other variants, but not always.
         for _i in range(10):
             self.createInteraction(self.var1, converted=False)
 
