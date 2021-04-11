@@ -102,7 +102,14 @@ class Variant(models.Model):
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
 
+    # Counter cache fields
+    num_interactions = models.IntegerField(default=0)
+    num_conversions = models.IntegerField(default=0)
+
     class Meta:
+        indexes = [
+            models.Index(fields=["customer_id", "experiment_id"])
+        ]
         constraints = [
             models.UniqueConstraint(
                 name="uniq_variant_name_per_experiment",
