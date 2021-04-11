@@ -110,6 +110,7 @@ class Variant(models.Model):
 
 
 class Interaction(models.Model):
+    id = models.BigAutoField(primary_key=True)
     converted = models.BooleanField(default=False)
     created_at = models.DateTimeField('created at', auto_now_add=True)
     updated_at = models.DateTimeField('updated at', auto_now=True)
