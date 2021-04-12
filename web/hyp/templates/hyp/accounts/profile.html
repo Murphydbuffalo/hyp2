@@ -2,6 +2,7 @@
 {% block content %}
   <h1>{{ user.email }}</h1>
 
-  <h2>API Key</h2>
-  <code>{{ access_token }}</code>
+  <a href={% url "api_keys" %}>
+    Manage API keys
+  </a>
 {% endblock %}

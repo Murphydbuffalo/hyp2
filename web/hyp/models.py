@@ -60,6 +60,12 @@ class ApiKey(models.Model):
             )
         ]
 
+    def description(self):
+        return f'{self.label}: {self} {"" if self.is_active() else "(Deactivated)"}'
+
+    def is_active(self):
+        return self.deactivated_at is None
+
     def __str__(self):
         sandbox = environ.get("SANDBOX") == "ON"
         return f'{"SANDBOX" if sandbox else "PRODUCTION"}/HYP/{self.access_token}'
