@@ -12,7 +12,7 @@ defusedxml==0.7.1
 cycler==0.10.0
 Django==3.1.7
 django-allauth==0.44.0
-django-debug-toolbar==3.2
+django-debug-toolbar==3.2.1
 flake8==3.8.4
 flake8-bandit==2.1.2
 flake8-bugbear==20.11.1
