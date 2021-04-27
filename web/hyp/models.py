@@ -52,14 +52,6 @@ class ApiKey(models.Model):
             models.Index(fields=["access_token", "deactivated_at", "customer_id"])
         ]
 
-        constraints = [
-            models.UniqueConstraint(
-                name="uniq_active_key_per_customer",
-                fields=["customer_id"],
-                condition=models.Q(deactivated_at=None),
-            )
-        ]
-
     def description(self):
         return f'{self.label}: {self} {"" if self.is_active() else "(Deactivated)"}'
 
