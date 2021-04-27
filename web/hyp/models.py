@@ -1,5 +1,5 @@
 from django.contrib.auth.models import AbstractUser
-from django.db import models
+from django.db import models, connection
 from uuid import uuid4
 from os import environ
 
@@ -88,7 +88,19 @@ class Experiment(models.Model):
         return self.name
 
 
+class VariantManager(models.Manager):
+    def for_assignment(self, participant_id, access_token, experiment_id):
+        return self.raw("""
+        SELECT v.id, v.name, v.num_interactions, v.num_conversions, i.id as interaction_id
+        FROM hyp_variant as v
+        INNER JOIN hyp_apikey as k ON k.customer_id = v.customer_id
+        LEFT OUTER JOIN hyp_interaction as i ON i.variant_id = v.id AND i.participant_id = %s
+        WHERE k.access_token = %s AND k.deactivated_at IS NULL AND v.experiment_id = %s;
+        """, [participant_id, access_token, experiment_id])
+
+
 class Variant(models.Model):
+    objects = VariantManager()
     name = models.CharField(max_length=200)
     created_at = models.DateTimeField('created at', auto_now_add=True)
     updated_at = models.DateTimeField('updated at', auto_now=True)
@@ -115,7 +127,22 @@ class Variant(models.Model):
         return self.name
 
 
+class InteractionManager(models.Manager):
+    def record_conversion(self, access_token, experiment_id, participant_id):
+        with connection.cursor() as cursor:
+            return cursor.execute("""
+            UPDATE hyp_interaction as i
+            SET converted = TRUE
+            FROM hyp_apikey as k
+            WHERE k.customer_id = i.customer_id
+            AND k.access_token = %s AND k.deactivated_at IS NULL
+            AND i.experiment_id = %s AND i.participant_id = %s;
+            """, [access_token, experiment_id, participant_id])
+
+
 class Interaction(models.Model):
+    objects = InteractionManager()
+
     id = models.BigAutoField(primary_key=True)
     converted = models.BooleanField(default=False)
     created_at = models.DateTimeField('created at', auto_now_add=True)

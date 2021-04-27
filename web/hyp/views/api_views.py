@@ -3,7 +3,7 @@ from uuid import UUID
 from http import HTTPStatus
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from hyp.models import ApiKey, Variant, Interaction
+from hyp.models import Variant, Interaction
 from hyp.thompson_sampler import ThompsonSampler
 
 
@@ -11,42 +11,41 @@ from hyp.thompson_sampler import ThompsonSampler
 def variant_assignment(request, participant_id, experiment_id):
     validator = validateRequest(request, allowed_methods=["POST"])
     if validator["success"] is True:
-        key = validator["apiKey"]
+        token = validator["access_token"]
     else:
         return validator["error"]
 
-    variant = Variant.objects.filter(
-        customer_id=key.customer_id,
-        experiment_id=experiment_id,
-        interaction__participant_id=participant_id,
-    ).values("id", "name").first()
+    variants = Variant.objects.for_assignment(
+        access_token=token,
+        participant_id=participant_id,
+        experiment_id=experiment_id
+    )
 
-    if variant is None:
-        variants = Variant.objects.filter(
-            customer_id=key.customer_id,
-            experiment_id=experiment_id,
-        ).values(
-            "id", "name", "num_interactions", "num_conversions"
+    if len(variants) == 0:
+        return apiResponse(
+            status=404,
+            message="No experiment variants visible to your access token match that ID."
         )
 
-        if variants.count() == 0:
-            return apiResponse(
-                status=404,
-                message="No experiment variants visible to your access token match that ID."
-            )
+    already_assigned_variant = next((v for v in variants if v.interaction_id is not None), None)
 
+    if already_assigned_variant is None:
         variant = ThompsonSampler(variants).winner()
+        customer_id = variants[0].customer_id
 
         Interaction(
-            variant_id=variant["id"],
+            variant_id=variant.id,
             experiment_id=experiment_id,
-            customer_id=key.customer_id,
+            customer_id=customer_id,
             participant_id=participant_id,
         ).save()
 
+    else:
+        variant = already_assigned_variant
+
     return apiResponse(payload={
-        "id": variant["id"],
-        "name": variant["name"]
+        "id": variant.id,
+        "name": variant.name
     })
 
 
@@ -54,21 +53,15 @@ def variant_assignment(request, participant_id, experiment_id):
 def record_conversion(request, participant_id, experiment_id):
     validator = validateRequest(request, allowed_methods=["PUT", "PATCH"])
     if validator["success"] is True:
-        key = validator["apiKey"]
+        token = validator["access_token"]
     else:
         return validator["error"]
 
-    num_rows_updated = Interaction.objects.filter(
-        customer_id=key.customer_id,
+    Interaction.objects.record_conversion(
+        access_token=token,
         experiment_id=experiment_id,
         participant_id=participant_id
-    ).update(converted=True)
-
-    if num_rows_updated == 0:
-        return apiResponse(
-            status=404,
-            message="No interaction visible to your access token matches that ID."
-        )
+    )
 
     return apiResponse(payload={"id": experiment_id})
 
@@ -84,12 +77,7 @@ def validateRequest(request, allowed_methods):
     if not validAccessToken(token):
         return {"success": False, "error": badAccessToken(), "apiKey": None}
 
-    key = apiKey(token)
-
-    if key is None:
-        return {"success": False, "error": badAccessToken(), "apiKey": None}
-
-    return {"success": True, "apiKey": key, "error": None}
+    return {"success": True, "access_token": token, "error": None}
 
 
 def accessToken(request):
@@ -110,10 +98,6 @@ def validAccessToken(token):
         return True
     except ValueError:
         return False
-
-
-def apiKey(token):
-    return ApiKey.objects.filter(access_token=token, deactivated_at=None).first()
 
 
 def apiResponse(payload="", status=200, message="success"):

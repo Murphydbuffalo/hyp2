@@ -23,14 +23,6 @@ class TestThompsonSampler(TestCase):
             i.converted = True
             i.save()
 
-    def getVariantsWithConversions(self):
-        return Variant.objects.values(
-            "id",
-            "name",
-            "num_interactions",
-            "num_conversions"
-        )
-
     def setUp(self):
         bonusly = Customer(name="Bonusly")
         bonusly.save()
@@ -55,12 +47,12 @@ class TestThompsonSampler(TestCase):
         self.winner_counts[self.var3.id] = 0
 
     def test_no_conversions(self):
-        variants = self.getVariantsWithConversions()
+        variants = Variant.objects.all()
 
         n = 1000
         for _i in range(n):
             sampler = ThompsonSampler(variants)
-            self.winner_counts[sampler.winner()["id"]] += 1
+            self.winner_counts[sampler.winner().id] += 1
 
         self.assertAlmostEqual(
             self.winner_counts[self.var1.id],
@@ -91,12 +83,12 @@ class TestThompsonSampler(TestCase):
             self.createInteraction(self.var2, converted=True)
             self.createInteraction(self.var3, converted=True)
 
-        variants = self.getVariantsWithConversions()
+        variants = Variant.objects.all()
 
         n = 1000
         for _i in range(n):
             sampler = ThompsonSampler(variants)
-            self.winner_counts[sampler.winner()["id"]] += 1
+            self.winner_counts[sampler.winner().id] += 1
 
         self.assertAlmostEqual(
             self.winner_counts[self.var1.id],
@@ -135,12 +127,12 @@ class TestThompsonSampler(TestCase):
             self.createInteraction(self.var2, converted=True)
             self.createInteraction(self.var3, converted=True)
 
-        variants = self.getVariantsWithConversions()
+        variants = Variant.objects.all()
 
         n = 1000
         for _i in range(n):
             sampler = ThompsonSampler(variants)
-            self.winner_counts[sampler.winner()["id"]] += 1
+            self.winner_counts[sampler.winner().id] += 1
 
         self.assertGreater(
             self.winner_counts[self.var1.id],
@@ -189,12 +181,12 @@ class TestThompsonSampler(TestCase):
             self.createInteraction(self.var2, converted=True)
             self.createInteraction(self.var3, converted=True)
 
-        variants = self.getVariantsWithConversions()
+        variants = Variant.objects.all()
 
         n = 1000
         for _i in range(n):
             sampler = ThompsonSampler(variants)
-            self.winner_counts[sampler.winner()["id"]] += 1
+            self.winner_counts[sampler.winner().id] += 1
 
         self.assertGreater(
             self.winner_counts[self.var1.id],

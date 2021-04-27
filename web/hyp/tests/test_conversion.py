@@ -55,19 +55,6 @@ class TestConversion(TestCase):
         self.assertEqual(self.var1.num_interactions, 1)
         self.assertEqual(self.var1.num_conversions, 1)
 
-    def test_no_interaction_found(self):
-        response = self.client.patch(
-            f'/api/v1/convert/danmurphy/{self.exp.id}',
-            HTTP_X_HYP_TOKEN=self.access_token
-        )
-
-        self.assertEqual(response.status_code, 404)
-        self.assertEqual(response.json()["message"], (
-            "No interaction visible"
-            " to your access token matches that ID."
-        ))
-        self.assertEqual(response.json()["payload"], "")
-
     def test_bad_access_token(self):
         response = self.client.patch(f'/api/v1/convert/danmurphy/{self.exp.id}')
         self.assertEqual(response.status_code, 401)
