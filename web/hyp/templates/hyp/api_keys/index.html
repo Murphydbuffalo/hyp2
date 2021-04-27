@@ -4,10 +4,10 @@
 
   <h2>Create API Key</h2>
   <p>
-    Generate a new API key. <strong>All other API keys will be deactivated.</strong>
+    Generate a new API key.
   </p>
 
-  <form action="{% url 'rotate_api_key' %}" method="post">
+  <form action="{% url 'create_api_key' %}" method="post">
     {% csrf_token %}
     <label for="api_key_label">Label:</label><br>
     <input type="text" id="api_key_label" name="api_key_label"><br>
@@ -16,11 +16,16 @@
 
   <ul class="api-key-list">
   {% for api_key in api_keys %}
-    <li>
+    <li> 
       <p>
         <span>
           {{ api_key.description }}
         </span>
+        {% if api_key.is_active %}
+          <form action="{% url 'deactivate_api_key' api_key_id=api_key.id %}" method="patch" onsubmit="return confirm('This will break any API clients using this key. API keys cannot be reactivated. Are you sure?');">
+            <input type="submit" value="Deactivate">
+          </form>
+        {% endif %}
       </p>
     </li>
   {% endfor %}
