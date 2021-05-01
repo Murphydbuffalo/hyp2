@@ -31,11 +31,6 @@ def create_access_token():
     return uuid4().hex
 
 
-class ApiKeyManager(models.Manager):
-    def active(self):
-        return self.get(deactivated_at=None)
-
-
 class ApiKey(models.Model):
     access_token = models.UUIDField(default=create_access_token)
     label = models.CharField(max_length=200)
@@ -45,7 +40,6 @@ class ApiKey(models.Model):
     last_used_at = models.DateTimeField('last used at', null=True, blank=True)
 
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    objects = ApiKeyManager()
 
     class Meta:
         indexes = [
