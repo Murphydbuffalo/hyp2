@@ -12,10 +12,10 @@ class ThompsonSampler:
         )["variant"]
 
     def simulated_traffic_split(self, n=1000):
-        winner_counts = {v["id"]: 0 for v in self.variants}
+        winner_counts = {v.id: 0 for v in self.variants}
 
         for _i in range(n):
-            winner_counts[self.winner()["id"]] += 1
+            winner_counts[self.winner().id] += 1
 
         total = sum(winner_counts.values())
 
@@ -40,7 +40,7 @@ class ThompsonSampler:
         return samples
 
     def alpha(self, variant):
-        return variant["num_conversions"] + 1
+        return variant.num_conversions + 1
 
     def beta(self, variant):
-        return variant["num_interactions"] - variant["num_conversions"] + 1
+        return variant.num_interactions - variant.num_conversions + 1

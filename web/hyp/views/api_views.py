@@ -9,73 +9,75 @@ from hyp.thompson_sampler import ThompsonSampler
 
 @csrf_exempt
 def variant_assignment(request, participant_id, experiment_id):
-    if request.method != "POST":
-        return badHTTPMethod()
+    validator = validateRequest(request, allowed_methods=["POST"])
+    if validator["success"] is True:
+        token = validator["access_token"]
+    else:
+        return validator["error"]
 
-    token = accessToken(request)
+    variants = Variant.objects.for_assignment(
+        access_token=token,
+        participant_id=participant_id,
+        experiment_id=experiment_id
+    )
 
-    if not validAccessToken(token):
-        return badAccessToken()
-
-    variant = Variant.objects.filter(
-        experiment__customer__apikey__access_token=token,
-        experiment_id=experiment_id,
-        interaction__participant_id=participant_id,
-    ).values("id", "name").first()
-
-    if variant is None:
-        variants = Variant.objects.with_interaction_counts().filter(
-            experiment__customer__apikey__access_token=token,
-            experiment_id=experiment_id,
-        ).values(
-            "id", "name", "num_interactions", "num_conversions"
+    if len(variants) == 0:
+        return apiResponse(
+            status=404,
+            message="No experiment variants visible to your access token match that ID."
         )
 
-        if variants.count() == 0:
-            return apiResponse(
-                status=404,
-                message="No experiment variants visible to your access token match that ID."
-            )
+    already_assigned_variant = next((v for v in variants if v.interaction_id is not None), None)
 
+    if already_assigned_variant is None:
         variant = ThompsonSampler(variants).winner()
+        customer_id = variants[0].customer_id
 
         Interaction(
-            variant_id=variant["id"],
+            variant_id=variant.id,
             experiment_id=experiment_id,
+            customer_id=customer_id,
             participant_id=participant_id,
         ).save()
 
+    else:
+        variant = already_assigned_variant
+
     return apiResponse(payload={
-        "id": variant["id"],
-        "name": variant["name"]
+        "id": variant.id,
+        "name": variant.name
     })
 
 
 @csrf_exempt
 def record_conversion(request, participant_id, experiment_id):
-    if request.method not in ["PUT", "PATCH"]:
-        return badHTTPMethod()
+    validator = validateRequest(request, allowed_methods=["PUT", "PATCH"])
+    if validator["success"] is True:
+        token = validator["access_token"]
+    else:
+        return validator["error"]
 
-    token = accessToken(request)
-
-    if not validAccessToken(token):
-        return badAccessToken()
-
-    num_rows_updated = Interaction.objects.filter(
-        experiment__customer__apikey__access_token=token,
+    Interaction.objects.record_conversion(
+        access_token=token,
         experiment_id=experiment_id,
         participant_id=participant_id
-    ).update(converted=True)
-
-    if num_rows_updated == 0:
-        return apiResponse(
-            status=404,
-            message="No interaction visible to your access token matches that ID."
-        )
+    )
 
     return apiResponse(payload={"id": experiment_id})
 
 # private
+
+
+def validateRequest(request, allowed_methods):
+    if request.method not in allowed_methods:
+        return {"success": False, "error": badHTTPMethod(), "apiKey": None}
+
+    token = accessToken(request)
+
+    if not validAccessToken(token):
+        return {"success": False, "error": badAccessToken(), "apiKey": None}
+
+    return {"success": True, "access_token": token, "error": None}
 
 
 def accessToken(request):
@@ -83,11 +85,14 @@ def accessToken(request):
         return None
 
     # Clients may send access tokens that are prepended with a namespace like
-    # "SANDBOX/" or "PRODUCTION/" to help them know which keys are which.
+    # "SANDBOX/HYP/" or "PRODUCTION/HYP/" to help them know which keys are which.
     return request.headers["X-HYP-TOKEN"].split("/")[-1]
 
 
 def validAccessToken(token):
+    if token is None:
+        return False
+
     try:
         UUID(str(token), version=4)
         return True

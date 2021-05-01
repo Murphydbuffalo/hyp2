@@ -26,6 +26,7 @@ urlpatterns = [
     path('api/v1/', include('hyp.urls.api_urls')),
     path('accounts/', include('allauth.urls')),
     path('accounts/', include('hyp.urls.account_urls')),
+    path('api_keys/', include('hyp.urls.api_key_urls')),
     path('admin/', admin.site.urls),
     path('__debug__/', include(debug_toolbar.urls)),
 ]

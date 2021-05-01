@@ -9,25 +9,27 @@ class TestAssignment(TestCase):
         bonusly = Customer(name="Bonusly")
         bonusly.save()
 
-        api_key = ApiKey(customer=bonusly, name="Assignment test key")
+        api_key = ApiKey(customer=bonusly, label="Assignment test key")
         api_key.save()
         self.access_token = "SANDBOX/" + api_key.access_token
 
         self.exp = Experiment(name="Trial lengths", customer=bonusly)
         self.exp.save()
 
-        self.var1 = Variant(name="14 days", experiment=self.exp)
+        self.var1 = Variant(name="14 days", experiment=self.exp, customer=bonusly)
         self.var1.save()
 
-        self.var2 = Variant(name="30 days", experiment=self.exp)
+        self.var2 = Variant(name="30 days", experiment=self.exp, customer=bonusly)
         self.var2.save()
 
-        self.var3 = Variant(name="60 days", experiment=self.exp)
+        self.var3 = Variant(name="60 days", experiment=self.exp, customer=bonusly)
         self.var3.save()
 
     def test_consistent_assignment(self):
         query = Interaction.objects.filter(participant_id="danmurphy")
         self.assertEqual(query.count(), 0)
+        self.assertEqual(self.var1.num_interactions, 0)
+        self.assertEqual(self.var1.num_conversions, 0)
 
         response = self.client.post(
             f'/api/v1/assign/danmurphy/{self.exp.id}',
@@ -41,6 +43,10 @@ class TestAssignment(TestCase):
         self.assertEqual(response.json()["payload"]["id"], variant.id)
         self.assertEqual(response.json()["payload"]["name"], variant.name)
 
+        variant.refresh_from_db()
+        self.assertEqual(variant.num_interactions, 1)
+        self.assertEqual(variant.num_conversions, 0)
+
         # Variant for a given participant does not change once assigned
         response = self.client.post(
             f'/api/v1/assign/danmurphy/{self.exp.id}',
@@ -52,6 +58,10 @@ class TestAssignment(TestCase):
         self.assertEqual(response.json()["message"], "success")
         self.assertEqual(response.json()["payload"]["id"], variant.id)
         self.assertEqual(response.json()["payload"]["name"], variant.name)
+
+        variant.refresh_from_db()
+        self.assertEqual(variant.num_interactions, 1)
+        self.assertEqual(variant.num_conversions, 0)
 
     def test_no_variants_found(self):
         response = self.client.post(

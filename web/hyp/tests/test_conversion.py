@@ -9,30 +9,34 @@ class TestConversion(TestCase):
         bonusly = Customer(name="Bonusly")
         bonusly.save()
 
-        api_key = ApiKey(customer=bonusly, name="Assignment test key")
+        api_key = ApiKey(customer=bonusly, label="Assignment test key")
         api_key.save()
         self.access_token = "SANDBOX/" + api_key.access_token
 
         self.exp = Experiment(name="Trial lengths", customer=bonusly)
         self.exp.save()
 
-        self.var1 = Variant(name="14 days", experiment=self.exp)
+        self.var1 = Variant(name="14 days", experiment=self.exp, customer=bonusly)
         self.var1.save()
 
-        self.var2 = Variant(name="30 days", experiment=self.exp)
+        self.var2 = Variant(name="30 days", experiment=self.exp, customer=bonusly)
         self.var2.save()
 
-        self.var3 = Variant(name="60 days", experiment=self.exp)
+        self.var3 = Variant(name="60 days", experiment=self.exp, customer=bonusly)
         self.var3.save()
 
     def test_conversion_updates_interaction(self):
         interaction = Interaction(
             experiment_id=self.exp.id,
+            customer_id=self.exp.customer_id,
             variant_id=self.var1.id,
             participant_id="danmurphy"
         )
         interaction.save()
+        self.var1.refresh_from_db()
 
+        self.assertEqual(self.var1.num_interactions, 1)
+        self.assertEqual(self.var1.num_conversions, 0)
         self.assertEqual(interaction.converted, False)
 
         response = self.client.patch(
@@ -46,18 +50,10 @@ class TestConversion(TestCase):
         self.assertEqual(response.json()["message"], "success")
         self.assertEqual(response.json()["payload"]["id"], self.exp.id)
 
-    def test_no_interaction_found(self):
-        response = self.client.patch(
-            f'/api/v1/convert/danmurphy/{self.exp.id}',
-            HTTP_X_HYP_TOKEN=self.access_token
-        )
+        self.var1.refresh_from_db()
 
-        self.assertEqual(response.status_code, 404)
-        self.assertEqual(response.json()["message"], (
-            "No interaction visible"
-            " to your access token matches that ID."
-        ))
-        self.assertEqual(response.json()["payload"], "")
+        self.assertEqual(self.var1.num_interactions, 1)
+        self.assertEqual(self.var1.num_conversions, 1)
 
     def test_bad_access_token(self):
         response = self.client.patch(f'/api/v1/convert/danmurphy/{self.exp.id}')
