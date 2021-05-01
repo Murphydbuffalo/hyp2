@@ -1,7 +1,7 @@
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from datetime import datetime
+from django.utils import timezone
 from hyp.models import ApiKey
 
 
@@ -28,12 +28,11 @@ def create(request):
         raise PermissionDenied
 
 
-
 @login_required
 def deactivate(request, api_key_id):
     if request.user.has_perm("hyp.change_apikey"):
-        api_key = ApiKey.objects.get(id=api_key_id)
-        api_key.deactivated_at = datetime.now()
+        api_key = get_object_or_404(ApiKey, id=api_key_id)
+        api_key.deactivated_at = timezone.now()
         api_key.save()
 
         return redirect("/api_keys/")
