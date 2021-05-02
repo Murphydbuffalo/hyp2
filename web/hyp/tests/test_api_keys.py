@@ -16,9 +16,8 @@ class TestApiKeys(TestCase):
         self.wunder_key.save()
 
         email = "dan@example.com"
-        password = "ipulledintonazarethfeelingbouthalfpastdead" # noqa S105
-        signup(email=email, password=password, customer=self.bonusly)
-        login(client=self.client, email=email, password=password)
+        signup(email=email, customer=self.bonusly)
+        login(client=self.client, email=email)
 
     def test_create_api_key(self):
         response = self.client.get('/api_keys/', follow=True)

@@ -2,6 +2,7 @@ from django.test import TestCase, Client
 from django.core import mail
 from django.contrib import auth
 from hyp.models import HypUser, Customer
+from hyp.tests.helpers import signup
 from allauth.account.models import EmailAddress
 import re
 
@@ -10,6 +11,9 @@ class TestAuth(TestCase):
     def setUp(self):
         self.client = Client()
 
+    # We intentionally don't use the `signup` helper function here so that
+    # 1) we actually use the email confirmation endpoint
+    # 2) all the gorey details are laid bare
     def test_signup(self):
         self.assertEqual(EmailAddress.objects.count(), 0)
         self.assertEqual(Customer.objects.count(), 0)
@@ -63,19 +67,7 @@ class TestAuth(TestCase):
         )
 
     def test_login(self):
-        self.client.post(
-            '/accounts/signup/',
-            {
-                'email': 'bob@example.com',
-                'password1': 'thisisaverynicepasswordfortesting!',
-                'password2': 'thisisaverynicepasswordfortesting!'
-            },
-            follow=True
-        )
-
-        email = EmailAddress.objects.filter(email='bob@example.com', verified=False).first()
-        email.verified = True
-        email.save()
+        signup("bob@example.com", password='thisisaverynicepasswordfortesting!')
 
         bad_login_response = self.client.post(
             '/accounts/login/',
@@ -113,19 +105,7 @@ class TestAuth(TestCase):
         self.assertTrue(user.is_authenticated)
 
     def test_logout(self):
-        self.client.post(
-            '/accounts/signup/',
-            {
-                'email': 'bob@example.com',
-                'password1': 'thisisaverynicepasswordfortesting!',
-                'password2': 'thisisaverynicepasswordfortesting!'
-            },
-            follow=True
-        )
-
-        email = EmailAddress.objects.filter(email='bob@example.com', verified=False).first()
-        email.verified = True
-        email.save()
+        signup("bob@example.com", password='thisisaverynicepasswordfortesting!')
 
         self.client.post(
             '/accounts/login/',
