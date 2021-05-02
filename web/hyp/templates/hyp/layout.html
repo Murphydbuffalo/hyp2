@@ -34,8 +34,12 @@
 
     <div class="auth">
       {% if user.is_authenticated %}
+        <a href={% url "experiments" %}>
+          <i class="fas fa-flask"></i>
+        </a>
+
         <a href={% url "profile" %}>
-          <i class="fas fa-user"></i> Profile
+          <i class="fas fa-user"></i>
         </a>
 
        <form action="{% url 'account_logout' %}" method="post">
