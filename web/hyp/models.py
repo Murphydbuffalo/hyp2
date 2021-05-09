@@ -73,6 +73,9 @@ class Experiment(models.Model):
     def __str__(self):
         return self.name
 
+    def description(self):
+        return f'{self.name}{" (stopped)" if self.stopped else ""}'
+
 
 class VariantManager(models.Manager):
     def for_assignment(self, participant_id, access_token, experiment_id):
@@ -90,6 +93,7 @@ class Variant(models.Model):
     name = models.CharField(max_length=200)
     created_at = models.DateTimeField('created at', auto_now_add=True)
     updated_at = models.DateTimeField('updated at', auto_now=True)
+    baseline = models.BooleanField(default=False)
 
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
