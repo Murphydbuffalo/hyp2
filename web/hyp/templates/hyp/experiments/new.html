@@ -1,0 +1,10 @@
+{% extends "hyp/layout.html" %}
+{% block content %}
+  <h1>New Experiment</h1>
+  <form action="{% url 'create_experiment' %}" method="post">
+    {% csrf_token %}
+    <label for="name">Label:</label><br>
+    <input type="text" id="name" name="name"><br>
+    <input type="submit" value="Create">
+  </form>
+{% endblock %}

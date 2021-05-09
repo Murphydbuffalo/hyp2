@@ -1,8 +1,8 @@
 from django.http import HttpResponse
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
-from hyp.models import Experiment
+from hyp.models import Experiment, Variant
 
 
 @login_required
@@ -30,13 +30,35 @@ def show(request, experiment_id):
 
 
 @login_required
+def new(request):
+    if request.user.has_perm("hyp.add_experiment"):
+        return render(request, 'hyp/experiments/new.html')
+    else:
+        raise PermissionDenied
+
+
+@login_required
 def create(request, params):
-    if request.user.has_perm("hyp.read_experiment"):
-        # TODO: want something like:
-        # create experiment with request.POST['name']
-        # interate over request.POST['variant_names'] and
-        # create a variant for each, referncing the already
-        # created experiment
+    if request.user.has_perm("hyp.add_experiment"):
+        # TODO: how to do a transaction?
+        experiment = Experiment(customer=request.user.customer, name=request.POST["name"])
+        experiment.save()
+        for variant_name in request.POST["variant_names"]:
+            variant = Variant(
+                experiment=experiment,
+                customer=request.customer,
+                name=variant_name
+            )
+            variant.save()
+
+        return redirect("/experiments/")
+    else:
+        raise PermissionDenied
+
+
+@login_required
+def update(request, params):
+    if request.user.has_perm("hyp.change_experiment"):
         return HttpResponse("This is a no-op for now")
     else:
         raise PermissionDenied
