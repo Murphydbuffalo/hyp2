@@ -16,6 +16,12 @@ def index(request):
     else:
         raise PermissionDenied
 
+@login_required
+def new(request):
+    if request.user.has_perm("hyp.add_apikey"):
+        return render(request, 'hyp/api_keys/new.html')
+    else:
+        raise PermissionDenied
 
 @login_required
 def create(request):

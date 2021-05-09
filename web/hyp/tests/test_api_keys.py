@@ -27,7 +27,7 @@ class TestApiKeys(TestCase):
         self.assertEqual(ApiKey.objects.count(), 1)
 
         response = self.client.post(
-            '/api_keys/create',
+            '/api_keys/create/',
             {"api_key_label": "My new key"},
             follow=True
         )
@@ -37,7 +37,7 @@ class TestApiKeys(TestCase):
         self.assertIn(str(key.access_token), str(response.content))
         self.assertIn(str(key.label), str(response.content))
 
-        response = self.client.post(f'/api_keys/deactivate/{key.id}', follow=True)
+        response = self.client.post(f'/api_keys/deactivate/{key.id}/', follow=True)
         self.assertIn("Deactivated", str(response.content))
         key.refresh_from_db()
         self.assertFalse(key.is_active())
@@ -56,11 +56,11 @@ class TestApiKeys(TestCase):
         response = self.client.get('/api_keys/', follow=True)
 
         self.assertEqual(response.status_code, 200)
-        self.assertNotIn('Create API Key', str(response.content))
+        self.assertNotIn('Create', str(response.content))
         self.assertIn('Deactivate', str(response.content))
 
         response = self.client.post(
-            '/api_keys/create',
+            '/api_keys/create/',
             {"api_key_label": "My new key"},
             follow=True
         )

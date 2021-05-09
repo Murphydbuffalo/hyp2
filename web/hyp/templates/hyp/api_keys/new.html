@@ -1,0 +1,11 @@
+{% extends "hyp/layout.html" %}
+{% block content %}
+<h2>Create API Key</h2>
+
+<form action="{% url 'create_api_key' %}" method="post">
+  {% csrf_token %}
+  <label for="api_key_label">Label:</label><br>
+  <input type="text" id="api_key_label" name="api_key_label"><br>
+  <input type="submit" value="Create">
+</form>
+{% endblock %}
