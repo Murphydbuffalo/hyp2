@@ -1,16 +1,17 @@
 // TODO: only load this on the relevant page...
 document.onreadystatechange = function(_event) {
-  let variantIndex = 0;
+  let hiddenVariantIndex = 2;
 
   document.querySelector(".add-variant").onclick = function(event) {
     event.preventDefault();
-    variantIndex = variantIndex + 1;
+    let nextVariantInputs = document.querySelectorAll(`#variant-${hiddenVariantIndex} .hidden`)
+    nextVariantInputs.forEach((element) => element.classList.remove("hidden"));
 
-    const nextVariantInputs = document.querySelectorAll(`#variant-${variantIndex + 1} .hidden`)
+    hiddenVariantIndex++;
 
-    if (nextVariantInputs.length > 0) {
-      nextVariantInputs.forEach((element) => element.classList.remove("hidden"));
-    } else {
+    nextVariantInputs = document.querySelectorAll(`#variant-${hiddenVariantIndex} .hidden`)
+
+    if (nextVariantInputs.length === 0) {
       event.currentTarget.classList.add("hidden");
     }
   }
