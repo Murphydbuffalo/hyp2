@@ -1,10 +1,32 @@
 {% extends "hyp/layout.html" %}
 {% block content %}
   <h1>New Experiment</h1>
-  <form action="{% url 'create_experiment' %}" method="post">
+  <form action="{% url 'create_experiment' %}" method="post" id="new-experiment">
     {% csrf_token %}
-    <label for="name">Label:</label><br>
-    <input type="text" id="name" name="name"><br>
+    <label for="experiment-name">Experiment Name:</label>
+    <input type="text" id="experiment-name" name="experiment-name"><br>
+
+    <div id="variant-inputs">
+      <div id="variant-0">
+        <label for="variant-0-name">Baseline Variant Name:</label>
+        <input type="text" id="variant-0-name" name="variant-0-name"><br>
+      </div>
+
+      <div id="variant-1">
+        <label for="variant-1-name">Variant Name:</label>
+        <input type="text" id="variant-1-name" name="variant-1-name"><br>
+      </div>
+
+      {% for i in num_optional_variants %}
+        <div id="variant-{{ i }}">
+          <label class="hidden" for="variant-{{ i }}-name">New Variant Name:</label>
+          <input class="hidden" type="text" name="variant-{{ i }}-name"><br>
+        </div>
+      {% endfor %}
+
+      <button class="add-variant">Add variant</button>
+    </div>
+
     <input type="submit" value="Create">
   </form>
 {% endblock %}
