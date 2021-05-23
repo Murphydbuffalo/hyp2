@@ -37,7 +37,11 @@ def show(request, experiment_id):
 @login_required
 def new(request):
     if request.user.has_perm("hyp.add_experiment"):
-        return render(request, 'hyp/experiments/new.html', {"num_optional_variants": range(NUM_REQUIRED_VARIANTS, MAX_NUM_VARIANTS)})
+        context = {
+            "num_optional_variants": range(NUM_REQUIRED_VARIANTS, MAX_NUM_VARIANTS),
+            "errors": [],
+        }
+        return render(request, 'hyp/experiments/new.html', context)
     else:
         raise PermissionDenied
 
@@ -46,39 +50,46 @@ def new(request):
 @transaction.atomic
 def create(request):
     if request.user.has_perm("hyp.add_experiment"):
-        context = { "errors": [] }
         experiment_form = ExperimentForm({
             "customer": request.user.customer,
             "name": request.POST["experiment-name"]
         })
+        experiment = Experiment()
 
         if experiment_form.is_valid():
-            experiment = experiment_form.save()
-        else:
-            context["errors"].append(experiment_form.errors)
+            experiment = experiment_form.save(commit=False)
 
-        variants = []
         variant_names = [request.POST[f'variant-{i}-name'] for i in range(MAX_NUM_VARIANTS)]
-        variant_names = [n for n in variant_names if (n is not None) and (len(n) > 0)]
+        valid_variant_forms = []
+        invalid_variant_forms = []
+        for i, name in enumerate(variant_names):
+            variant_form = VariantForm({
+                "name": name,
+                "experiment": experiment,
+                "customer": request.user.customer,
+                "baseline": (i==0)
+            })
 
-        if len(variant_names) < 2:
-            context["errors"].append({ "num_variants": "Must have at least 2 variants for every experiment." })
+            if variant_form.is_valid():
+                valid_variant_forms.append(variant_form)
+            else:
+                invalid_variant_forms.append(variant_form)
+
+        if experiment_form.is_valid() and len(valid_variant_forms) >= 2:
+            experiment.save()
+            for variant_form in valid_variant_forms:
+                variant_form.save()
+
+            return redirect("/experiments/")
         else:
-            for i, name in enumerate(variant_names):
-                variant_form = VariantForm({
-                    "name": name,
-                    "experiment": experiment,
-                    "customer": experiment.customer,
-                    "baseline": (i==0)
-                })
+            context = {
+                "num_optional_variants": range(NUM_REQUIRED_VARIANTS, MAX_NUM_VARIANTS),
+                "errors": ["Must provide a unique name for the experiment and at least 2 variants."],
+            }
 
-                if variant_form.is_valid():
-                    variant = variant_form.save()
-                    variants.append(variant)
-                else:
-                    context["errors"].append(variant_form.errors)
+            return render(request, 'hyp/experiments/new.html', context)
 
-        return redirect("/experiments/", context)
+
     else:
         raise PermissionDenied
 

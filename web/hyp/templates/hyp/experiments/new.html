@@ -1,6 +1,11 @@
 {% extends "hyp/layout.html" %}
 {% block content %}
   <h1>New Experiment</h1>
+  {% for error in errors %}
+    <p class="error">
+      <strong>{{ error }}</strong>
+    </p>
+  {% endfor %}
   <form action="{% url 'create_experiment' %}" method="post" id="new-experiment">
     {% csrf_token %}
     <label for="experiment-name">Experiment Name:</label>
