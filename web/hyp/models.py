@@ -69,6 +69,13 @@ class Experiment(models.Model):
         indexes = [
             models.Index(fields=["name", "stopped", "customer_id"])
         ]
+        constraints = [
+            models.UniqueConstraint(
+                name="uniq_experiment_name_per_customer",
+                fields=["customer_id", "name"]
+            )
+        ]
+
 
     def __str__(self):
         return self.name
@@ -90,7 +97,7 @@ class VariantManager(models.Manager):
 
 class Variant(models.Model):
     objects = VariantManager()
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, verbose_name="Variant name")
     created_at = models.DateTimeField('created at', auto_now_add=True)
     updated_at = models.DateTimeField('updated at', auto_now=True)
     baseline = models.BooleanField(default=False)
