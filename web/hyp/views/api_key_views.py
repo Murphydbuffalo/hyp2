@@ -16,6 +16,7 @@ def index(request):
     else:
         raise PermissionDenied
 
+
 @login_required
 def new(request):
     if request.user.has_perm("hyp.add_apikey"):
