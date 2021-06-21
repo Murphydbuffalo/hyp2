@@ -24,9 +24,9 @@ class BaseVariantFormSet(BaseInlineFormSet):
         names = []
         for form in self.forms:
             name = form.cleaned_data.get('name')
-            if name in name:
+            if name in names:
                 raise ValidationError("Each variant must have a unique name.")
-            name.append(name)
+            names.append(name)
 
 CreateVariantsFormset = inlineformset_factory(
     Experiment,
