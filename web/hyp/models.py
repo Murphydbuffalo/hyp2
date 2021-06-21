@@ -97,7 +97,7 @@ class VariantManager(models.Manager):
 
 class Variant(models.Model):
     objects = VariantManager()
-    name = models.CharField(max_length=200, verbose_name="Variant name")
+    name = models.CharField(max_length=200)
     created_at = models.DateTimeField('created at', auto_now_add=True)
     updated_at = models.DateTimeField('updated at', auto_now=True)
     baseline = models.BooleanField(default=False)
