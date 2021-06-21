@@ -7,8 +7,14 @@
 
     <table>
       {{ experiment_form }}
+    </table>
 
+     <table>
       {{ variant_formset.management_form }}
+
+      <tr>
+        <h2>Variants</h2>
+      </tr>
 
       {% if formset_errors %}
       <tr>
