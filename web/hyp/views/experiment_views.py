@@ -58,14 +58,13 @@ def create(request):
         context["variant_formset"] = variant_formset
 
         if experiment_form.is_valid() and variant_formset.is_valid():
-            # TODO: redirect to show page for this experiment once that page is built out
             experiment = experiment_form.save()
             variants = variant_formset.save(commit=False)
             for variant in variants:
                 variant.customer_id = experiment.customer_id
                 variant.save()
 
-            return redirect("/experiments/")
+            return redirect(f'/experiments/{experiment.id}/')
         else:
             context["formset_errors"] = variant_formset.non_form_errors()
 
