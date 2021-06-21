@@ -4,11 +4,8 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from hyp.models import Experiment, Variant
-from hyp.forms import ExperimentForm, VariantForm
+from hyp.forms import ExperimentForm, CreateVariantsFormset
 
-
-MAX_NUM_VARIANTS = 5
-NUM_REQUIRED_VARIANTS = 2
 
 @login_required
 def index(request):
@@ -37,9 +34,11 @@ def show(request, experiment_id):
 @login_required
 def new(request):
     if request.user.has_perm("hyp.add_experiment"):
+        experiment = Experiment()
         context = {
-            "num_optional_variants": range(NUM_REQUIRED_VARIANTS, MAX_NUM_VARIANTS),
-            "errors": [],
+            "experiment_form": ExperimentForm(instance=experiment),
+            "variant_formset": CreateVariantsFormset(instance=experiment),
+            "formset_errors": [],
         }
         return render(request, 'hyp/experiments/new.html', context)
     else:
@@ -50,46 +49,27 @@ def new(request):
 @transaction.atomic
 def create(request):
     if request.user.has_perm("hyp.add_experiment"):
-        experiment_form = ExperimentForm({
-            "customer": request.user.customer,
-            "name": request.POST["experiment-name"]
-        })
-        experiment = Experiment()
+        experiment_form = ExperimentForm(request.POST)
+        context = { "experiment_form": experiment_form }
 
-        if experiment_form.is_valid():
-            experiment = experiment_form.save(commit=False)
+        experiment = experiment_form.save(commit=False)
+        experiment.customer_id = request.user.customer_id
+        variant_formset = CreateVariantsFormset(request.POST, instance=experiment)
+        context["variant_formset"] = variant_formset
 
-        variant_names = [request.POST[f'variant-{i}-name'] for i in range(MAX_NUM_VARIANTS)]
-        valid_variant_forms = []
-        invalid_variant_forms = []
-        for i, name in enumerate(variant_names):
-            variant_form = VariantForm({
-                "name": name,
-                "experiment": experiment,
-                "customer": request.user.customer,
-                "baseline": (i==0)
-            })
-
-            if variant_form.is_valid():
-                valid_variant_forms.append(variant_form)
-            else:
-                invalid_variant_forms.append(variant_form)
-
-        if experiment_form.is_valid() and len(valid_variant_forms) >= 2:
-            experiment.save()
-            for variant_form in valid_variant_forms:
-                variant_form.save()
+        if experiment_form.is_valid() and variant_formset.is_valid():
+            # TODO: redirect to show page for this experiment once that page is built out
+            experiment = experiment_form.save()
+            variants = variant_formset.save(commit=False)
+            for variant in variants:
+                variant.customer_id = experiment.customer_id
+                variant.save()
 
             return redirect("/experiments/")
         else:
-            context = {
-                "num_optional_variants": range(NUM_REQUIRED_VARIANTS, MAX_NUM_VARIANTS),
-                "errors": ["Must provide a unique name for the experiment and at least 2 variants."],
-            }
+            context["formset_errors"] = variant_formset.non_form_errors()
 
             return render(request, 'hyp/experiments/new.html', context)
-
-
     else:
         raise PermissionDenied
 
