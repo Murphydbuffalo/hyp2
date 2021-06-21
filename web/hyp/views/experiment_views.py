@@ -66,7 +66,7 @@ def create(request):
 
             return redirect(f'/experiments/{experiment.id}/')
         else:
-            context["formset_errors"] = variant_formset.non_form_errors()
+            context["formset_errors"] = variant_formset.formset_errors()
 
             return render(request, 'hyp/experiments/new.html', context)
     else:

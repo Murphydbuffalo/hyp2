@@ -39,3 +39,17 @@ CreateVariantsFormset = inlineformset_factory(
     extra=0,
     formset=BaseVariantFormSet,
 )
+
+# TODO: can we achieve the same result with internationalization/translations?
+# Probably want to do that at some point anyhow.
+def create_variant_formset_errors(self):
+    message_mappings = {
+        "Please submit at least 2 forms.": "Experiments must have at least 2 variants.",
+    }
+
+    messages = [message_mappings[message] if message in message_mappings else message for message in self.non_form_errors() ]
+
+    return messages
+
+
+CreateVariantsFormset.formset_errors = create_variant_formset_errors
