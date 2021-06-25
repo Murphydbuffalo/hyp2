@@ -38,7 +38,6 @@ def new(request):
         context = {
             "experiment_form": ExperimentForm(instance=experiment),
             "variant_formset": CreateVariantsFormset(instance=experiment),
-            "formset_errors": [],
         }
         return render(request, 'hyp/experiments/new.html', context)
     else:
@@ -66,8 +65,6 @@ def create(request):
 
             return redirect(f'/experiments/{experiment.id}/')
         else:
-            context["formset_errors"] = variant_formset.formset_errors()
-
             return render(request, 'hyp/experiments/new.html', context)
     else:
         raise PermissionDenied

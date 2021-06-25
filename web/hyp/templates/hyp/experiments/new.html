@@ -16,10 +16,10 @@
         <h2>Variants</h2>
       </tr>
 
-      {% if formset_errors %}
+      {% if variant_formset.non_form_errors %}
       <tr>
       <ul class="errorlist">
-        {% for error in formset_errors %}
+        {% for error in variant_formset.non_form_errors %}
         <li>{{ error }}</li>
         {% endfor %}
       </ul>

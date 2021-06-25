@@ -27,6 +27,10 @@ class BaseVariantFormSet(BaseInlineFormSet):
             if name in names:
                 raise ValidationError("Each variant must have a unique name.")
             names.append(name)
+        
+        if sum(name is not None and len(name) > 0 for name in names) < 2:
+            raise ValidationError("An experiment must have at least 2 variants.")
+
 
 CreateVariantsFormset = inlineformset_factory(
     Experiment,
@@ -35,21 +39,6 @@ CreateVariantsFormset = inlineformset_factory(
     can_delete=False,
     min_num=2,
     max_num=10,
-    validate_min=True,
     extra=0,
     formset=BaseVariantFormSet,
 )
-
-# TODO: can we achieve the same result with internationalization/translations?
-# Probably want to do that at some point anyhow.
-def create_variant_formset_errors(self):
-    message_mappings = {
-        "Please submit at least 2 forms.": "Experiments must have at least 2 variants.",
-    }
-
-    messages = [message_mappings[message] if message in message_mappings else message for message in self.non_form_errors() ]
-
-    return messages
-
-
-CreateVariantsFormset.formset_errors = create_variant_formset_errors
