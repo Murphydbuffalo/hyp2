@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
@@ -57,13 +57,18 @@ def create(request):
         context["variant_formset"] = variant_formset
 
         if experiment_form.is_valid() and variant_formset.is_valid():
-            experiment = experiment_form.save()
-            variants = variant_formset.save(commit=False)
-            for variant in variants:
-                variant.customer_id = experiment.customer_id
-                variant.save()
+            try:
+                experiment.validate_unique()
+                experiment = experiment_form.save()
+                variants = variant_formset.save(commit=False)
+                for variant in variants:
+                    variant.customer_id = experiment.customer_id
+                    variant.save()
 
-            return redirect(f'/experiments/{experiment.id}/')
+                return redirect(f'/experiments/{experiment.id}/')
+            except(ValidationError):
+              context["unique_error"] = "Experiment name is already taken."
+              return render(request, 'hyp/experiments/new.html', context)
         else:
             return render(request, 'hyp/experiments/new.html', context)
     else:
