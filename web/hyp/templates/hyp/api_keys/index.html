@@ -3,15 +3,12 @@
   <h1>API Keys</h1>
 
   {% if perms.hyp.add_apikey %}
-    <h2>Create API Key</h2>
+    <h2>
+      <a href="{% url 'new_api_key' %}">
+        Create API Key
+      </a>
+    </h2>
   {% endif %}
-
-  <form action="{% url 'create_api_key' %}" method="post">
-    {% csrf_token %}
-    <label for="api_key_label">Label:</label><br>
-    <input type="text" id="api_key_label" name="api_key_label"><br>
-    <input type="submit" value="Create">
-  </form>
 
   <ul class="api-key-list">
   {% for api_key in api_keys %}

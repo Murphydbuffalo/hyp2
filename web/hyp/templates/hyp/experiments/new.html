@@ -1,0 +1,53 @@
+{% extends "hyp/layout.html" %}
+{% load static %}
+{% block content %}
+  <h1>New Experiment</h1>
+
+  <form method="post" id="new-experiment-form" action="{% url 'create_experiment' %}">
+    {% csrf_token %}
+
+    <table id="experiment-form-fields">
+      {% if unique_error %}
+      <tr>
+      <ul class="errorlist">
+        <li>{{ unique_error }}</li>
+      </ul>
+      </tr>
+      {% endif %}
+
+      {{ experiment_form }}
+    </table>
+
+     <table id="variant-form-fields">
+      {{ variant_formset.management_form }}
+
+      <tr>
+        <h2>Variants</h2>
+      </tr>
+
+      {% if variant_formset.non_form_errors %}
+      <tr>
+      <ul class="errorlist">
+        {% for error in variant_formset.non_form_errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+      </tr>
+      {% endif %}
+
+      {% for form in variant_formset %}
+      {{ form }}
+      {% endfor %}
+    </table>
+
+    <table id="empty-form" class="hidden">
+      {{ variant_formset.empty_form.as_table }}
+    </table>
+
+    <button id="add-variant">Add variant</button>
+    <br>
+    <input class='button-primary' type='submit' value='Save'>
+  </form>
+
+  <script src={% static "js/experiment_form.js" %}></script>
+{% endblock %}

@@ -6,6 +6,10 @@ a {
   color: red;
 }
 
+.hidden {
+  display: none;
+}
+
 navbar.vertical {
   max-width: 12%;
   width: 12%;

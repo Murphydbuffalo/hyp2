@@ -18,6 +18,13 @@ def index(request):
 
 
 @login_required
+def new(request):
+    if request.user.has_perm("hyp.add_apikey"):
+        return render(request, 'hyp/api_keys/new.html')
+    else:
+        raise PermissionDenied
+
+@login_required
 def create(request):
     if request.user.has_perm("hyp.add_apikey"):
         new_key = ApiKey(customer_id=request.user.customer_id, label=request.POST["api_key_label"])
