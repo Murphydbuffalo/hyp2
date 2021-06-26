@@ -1,11 +1,12 @@
 {% extends "hyp/layout.html" %}
+{% load static %}
 {% block content %}
   <h1>New Experiment</h1>
 
-  <form method="post" id="new-experiment" action="{% url 'create_experiment' %}">
+  <form method="post" id="new-experiment-form" action="{% url 'create_experiment' %}">
     {% csrf_token %}
 
-    <table>
+    <table id="experiment-form-fields">
       {% if unique_error %}
       <tr>
       <ul class="errorlist">
@@ -17,7 +18,7 @@
       {{ experiment_form }}
     </table>
 
-     <table>
+     <table id="variant-form-fields">
       {{ variant_formset.management_form }}
 
       <tr>
@@ -39,7 +40,14 @@
       {% endfor %}
     </table>
 
-    <button class="add-variant">Add variant</button>
-    <input class='btn btn-primary' type='submit' value='Save'>
+    <table id="empty-form" class="hidden">
+      {{ variant_formset.empty_form.as_table }}
+    </table>
+
+    <button id="add-variant">Add variant</button>
+    <br>
+    <input class='button-primary' type='submit' value='Save'>
   </form>
+
+  <script src={% static "js/experiment_form.js" %}></script>
 {% endblock %}
