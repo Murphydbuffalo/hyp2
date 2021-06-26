@@ -30,7 +30,7 @@ class BaseVariantFormSet(BaseInlineFormSet):
             if name in names:
                 raise ValidationError("Each variant must have a unique name.")
             names.append(name)
- 
+
         if sum(name is not None and len(name) > 0 for name in names) < 2:
             raise ValidationError("An experiment must have at least 2 variants.")
 
