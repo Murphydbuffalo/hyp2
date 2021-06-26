@@ -51,7 +51,10 @@ def create(request):
         experiment_form = ExperimentForm(request.POST)
         context = { "experiment_form": experiment_form }
 
-        experiment = experiment_form.save(commit=False)
+        experiment = Experiment()
+        if experiment_form.is_valid():
+            experiment = experiment_form.save(commit=False)
+
         experiment.customer_id = request.user.customer_id
         variant_formset = CreateVariantsFormset(request.POST, instance=experiment)
         context["variant_formset"] = variant_formset
