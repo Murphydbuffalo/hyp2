@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.forms import modelform_factory, inlineformset_factory, BaseInlineFormSet
 from django.core.exceptions import ValidationError
 
+
 class HypUserChangeForm(UserChangeForm):
     class Meta:
         model = HypUser
@@ -16,6 +17,8 @@ class HypUserCreationForm(UserCreationForm):
 
 
 ExperimentForm = modelform_factory(Experiment, fields=["name"])
+
+
 class BaseVariantFormSet(BaseInlineFormSet):
     def clean(self):
         if any(self.errors):
@@ -27,7 +30,7 @@ class BaseVariantFormSet(BaseInlineFormSet):
             if name in names:
                 raise ValidationError("Each variant must have a unique name.")
             names.append(name)
-        
+ 
         if sum(name is not None and len(name) > 0 for name in names) < 2:
             raise ValidationError("An experiment must have at least 2 variants.")
 
