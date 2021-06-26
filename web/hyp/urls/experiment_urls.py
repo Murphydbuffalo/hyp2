@@ -7,4 +7,5 @@ urlpatterns = [
     path('new/', experiment_views.new, name='new_experiment'),
     path('create/', experiment_views.create, name='create_experiment'),
     path('update/', experiment_views.update, name='update_experiment'),
+    path('destroy/', experiment_views.destroy, name='destroy_experiment'),
 ]
