@@ -81,11 +81,6 @@ def create(request):
 @login_required
 def update(request):
     if request.user.has_perm("hyp.change_experiment"):
-        # TODO: should be able to update the name of an experiment at any time
-        # TOOD: should be able to update variant names at any time
-        # TODO: should be able to stop/restart an experiment at any time, but we probably 
-        # want to do that as a separate ticket as it necessitates skipping the Thompson
-        # sampler and instead always directing users to the best performing variant.
         return HttpResponse("This is a no-op for now")
     else:
         raise PermissionDenied
@@ -94,8 +89,6 @@ def update(request):
 @login_required
 def destroy(request):
     if request.user.has_perm("hyp.change_experiment"):
-        # TODO: should be able to destroy an experiment if it hasn't started
-        # otherwise, they can pause it and filter it out of the view that way.
         return HttpResponse("This is a no-op for now")
     else:
         raise PermissionDenied
