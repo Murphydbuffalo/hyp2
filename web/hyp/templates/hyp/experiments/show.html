@@ -1,8 +1,30 @@
 {% extends "hyp/layout.html" %}
 {% block content %}
   <h1>{{ experiment.description }}</h1>
+  <p id="total-interactions">
+    {% if experiment.total_interactions > 0 %}
+    {{ experiment.total_interactions }} unique participants.
+    {% else %}
+    No one has participated in this experiment yet.
+    {% endif %}
+  </p>
+  <p id="uncertainty" class={{ experiment.uncertainty_style }}>
+    Uncertainty level: {{ experiment.uncertainty_level  }}
+  </p>
+
   <h2>Variants</h2>
-  {% for variant in experiment.variant_set.all %}
-    <p>{{ variant.name }}</p>
-  {% endfor %}
+  <div id="variants">
+    {% for variant in experiment.variant_set.all %}
+    <div class="variant-details">
+      <h3>{{ variant.name }}</h3>
+      {% if experiment.total_interactions == 0 %}
+      <p>No data to display.</p>
+      {% else %}
+      <p>Receiving {{ variant.traffic_split }}% of traffic</p>
+      <p>{{ variant.total_interactions }} unique participants</p>
+      <p>{{ variant.conversion_rate }}% conversion rate</p>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
 {% endblock %}

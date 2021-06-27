@@ -1,7 +1,9 @@
+from hyp.thompson_sampler import ThompsonSampler
 from django.contrib.auth.models import AbstractUser
 from django.db import models, connection
 from uuid import uuid4
 from os import environ
+from scipy.stats import beta
 
 
 class Customer(models.Model):
@@ -82,6 +84,32 @@ class Experiment(models.Model):
     def description(self):
         return f'{self.name}{" (paused)" if self.stopped else ""}'
 
+    def total_interactions(self):
+        return sum([v.num_interactions for v in self.interaction_set.all()])
+
+    def uncertainty_style(self):
+        if self.uncertainty_level() == "High":
+            return "high-uncertainty"
+        elif self.uncertainty_level() == "Moderate":
+            return "moderate-uncertainty"
+        else:
+            return "low-uncertainty"
+
+    # TODO: instead of simplifying uncertainty by representing it discretely, we could 
+    # represent it continuously. Eg, maybe `(1.0 - self.inverval_width())`?
+    # So 75% interval = 25% "confidence", 50% = 50%, 10% interval = 90% confidence, etc?
+    def uncertainty_level(self):
+        if any([v.interval_width() >= 0.25 for v in self.variant_set.all()]):
+            return "High"
+        elif any([v.interval_width() >= 0.10 for v in self.variant_set.all()]):
+            return "Moderate"
+        else:
+            return "Low"
+
+    def simulated_traffic_split(self):
+        sampler = ThompsonSampler(self.variant_set.all())
+        return sampler.simulated_traffic_split()
+
 
 class VariantManager(models.Manager):
     def for_assignment(self, participant_id, access_token, experiment_id):
@@ -121,6 +149,31 @@ class Variant(models.Model):
 
     def __str__(self):
         return self.name
+
+    # What proportion of traffic has the variant received thus far?
+    def traffic_split_to_date(self):
+        if self.experiment.total_interactions() == 0:
+            return 0.0
+
+        return (float(self.num_interactions) / float(self.experiment.total_interactions()))
+
+    # Approximately what percentage of traffic will the variant receive going forward,
+    # based on the performance of all variants so far?
+    def expected_future_traffic_split(self):
+        if self.experiment.total_interactions() == 0:
+            return 0.0
+
+        return self.experiment.simulated_traffic_split()[self.id]
+
+    def conversion_rate(self):
+        if self.num_interactions == 0:
+            return 0.0
+
+        return (float(self.num_conversions) / float(self.num_interactions))
+
+    def interval_width(self, mass=0.97):
+        interval_start, interval_end = beta.interval(mass, self.num_conversions, self.num_interactions)
+        return interval_end - interval_start
 
 
 class InteractionManager(models.Manager):

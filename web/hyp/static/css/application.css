@@ -47,3 +47,13 @@ navbar.horizontal a {
 navbar.horizontal .auth form {
   display: inline-block;
 }
+
+#variants {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+}
+
+.variant-details {
+  margin-right: 2em;
+}

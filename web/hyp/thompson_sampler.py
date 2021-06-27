@@ -19,7 +19,7 @@ class ThompsonSampler:
 
         total = sum(winner_counts.values())
 
-        return {id: winner_counts[id] / total for id in winner_counts.keys()}
+        return {id: winner_counts[id] / float(total) for id in winner_counts.keys()}
 
     # private
 
