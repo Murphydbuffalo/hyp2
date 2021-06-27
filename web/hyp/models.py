@@ -80,7 +80,7 @@ class Experiment(models.Model):
         return self.name
 
     def description(self):
-        return f'{self.name}{" (stopped)" if self.stopped else ""}'
+        return f'{self.name}{" (paused)" if self.stopped else ""}'
 
 
 class VariantManager(models.Manager):
