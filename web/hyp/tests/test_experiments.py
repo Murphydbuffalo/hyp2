@@ -66,6 +66,10 @@ class TestExperiments(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn('New Experiment', str(response.content))
         self.assertIn('<form method="post" id="new-experiment-form" action="/experiments/create/">', str(response.content))
+        self.assertIn('<input type="text" name="name"', str(response.content))
+        self.assertIn('<input type="text" name="variant_set-0-name"', str(response.content))
+        self.assertIn('<input type="text" name="variant_set-1-name"', str(response.content))
+        self.assertIn('Save', str(response.content))
 
         payload = {
             'name': ['hiii'],
