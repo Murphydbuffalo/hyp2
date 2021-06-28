@@ -85,7 +85,7 @@ class Experiment(models.Model):
         return f'{self.name}{" (paused)" if self.stopped else ""}'
 
     def total_interactions(self):
-        return sum([v.num_interactions for v in self.interaction_set.all()])
+        return sum([v.num_interactions for v in self.variant_set.all()])
 
     def uncertainty_style(self):
         if self.uncertainty_level() == "High":

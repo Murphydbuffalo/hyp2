@@ -18,10 +18,9 @@
     <div class="variant-details">
       <h3>{{ variant.name }}</h3>
       {% if experiment.total_interactions == 0 %}
-      <p>No data to display.</p>
+      <p><strong>No data to display.</strong></p>
       {% else %}
-      <p>Receiving {{ variant.traffic_split }}% of traffic</p>
-      <p>{{ variant.total_interactions }} unique participants</p>
+      <p>Has received {{ variant.traffic_split_to_date }}% of traffic to date.</p>
       <p>{{ variant.conversion_rate }}% conversion rate</p>
       {% endif %}
     </div>
