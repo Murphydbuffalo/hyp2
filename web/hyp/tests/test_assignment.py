@@ -11,7 +11,7 @@ class TestAssignment(TestCase):
 
         api_key = ApiKey(customer=bonusly, label="Assignment test key")
         api_key.save()
-        self.access_token = "SANDBOX/" + api_key.access_token
+        self.access_token = str(api_key)
 
         self.exp = Experiment(name="Trial lengths", customer=bonusly)
         self.exp.save()
