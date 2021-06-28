@@ -155,7 +155,10 @@ class Variant(models.Model):
         if self.experiment.total_interactions() == 0:
             return 0.0
 
-        return (float(self.num_interactions) / float(self.experiment.total_interactions()))
+        return round(
+            (float(self.num_interactions) / float(self.experiment.total_interactions())) * 100,
+            2
+        )
 
     # Approximately what percentage of traffic will the variant receive going forward,
     # based on the performance of all variants so far?
@@ -169,7 +172,10 @@ class Variant(models.Model):
         if self.num_interactions == 0:
             return 0.0
 
-        return (float(self.num_conversions) / float(self.num_interactions))
+        return round(
+            (float(self.num_conversions) / float(self.num_interactions)) * 100,
+            2
+        )
 
     def interval_width(self, mass=0.97):
         interval_start, interval_end = beta.interval(mass, self.num_conversions, self.num_interactions)
