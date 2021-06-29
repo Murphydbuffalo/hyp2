@@ -99,7 +99,7 @@ class Experiment(models.Model):
     # represent it continuously. Eg, maybe `(1.0 - self.inverval_width())`?
     # So 75% interval = 25% "confidence", 50% = 50%, 10% interval = 90% confidence, etc?
     def uncertainty_level(self):
-        if any([v.interval_width() >= 0.25 for v in self.variant_set.all()]) or self.total_interactions < 20:
+        if self.total_interactions() < 20 or any([v.interval_width() >= 0.25 for v in self.variant_set.all()]):
             return "High"
         elif any([v.interval_width() >= 0.10 for v in self.variant_set.all()]):
             return "Moderate"
