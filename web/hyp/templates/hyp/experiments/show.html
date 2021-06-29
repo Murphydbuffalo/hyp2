@@ -18,7 +18,7 @@
     <div class="variant-details">
       <h3>{{ variant.name }}</h3>
       {% if variant.num_interactions == 0 %}
-      <p><strong>No one has interacted with this variant yet.</strong></p>
+      <p>No one has interacted with this variant yet.</p>
       {% else %}
       <p>Has received {{ variant.traffic_split_to_date }}% of traffic to date.</p>
       <p>{{ variant.conversion_rate }}% conversion rate</p>
