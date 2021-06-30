@@ -30,9 +30,7 @@ class ThompsonSampler:
 
             result = {
                 "variant": variant,
-                "sampled_parameter": np.random.beta(
-                    self.alpha(variant), self.beta(variant)
-                )
+                "sampled_parameter": np.random.beta(variant.alpha(), variant.beta())
             }
 
             samples.append(result)

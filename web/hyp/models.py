@@ -99,7 +99,7 @@ class Experiment(models.Model):
     # represent it continuously. Eg, maybe `(1.0 - self.inverval_width())`?
     # So 75% interval = 25% "confidence", 50% = 50%, 10% interval = 90% confidence, etc?
     def uncertainty_level(self):
-        if self.total_interactions() < 20 or any([v.interval_width() >= 0.25 for v in self.variant_set.all()]):
+        if  any([v.interval_width() >= 0.25 for v in self.variant_set.all()]):
             return "High"
         elif any([v.interval_width() >= 0.10 for v in self.variant_set.all()]):
             return "Moderate"
@@ -150,6 +150,12 @@ class Variant(models.Model):
     def __str__(self):
         return self.name
 
+    def alpha(self):
+        return self.num_conversions + 1
+
+    def beta(self):
+        return self.num_interactions + 1
+
     # What proportion of traffic has the variant received thus far?
     def traffic_split_to_date(self):
         if self.experiment.total_interactions() == 0:
@@ -178,7 +184,8 @@ class Variant(models.Model):
         )
 
     def interval_width(self, mass=0.97):
-        interval_start, interval_end = beta.interval(mass, self.num_conversions, self.num_interactions)
+        interval_start, interval_end = beta.interval(mass, self.alpha(), self.beta())
+
         return interval_end - interval_start
 
 

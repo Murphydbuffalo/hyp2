@@ -1,7 +1,9 @@
 from django.test import TestCase, Client
 from django.contrib.auth.models import Permission
-from hyp.models import Customer, Experiment, HypUser
+from hyp.models import Customer, Experiment, HypUser, Interaction, Variant
 from hyp.tests.helpers import login, signup
+
+import random
 
 
 class TestExperiments(TestCase):
@@ -21,6 +23,12 @@ class TestExperiments(TestCase):
             name="Test dank color schemes",
         )
         e1.save()
+        for i in range(3):
+            v = Variant(name=f'Variant {i + 1}', experiment=e1, customer=e1.customer)
+            v.save()
+
+        self.experiment = e1
+
         e2 = Experiment(
             customer=self.bonusly,
             name="Chill vibez",
@@ -172,3 +180,95 @@ class TestExperiments(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Experiment.objects.filter(customer_id=self.bonusly.id).count(), 2)
         self.assertIn('Experiment name is already taken.', str(response.content))
+
+    def test_description(self):
+        self.assertEqual(self.experiment.description(), "Test dank color schemes")
+        self.experiment.stopped = True
+        self.experiment.save()
+        self.assertEqual(self.experiment.description(), "Test dank color schemes (paused)")
+
+    def test_total_interactions(self):
+        self.assertEqual(self.experiment.total_interactions(), 0)
+        interaction1 = Interaction(
+            customer=self.experiment.customer,
+            experiment=self.experiment,
+            variant=self.experiment.variant_set.first(),
+            participant_id="foo",
+        )
+        interaction1.save()
+        interaction2 = Interaction(
+            customer=self.experiment.customer,
+            experiment=self.experiment,
+            variant=self.experiment.variant_set.last(),
+            participant_id="bar",
+        )
+        interaction2.save()
+
+        self.assertEqual(self.experiment.total_interactions(), 2)
+
+
+    def test_uncertainty_level(self):
+        self.assertEqual(self.experiment.uncertainty_level(), "High")
+
+        conversion_rates = {
+            0: (random.randint(1, 10) > 3), # 70% conversion rate
+            1: (random.randint(1, 10) > 4), # 60% conversion rate
+            2: (random.randint(1, 10) > 5), # 50% conversion rate
+        }
+
+        for i in range(20):
+            interaction = Interaction(
+                customer=self.experiment.customer,
+                experiment=self.experiment,
+                variant=self.experiment.variant_set.first(),
+                participant_id=f'User {i}',
+                converted=conversion_rates[0],
+            )
+            interaction.save()
+
+        # Little uncertainty for the first variant, but still much uncertainty
+        # for the other two
+        self.assertEqual(self.experiment.uncertainty_level(), "High")
+
+        for i in range(20):
+            interaction = Interaction(
+                customer=self.experiment.customer,
+                experiment=self.experiment,
+                variant=self.experiment.variant_set.all()[1],
+                participant_id=f'User {20 + i}',
+                converted=conversion_rates[1],
+            )
+            interaction.save()
+
+        # Still uncertainty in the last variant
+        self.assertEqual(self.experiment.uncertainty_level(), "High")
+
+        for i in range(20):
+            interaction = Interaction(
+                customer=self.experiment.customer,
+                experiment=self.experiment,
+                variant=self.experiment.variant_set.last(),
+                participant_id=f'User {40 + i}',
+                converted=conversion_rates[2],
+            )
+            interaction.save()
+
+        self.assertEqual(self.experiment.uncertainty_level(), "Moderate")
+
+        for i in range(20):
+            for j in range(3):
+                interaction = Interaction(
+                    customer=self.experiment.customer,
+                    experiment=self.experiment,
+                    variant=self.experiment.variant_set.all()[j],
+                    participant_id=f'User {(j + 1) * 60 + i}',
+                    converted=conversion_rates[j],
+                )
+                interaction.save()
+
+        self.assertEqual(self.experiment.uncertainty_level(), "Low")
+
+
+
+    def test_simulated_traffic_split(self):
+        pass
