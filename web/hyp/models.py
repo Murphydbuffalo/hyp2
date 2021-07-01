@@ -95,9 +95,6 @@ class Experiment(models.Model):
         else:
             return "low-uncertainty"
 
-    # TODO: instead of simplifying uncertainty by representing it discretely, we could 
-    # represent it continuously. Eg, maybe `(1.0 - self.inverval_width())`?
-    # So 75% interval = 25% "confidence", 50% = 50%, 10% interval = 90% confidence, etc?
     def uncertainty_level(self):
         if  any([v.interval_width() >= 0.25 for v in self.variant_set.all()]):
             return "High"
@@ -156,7 +153,6 @@ class Variant(models.Model):
     def beta(self):
         return self.num_interactions + 1
 
-    # What proportion of traffic has the variant received thus far?
     def traffic_split_to_date(self):
         if self.experiment.total_interactions() == 0:
             return 0.0
