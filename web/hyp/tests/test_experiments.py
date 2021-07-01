@@ -4,6 +4,7 @@ from hyp.models import Customer, Experiment, HypUser, Interaction, Variant
 from hyp.tests.helpers import login, signup
 
 import random
+import re
 
 
 class TestExperiments(TestCase):
@@ -28,6 +29,12 @@ class TestExperiments(TestCase):
             v.save()
 
         self.experiment = e1
+        self.conversion_rates = {
+            0: (random.randint(1, 10) > 3), # 70% conversion rate
+            1: (random.randint(1, 10) > 4), # 60% conversion rate
+            2: (random.randint(1, 10) > 5), # 50% conversion rate
+        }
+
 
         e2 = Experiment(
             customer=self.bonusly,
@@ -68,6 +75,44 @@ class TestExperiments(TestCase):
 
         response = self.client.post(f'/experiments/create/')
         self.assertEqual(response.status_code, 403)
+
+    def test_experiment_detail_page(self):
+        response = self.client.get(f'/experiments/{self.experiment.id}/')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Test dank color schemes experiment', str(response.content))
+        self.assertIn('No one has participated in this experiment yet.', str(response.content))
+        self.assertIn('Uncertainty level: High', str(response.content))
+        self.assertIn('Variant 1', str(response.content))
+        self.assertIn('Variant 2', str(response.content))
+        self.assertIn('Variant 3', str(response.content))
+        self.assertIn('No one has interacted with this variant yet.', str(response.content))
+
+        for i in range(20):
+            for j in range(3):
+                interaction = Interaction(
+                    customer=self.experiment.customer,
+                    experiment=self.experiment,
+                    variant=self.experiment.variant_set.all()[j],
+                    participant_id=f'User {random.random()} {j + i}',
+                    converted=self.conversion_rates[j],
+                )
+                interaction.save()
+
+        response = self.client.get(f'/experiments/{self.experiment.id}/')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Test dank color schemes experiment', str(response.content))
+        self.assertIn('60 unique participants.', str(response.content))
+        self.assertIn('Uncertainty level: Moderate', str(response.content))
+        self.assertIn('Variant 1', str(response.content))
+        self.assertIn('Variant 2', str(response.content))
+        self.assertIn('Variant 3', str(response.content))
+
+        traffic_split_regexp = re.compile('Has received (\d+\.\d+)% of traffic to date.')
+        self.assertRegex(str(response.content), traffic_split_regexp)
+
+        conversion_rate_regexp = re.compile('(\d+\.\d+)% conversion rate.')
+        self.assertRegex(str(response.content), conversion_rate_regexp)
+
 
     def test_create_success(self):
         response = self.client.get('/experiments/new/')
@@ -210,19 +255,13 @@ class TestExperiments(TestCase):
     def test_uncertainty_level(self):
         self.assertEqual(self.experiment.uncertainty_level(), "High")
 
-        conversion_rates = {
-            0: (random.randint(1, 10) > 3), # 70% conversion rate
-            1: (random.randint(1, 10) > 4), # 60% conversion rate
-            2: (random.randint(1, 10) > 5), # 50% conversion rate
-        }
-
         for i in range(20):
             interaction = Interaction(
                 customer=self.experiment.customer,
                 experiment=self.experiment,
                 variant=self.experiment.variant_set.first(),
-                participant_id=f'User {i}',
-                converted=conversion_rates[0],
+                participant_id=f'User {i} {random.random()}',
+                converted=self.conversion_rates[0],
             )
             interaction.save()
 
@@ -235,21 +274,21 @@ class TestExperiments(TestCase):
                 customer=self.experiment.customer,
                 experiment=self.experiment,
                 variant=self.experiment.variant_set.all()[1],
-                participant_id=f'User {20 + i}',
-                converted=conversion_rates[1],
+                participant_id=f'User {i} {random.random()}',
+                converted=self.conversion_rates[1],
             )
             interaction.save()
 
         # Still uncertainty in the last variant
         self.assertEqual(self.experiment.uncertainty_level(), "High")
 
-        for i in range(20):
+        for i in range(30):
             interaction = Interaction(
                 customer=self.experiment.customer,
                 experiment=self.experiment,
                 variant=self.experiment.variant_set.last(),
-                participant_id=f'User {40 + i}',
-                converted=conversion_rates[2],
+                participant_id=f'User {i} {random.random()}',
+                converted=self.conversion_rates[2],
             )
             interaction.save()
 
@@ -261,8 +300,8 @@ class TestExperiments(TestCase):
                     customer=self.experiment.customer,
                     experiment=self.experiment,
                     variant=self.experiment.variant_set.all()[j],
-                    participant_id=f'User {(j + 1) * 60 + i}',
-                    converted=conversion_rates[j],
+                    participant_id=f'User {j} {i} {random.random()}',
+                    converted=self.conversion_rates[j],
                 )
                 interaction.save()
 
