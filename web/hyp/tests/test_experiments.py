@@ -326,7 +326,71 @@ class TestExperiments(TestCase):
 
         self.assertEqual(self.experiment.uncertainty_level(), "Low")
 
-
-
     def test_simulated_traffic_split(self):
         pass
+
+    def test_variant_conversion_rate(self):
+        variant = self.experiment.variant_set.first()
+        self.assertEqual(variant.conversion_rate(), 0.0)
+
+        for _i in range(10):
+            interaction = Interaction(
+                customer=self.experiment.customer,
+                experiment=self.experiment,
+                variant=variant,
+                participant_id=f'User {random.random()}',
+            )
+            interaction.save()
+
+        variant.refresh_from_db()
+        self.assertEqual(variant.conversion_rate(), 0.0)
+
+        interactions = Interaction.objects.all()
+        for i in range(5):
+            interaction = interactions[i]
+            interaction.converted = True
+            interaction.save()
+
+        variant.refresh_from_db()
+        self.assertEqual(variant.conversion_rate(), 50.0)
+
+    def test_variant_traffic_split_to_date(self):
+        variants = self.experiment.variant_set.all()
+        for variant in variants:
+            self.assertEqual(variant.traffic_split_to_date(), 0.0)
+
+        for _i in range(10):
+            interaction = Interaction(
+                customer=self.experiment.customer,
+                experiment=self.experiment,
+                variant=variants[0],
+                participant_id=f'User {random.random()}',
+            )
+            interaction.save()
+
+        variants[0].refresh_from_db()
+        self.assertEqual(variants[0].traffic_split_to_date(), 100.0)
+
+        variants[1].refresh_from_db()
+        self.assertEqual(variants[1].traffic_split_to_date(), 0.0)
+
+        variants[2].refresh_from_db()
+        self.assertEqual(variants[2].traffic_split_to_date(), 0.0)
+
+        for _i in range(10):
+            interaction = Interaction(
+                customer=self.experiment.customer,
+                experiment=self.experiment,
+                variant=variants[1],
+                participant_id=f'User {random.random()}',
+            )
+            interaction.save()
+
+        variants[0].refresh_from_db()
+        self.assertEqual(variants[0].traffic_split_to_date(), 50.0)
+
+        variants[1].refresh_from_db()
+        self.assertEqual(variants[1].traffic_split_to_date(), 50.0)
+
+        variants[2].refresh_from_db()
+        self.assertEqual(variants[2].traffic_split_to_date(), 0.0)
