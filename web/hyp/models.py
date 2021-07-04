@@ -96,7 +96,7 @@ class Experiment(models.Model):
             return "low-uncertainty"
 
     def uncertainty_level(self):
-        if  any([v.interval_width() >= 0.25 for v in self.variant_set.all()]):
+        if any([v.interval_width() >= 0.25 for v in self.variant_set.all()]):
             return "High"
         elif any([v.interval_width() >= 0.10 for v in self.variant_set.all()]):
             return "Moderate"

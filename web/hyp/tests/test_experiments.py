@@ -74,7 +74,7 @@ class TestExperiments(TestCase):
         response = self.client.get('/experiments/new/')
         self.assertEqual(response.status_code, 403)
 
-        response = self.client.post(f'/experiments/create/')
+        response = self.client.post('/experiments/create/')
         self.assertEqual(response.status_code, 403)
 
     def test_experiment_detail_page(self):
@@ -88,7 +88,7 @@ class TestExperiments(TestCase):
         self.assertIn('Variant 3', str(response.content))
         self.assertIn('No one has interacted with this variant yet.', str(response.content))
 
-        for i in range(20):
+        for _i in range(20):
             for j in range(3):
                 variant = self.experiment.variant_set.all()[j]
                 converted = self.converted(self.conversion_rates[variant.id])
@@ -117,12 +117,14 @@ class TestExperiments(TestCase):
         conversion_rate_regexp = re.compile('(\d+\.\d+)% conversion rate.')
         self.assertRegex(str(response.content), conversion_rate_regexp)
 
-
     def test_create_success(self):
         response = self.client.get('/experiments/new/')
         self.assertEqual(response.status_code, 200)
         self.assertIn('New Experiment', str(response.content))
-        self.assertIn('<form method="post" id="new-experiment-form" action="/experiments/create/">', str(response.content))
+        self.assertIn(
+            '<form method="post" id="new-experiment-form" action="/experiments/create/">',
+            str(response.content)
+        )
         self.assertIn('<input type="text" name="name"', str(response.content))
         self.assertIn('<input type="text" name="variant_set-0-name"', str(response.content))
         self.assertIn('<input type="text" name="variant_set-1-name"', str(response.content))
@@ -143,7 +145,10 @@ class TestExperiments(TestCase):
         }
 
         response = self.client.post('/experiments/create/', payload, follow=True)
-        self.assertEqual(Experiment.objects.filter(name="hiii", customer_id=self.bonusly.id).count(), 1)
+        self.assertEqual(
+            Experiment.objects.filter(name="hiii", customer_id=self.bonusly.id).count(),
+            1
+        )
         exp = Experiment.objects.get(customer_id=self.bonusly.id, name="hiii")
         variants = exp.variant_set.all()
         self.assertEqual(len(variants), 2)
@@ -209,7 +214,6 @@ class TestExperiments(TestCase):
         self.assertEqual(Experiment.objects.filter(customer_id=self.bonusly.id).count(), 2)
         self.assertIn('Each variant must have a unique name.', str(response.content))
 
-
     def test_create_fail_duplicate_experiment_name(self):
         payload = {
             'name': ['Test dank color schemes'],
@@ -255,11 +259,10 @@ class TestExperiments(TestCase):
 
         self.assertEqual(self.experiment.total_interactions(), 2)
 
-
     def test_uncertainty_level(self):
         self.assertEqual(self.experiment.uncertainty_level(), "High")
 
-        for i in range(20):
+        for _i in range(20):
             variant = self.experiment.variant_set.all()[0]
             converted = self.converted(self.conversion_rates[variant.id])
 
@@ -276,7 +279,7 @@ class TestExperiments(TestCase):
         # for the other two
         self.assertEqual(self.experiment.uncertainty_level(), "High")
 
-        for i in range(20):
+        for _i in range(20):
             variant = self.experiment.variant_set.all()[1]
             converted = self.converted(self.conversion_rates[variant.id])
 
@@ -292,7 +295,7 @@ class TestExperiments(TestCase):
         # Still uncertainty in the last variant
         self.assertEqual(self.experiment.uncertainty_level(), "High")
 
-        for i in range(20):
+        for _i in range(20):
             variant = self.experiment.variant_set.all()[2]
             converted = self.converted(self.conversion_rates[variant.id])
 
@@ -307,7 +310,7 @@ class TestExperiments(TestCase):
 
         self.assertEqual(self.experiment.uncertainty_level(), "Moderate")
 
-        for i in range(20):
+        for _i in range(20):
             for j in range(3):
                 variant = self.experiment.variant_set.all()[j]
                 converted = self.converted(self.conversion_rates[variant.id])
