@@ -30,7 +30,7 @@ numpy==1.20.1
 pandas==1.2.2
 pathspec==0.8.1
 pbr==5.5.1
-Pillow==8.1.1
+Pillow==8.2.0
 psycopg2==2.8.6
 pybrake==0.4.6
 pycodestyle==2.6.0
