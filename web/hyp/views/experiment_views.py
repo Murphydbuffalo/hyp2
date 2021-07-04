@@ -3,7 +3,7 @@ from django.core.exceptions import PermissionDenied, ValidationError
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from hyp.models import Experiment, Variant
+from hyp.models import Experiment
 from hyp.forms import ExperimentForm, CreateVariantsFormset
 
 
@@ -49,7 +49,7 @@ def new(request):
 def create(request):
     if request.user.has_perm("hyp.add_experiment"):
         experiment_form = ExperimentForm(request.POST)
-        context = { "experiment_form": experiment_form }
+        context = {"experiment_form": experiment_form}
 
         experiment = Experiment()
         if experiment_form.is_valid():
@@ -70,8 +70,8 @@ def create(request):
 
                 return redirect(f'/experiments/{experiment.id}/')
             except(ValidationError):
-              context["unique_error"] = "Experiment name is already taken."
-              return render(request, 'hyp/experiments/new.html', context)
+                context["unique_error"] = "Experiment name is already taken."
+                return render(request, 'hyp/experiments/new.html', context)
         else:
             return render(request, 'hyp/experiments/new.html', context)
     else:
