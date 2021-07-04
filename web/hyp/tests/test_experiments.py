@@ -6,8 +6,10 @@ from hyp.tests.helpers import login, signup
 import random
 import re
 
-
 class TestExperiments(TestCase):
+    def converted(self, conversion_rate):
+        return random.random() <= conversion_rate
+
     def setUp(self):
         self.client = Client()
         self.bonusly = Customer(name="Bonusly")
@@ -24,17 +26,16 @@ class TestExperiments(TestCase):
             name="Test dank color schemes",
         )
         e1.save()
+
+        # Simulate different conversion rates for each variant
+        self.conversion_rates = {}
+
         for i in range(3):
             v = Variant(name=f'Variant {i + 1}', experiment=e1, customer=e1.customer)
             v.save()
+            self.conversion_rates[v.id] = 0.3 - (i * 0.1)
 
         self.experiment = e1
-        self.conversion_rates = {
-            0: (random.randint(1, 10) > 3), # 70% conversion rate
-            1: (random.randint(1, 10) > 4), # 60% conversion rate
-            2: (random.randint(1, 10) > 5), # 50% conversion rate
-        }
-
 
         e2 = Experiment(
             customer=self.bonusly,
@@ -89,12 +90,15 @@ class TestExperiments(TestCase):
 
         for i in range(20):
             for j in range(3):
+                variant = self.experiment.variant_set.all()[j]
+                converted = self.converted(self.conversion_rates[variant.id])
+
                 interaction = Interaction(
                     customer=self.experiment.customer,
                     experiment=self.experiment,
-                    variant=self.experiment.variant_set.all()[j],
-                    participant_id=f'User {random.random()} {j + i}',
-                    converted=self.conversion_rates[j],
+                    variant=variant,
+                    participant_id=f'User {random.random()}',
+                    converted=converted,
                 )
                 interaction.save()
 
@@ -256,12 +260,15 @@ class TestExperiments(TestCase):
         self.assertEqual(self.experiment.uncertainty_level(), "High")
 
         for i in range(20):
+            variant = self.experiment.variant_set.all()[0]
+            converted = self.converted(self.conversion_rates[variant.id])
+
             interaction = Interaction(
                 customer=self.experiment.customer,
                 experiment=self.experiment,
-                variant=self.experiment.variant_set.first(),
-                participant_id=f'User {i} {random.random()}',
-                converted=self.conversion_rates[0],
+                variant=variant,
+                participant_id=f'User {random.random()}',
+                converted=converted,
             )
             interaction.save()
 
@@ -270,25 +277,31 @@ class TestExperiments(TestCase):
         self.assertEqual(self.experiment.uncertainty_level(), "High")
 
         for i in range(20):
+            variant = self.experiment.variant_set.all()[1]
+            converted = self.converted(self.conversion_rates[variant.id])
+
             interaction = Interaction(
                 customer=self.experiment.customer,
                 experiment=self.experiment,
-                variant=self.experiment.variant_set.all()[1],
-                participant_id=f'User {i} {random.random()}',
-                converted=self.conversion_rates[1],
+                variant=variant,
+                participant_id=f'User {random.random()}',
+                converted=converted,
             )
             interaction.save()
 
         # Still uncertainty in the last variant
         self.assertEqual(self.experiment.uncertainty_level(), "High")
 
-        for i in range(30):
+        for i in range(20):
+            variant = self.experiment.variant_set.all()[2]
+            converted = self.converted(self.conversion_rates[variant.id])
+
             interaction = Interaction(
                 customer=self.experiment.customer,
                 experiment=self.experiment,
-                variant=self.experiment.variant_set.last(),
-                participant_id=f'User {i} {random.random()}',
-                converted=self.conversion_rates[2],
+                variant=variant,
+                participant_id=f'User {random.random()}',
+                converted=converted,
             )
             interaction.save()
 
@@ -296,12 +309,15 @@ class TestExperiments(TestCase):
 
         for i in range(20):
             for j in range(3):
+                variant = self.experiment.variant_set.all()[j]
+                converted = self.converted(self.conversion_rates[variant.id])
+
                 interaction = Interaction(
                     customer=self.experiment.customer,
                     experiment=self.experiment,
-                    variant=self.experiment.variant_set.all()[j],
-                    participant_id=f'User {j} {i} {random.random()}',
-                    converted=self.conversion_rates[j],
+                    variant=variant,
+                    participant_id=f'User {random.random()}',
+                    converted=converted,
                 )
                 interaction.save()
 
