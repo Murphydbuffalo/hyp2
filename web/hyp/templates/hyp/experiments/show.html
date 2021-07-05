@@ -1,4 +1,10 @@
 {% extends "hyp/layout.html" %}
+{% block head_tags %}
+  <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+  <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+  <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+{% endblock %} 
+
 {% block content %}
   <h1>{{ experiment.description }} experiment</h1>
   <p id="total-interactions">
@@ -11,6 +17,8 @@
   <p id="uncertainty" class={{ experiment.uncertainty_style }}>
     Uncertainty level: {{ experiment.uncertainty_level  }}
   </p>
+
+  <div id="traffic-split-chart"></div>
 
   <h2>Variants</h2>
   <div id="variants">
@@ -26,4 +34,115 @@
     </div>
     {% endfor %}
   </div>
+
+<script>
+  // TODO: break this into a module. TypeScript?
+  am4core.ready(function() {
+    am4core.useTheme(am4themes_animated);
+    let chart = am4core.create("traffic-split-chart", am4charts.XYChart);
+
+    const dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+    const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+
+    // TODO: for each variant.
+    for (var i = 0; i < 10; i++) {
+      createSeries("value" + i, "Series #" + i);
+    }
+
+    function createSeries(s, name) {
+      let series = chart.series.push(new am4charts.LineSeries());
+      series.dataFields.valueY = "value" + s;
+      series.dataFields.dateX = "date";
+      series.name = name;
+
+      let segment = series.segments.template;
+      segment.interactionsEnabled = true;
+
+      let hoverState = segment.states.create("hover");
+      hoverState.properties.strokeWidth = 3;
+
+      let dimmed = segment.states.create("dimmed");
+      dimmed.properties.stroke = am4core.color("#dadada");
+
+      segment.events.on("over", function(event) {
+        processOver(event.target.parent.parent.parent);
+      });
+
+      segment.events.on("out", function(event) {
+        processOut(event.target.parent.parent.parent);
+      });
+
+      // TODO: how to best get data from server to client?
+      // Make AJAX call on page load to fetch and pass resulting 
+      // payload into a function that renders graph?
+      // Would need a loading state.
+      // What if we have the data cached and want to immediately
+      // render? Could also fetch that data via AJAX, no problem.
+      // Django might provide a way to inject arbitrary data into
+      // the `script` tag, so that's an option as well, but that
+      // seems jankier. Eg harder to migrate from that world to
+      // something like React or Hotwire.
+      let data = [];
+      let value = Math.round(Math.random() * 100) + 100;
+      for (var i = 1; i < 100; i++) {
+        value += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 30 + i / 5);
+        const dataItem = { date: new Date(2018, 0, i) };
+        dataItem["value" + s] = value;
+        data.push(dataItem);
+      }
+
+      series.data = data;
+      return series;
+    }
+
+    chart.legend = new am4charts.Legend();
+    chart.legend.position = "right";
+    chart.legend.scrollable = true;
+
+    chart.legend.markers.template.states.create("dimmed").properties.opacity = 0.3;
+    chart.legend.labels.template.states.create("dimmed").properties.opacity = 0.3;
+
+    chart.legend.itemContainers.template.events.on("over", function(event) {
+      processOver(event.target.dataItem.dataContext);
+    });
+
+    chart.legend.itemContainers.template.events.on("out", function(event) {
+      processOut(event.target.dataItem.dataContext);
+    });
+
+    function processOver(hoveredSeries) {
+      hoveredSeries.toFront();
+
+      hoveredSeries.segments.each(function(segment) {
+        segment.setState("hover");
+      });
+  
+      hoveredSeries.legendDataItem.marker.setState("default");
+      hoveredSeries.legendDataItem.label.setState("default");
+
+      chart.series.each(function(series) {
+        if (series != hoveredSeries) {
+          series.segments.each(function(segment) {
+            segment.setState("dimmed");
+          });
+          series.bulletsContainer.setState("dimmed");
+          series.legendDataItem.marker.setState("dimmed");
+          series.legendDataItem.label.setState("dimmed");
+        }
+      });
+    }
+
+    function processOut() {
+      chart.series.each(function(series) {
+        series.segments.each(function(segment) {
+        segment.setState("default");
+      });
+      series.bulletsContainer.setState("default");
+      series.legendDataItem.marker.setState("default");
+      series.legendDataItem.label.setState("default");
+    });
+    }
+  });
+</script>
+
 {% endblock %}
