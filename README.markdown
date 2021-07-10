@@ -54,28 +54,27 @@ Django has good docs and guides and is conceptually similar to Ruby on Rails.
 Here's what you need to do to get Hyp running locally on a Mac:
 1. Make sure you have XCode installed and up to date: `xcode-select --install`
 2. Install Homebrew: `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
-3. Install Python 3 and set it as your default Python version: `brew install python3 && brew link python3`. This should also gets you `pip`, Python's package manager, but if not you can try `python -m ensurepip --upgrade`.
-4. Install Virtualenv: `python -m pip install virtualenv`. This is a library for managing the dependencies in your
-Python project. It lets you install different versions of packages for specific projects.
-5. Clone the Hyp repo. If you have SSH keys added to GitHub run `git clone git@github.com:Murphydbuffalo/hyp2.git`, otherwise run `git clone https://github.com/Murphydbuffalo/hyp2.git`
-6. `cd hyp2` (the original Hyp was a very terrible Ruby Gem, thus the name "Hyp2").
-7. Install the dependencies: `python -m pip install -r requirements.txt`.
-8. `cd web`. Most of the work you do will be inside this directory. The top level
-directory is mainly for configuration files.
-9. Install and run PostgreSQL: `brew install postgresql` and then `brew services start postgresql`.
-If everything is set up correctly you should be able to run the server with `python manage.py runserver`. Congrats!
-10. Debugging issues with your Postgres setup. If something is not working with Postgres you can
-investigate by looking at the log file: `tail -n 500 /usr/local/var/log/postgres.log`.
+3. Install Python 3: `brew install python3`. This should also gets you `pip3`, Python's package manager, but if not you can try `python3 -m ensurepip --upgrade`.
+4. Clone the Hyp repo. If you have SSH keys added to GitHub run `git clone git@github.com:Murphydbuffalo/hyp2.git`, otherwise run `git clone https://github.com/Murphydbuffalo/hyp2.git`
+5. `cd hyp2` (the original Hyp was a very terrible Ruby Gem, thus the name "Hyp2").
+6. Set up a *virtual env* for the project: `python3 -m venv .`. A virtual env does two things. First, it allows us to install the dependencies we need for Hyp into a directory specific to this project, which means installing those same dependencies globally or for another project won't overwrite a dependency with a different version. Second, it allows us to use a specific version of Python and Pip for the project. After running this command you should see a `./lib/python3.9/site-packages` directory. This is where our Hyp-specific installations of dependencies will live (as opposed to some global `site-packages` directory). You should also see a `./bin` directory, including among other things executables for `pip` and `python` that symlink to the version of Python you used to run the `python3 -m venv.` command earlier.
+7. Run `source ./bin/activate`. This tells your computer to use the executables in `./bin` by prepending that directory to your `PATH`. You can check that this worked by running `echo $PATH`, or by running `python -V` and seeing that your `python` executable points to some version of Python 3, not the system default of Python 2.
+8. Install the dependencies: `pip install -r requirements.txt`.
+9. I highly recommend making a shell alias so you don't forget to active your virtual env. I have something like `alias hyp="cd ~/Code/hyp2 && source ./bin/activate"` in my shell config file.
+10. `cd ./web`. Most of the work you do will be inside this directory. The top level directory is mainly for configuration files.
+11. Install and run PostgreSQL: `brew install postgresql` and then `brew services start postgresql`.
+If everything is set up correctly you should be able to run the server with `python manage.py runserver`. Congrats! If there are issues with your Postgres setup you can investigate by looking at the log file: `tail -n 500 /usr/local/var/log/postgres.log`.
+12. Create the development database: `createdb hyp2`. `createdb` is a command provided by Postgres.
+13. Run the database migrations: `./scripts/migrate`.
+14. Create a superuser for yourself: `./scripts/user`
+14. Start the server `./scripts/server`. By the way, this `scripts` directory is something I added for convenience. Feel free to make PRs that add new scripts or update existing ones.
+15. Run the tests `./scripts/test`. If you see a warning about a `web/staticfiles` directory it's nothing to worry about. We include that directory `.gitignore` because it is meant to contain our compiled production static assets. You can make the warning go away by running `mkdir ./web/staticfiles`.
+16. Fire up a Python REPL with all of the Hyp code available for import: `./scripts/shell`.
 
 If you're on a Linux system things should largely be the same, with some key differences being:
 1. You'll be using something like `apt` to fetch dependencies.
 2. You'll need to use something like Ubuntu's `service` command to run Postgres, rather than Homebrew services.
 3. *You'll need to install the Python dev package so that dependencies with native code can compile successfully.* To do this you can run `sudo apt-get install python3-dev`.
-
-### Using a virtual environment
-If you want to use a tool like `venv` to work on the project please feel free to do so!
-
-I (Dan) personally do so. But don't commit files specific to your local dev environment to the repo. For example you'll see that we have directories like `bin` and `lib` added to `.gitignore`. This prevents binaries specific to a developer's local environment from getting added to the repo.
 
 ### Useful Django commands
 Django provides `manage.py` script inside `web` that can be used to do things
