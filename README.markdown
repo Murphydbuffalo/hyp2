@@ -65,11 +65,11 @@ Here's what you need to do to get Hyp running locally on a Mac:
 11. Install and run PostgreSQL: `brew install postgresql` and then `brew services start postgresql`.
 If everything is set up correctly you should be able to run the server with `python manage.py runserver`. Congrats! If there are issues with your Postgres setup you can investigate by looking at the log file: `tail -n 500 /usr/local/var/log/postgres.log`.
 12. Create the development database: `createdb hyp2`. `createdb` is a command provided by Postgres.
-13. Run the database migrations: `./scripts/migrate`.
+13. Run the database migrations: `./scripts/migrate`. By the way, this `scripts` directory is something I added for convenience. Feel free to make PRs that add new scripts or update existing ones.
 14. Create a superuser for yourself: `./scripts/user`
-14. Start the server `./scripts/server`. By the way, this `scripts` directory is something I added for convenience. Feel free to make PRs that add new scripts or update existing ones.
-15. Run the tests `./scripts/test`. If you see a warning about a `web/staticfiles` directory it's nothing to worry about. We include that directory `.gitignore` because it is meant to contain our compiled production static assets. You can make the warning go away by running `mkdir ./web/staticfiles`.
-16. Fire up a Python REPL with all of the Hyp code available for import: `./scripts/shell`.
+15. Start the server `./scripts/server`. You should be able to login as the superuser you just created.
+16. Run the tests `./scripts/test`. If you see a warning about a `web/staticfiles` directory it's nothing to worry about. We include that directory `.gitignore` because it is meant to contain our compiled production static assets. You can make the warning go away by running `mkdir ./web/staticfiles`.
+17. Fire up a Python REPL with all of the Hyp code available for import: `./scripts/shell`.
 
 If you're on a Linux system things should largely be the same, with some key differences being:
 1. You'll be using something like `apt` to fetch dependencies.

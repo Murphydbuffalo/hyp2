@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -euxo pipefail
+
+python manage.py createsuperuser
+python manage.py verify_superuser_email
