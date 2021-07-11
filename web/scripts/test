@@ -2,7 +2,6 @@
 
 set -euxo pipefail
 
-
 if [ $# -eq 0 ]; then
   test_name='hyp/tests'
 else
