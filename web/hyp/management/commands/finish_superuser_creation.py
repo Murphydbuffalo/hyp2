@@ -1,9 +1,9 @@
 from django.core.management.base import BaseCommand, CommandError
 from allauth.account.models import EmailAddress
-from hyp.models import HypUser
+from hyp.models import Customer, HypUser
 
 class Command(BaseCommand):
-    help = 'Verifies the email address of a superuser'
+    help = 'Assigns a customer to and verifies the email address of the most recently created superuser'
 
     def add_arguments(self, parser):
         # parser.add_argument(
@@ -13,7 +13,15 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         user = HypUser.objects.filter(is_staff=True).last()
+
+        customer = Customer.objects.first()
+        if customer is None:
+            customer = Customer(name="A very cool customer")
+            customer.save()
+
+        user.customer = customer
+        user.save()
         email = EmailAddress(email=user.email, verified=True, user_id=user.id)
         email.save()
 
-        self.stdout.write(self.style.SUCCESS('Superuser email confirmed'))
+        self.stdout.write(self.style.SUCCESS(f'Superuser {user.username} is ready to go!'))
