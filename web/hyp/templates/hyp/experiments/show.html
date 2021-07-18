@@ -3,7 +3,7 @@
   <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
   <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
   <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
-{% endblock %} 
+{% endblock %}
 
 {% block content %}
   <h1>{{ experiment.description }} experiment</h1>
@@ -17,6 +17,9 @@
   <p id="uncertainty" class={{ experiment.uncertainty_style }}>
     Uncertainty level: {{ experiment.uncertainty_level  }}
   </p>
+
+  {{ experiment.traffic_split_history|json_script:"traffic-split-data" }}
+  <div id="traffic-split-chart"></div>
 
   <h2>Variants</h2>
   <div id="variants">
@@ -33,17 +36,22 @@
     {% endfor %}
   </div>
 
-  <div id="traffic-split-chart"></div>
   <script>
   // TODO: break this into a module. TypeScript?
   am4core.ready(function() {
     am4core.useTheme(am4themes_animated);
-    let chart = am4core.create("traffic-split-chart", am4charts.XYChart);
+    const chart = am4core.create("traffic-split-chart", am4charts.XYChart);
+    const data = JSON.parse(document.getElementById("traffic-split-data").textContent)
 
     const dateAxis = chart.xAxes.push(new am4charts.DateAxis());
     const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
 
     // TODO: for each variant.
+    Object.keys(data).forEach(function(date, i) {
+      data[data].forEach(function(variantMetrics) {
+        createSeries("value" + i, variantData.name);
+      })
+    })
     for (var i = 0; i < 10; i++) {
       createSeries("value" + i, "Series #" + i);
     }
@@ -72,7 +80,7 @@
       });
 
       // TODO: how to best get data from server to client?
-      // Make AJAX call on page load to fetch and pass resulting 
+      // Make AJAX call on page load to fetch and pass resulting
       // payload into a function that renders graph?
       // Would need a loading state.
       // What if we have the data cached and want to immediately
@@ -115,7 +123,7 @@
       hoveredSeries.segments.each(function(segment) {
         segment.setState("hover");
       });
-  
+
       hoveredSeries.legendDataItem.marker.setState("default");
       hoveredSeries.legendDataItem.label.setState("default");
 

@@ -4,6 +4,7 @@ from django.db import models, connection
 from uuid import uuid4
 from os import environ
 from scipy.stats import beta
+from datetime import datetime, timedelta
 
 
 class Customer(models.Model):
@@ -103,9 +104,53 @@ class Experiment(models.Model):
         else:
             return "Low"
 
-    def simulated_traffic_split(self):
-        sampler = ThompsonSampler(self.variant_set.all())
-        return sampler.simulated_traffic_split()
+    def traffic_split_history(self, days=90):
+        lookback_date = datetime.now().date() - timedelta(days=days)
+        metrics = DailyVariantMetrics.objects.filter(
+            date=lookback_date,
+            experiment_id=self.id,
+        ).order_by("date")
+
+        # TODO: we need to create a "series" on the graph for each variant,
+        # so maybe better to group by variant and simultaneously iterate
+        # through an array for each variant?
+        by_date = {}
+
+        for metric in metrics:
+            if metric.date in by_date:
+                by_variant[metric.date].append(metric)
+            else:
+                by_variant[metric.date] = []
+
+        return by_date
+
+
+class DailyVariantMetrics(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    date = models.DateField(auto_now_add=True)
+
+    conversion_rate = models.DecimalField()
+    traffic_split = models.DecimalField()
+    variant = models.ForeignKey(Variant, on_delete=models.CASCADE)
+    experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
+
+    # `lookback_days` is for ease of re-creating historical data if lost
+    # and creating dummy (eg for demo accounts) or test data.
+    def create_for_experiment(experiment, lookback_days=0):
+        for variant in experiment.variant_set.all():
+            metric = DailyVariantMetrics(
+                date=datetime.now().date() - timedelta(lookback_days),
+                variant_id=variant.id,
+                experiment_id=experiment.id,
+                conversion_rate=variant.conversion_rate(),
+                traffic_split=variant.traffic_split_to_date(),
+            )
+            metric.save()
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["date", "experiment_id"])
+        ]
 
 
 class VariantManager(models.Manager):
@@ -161,14 +206,6 @@ class Variant(models.Model):
             (float(self.num_interactions) / float(self.experiment.total_interactions())) * 100,
             2
         )
-
-    # Approximately what percentage of traffic will the variant receive going forward,
-    # based on the performance of all variants so far?
-    def expected_future_traffic_split(self):
-        if self.experiment.total_interactions() == 0:
-            return 0.0
-
-        return self.experiment.simulated_traffic_split()[self.id]
 
     def conversion_rate(self):
         if self.num_interactions == 0:

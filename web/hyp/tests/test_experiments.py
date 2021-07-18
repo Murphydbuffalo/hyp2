@@ -326,7 +326,7 @@ class TestExperiments(TestCase):
 
         self.assertEqual(self.experiment.uncertainty_level(), "Low")
 
-    def test_simulated_traffic_split(self):
+    def traffic_split_history(self):
         pass
 
     def test_variant_conversion_rate(self):
