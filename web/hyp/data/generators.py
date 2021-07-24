@@ -45,6 +45,7 @@ def generate_sample_data(experiment, conversion_rates=None, days_to_backfill=90,
                 interaction.converted = True
                 interaction.save()
 
+        for variant in experiment.variant_set.all():
             metric = DailyVariantMetrics(
                 date=lookback_date,
                 variant_id=variant.id,
