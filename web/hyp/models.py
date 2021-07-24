@@ -265,3 +265,24 @@ class Interaction(models.Model):
             f'Experiment {self.experiment_id}, Variant {self.variant_id},'
             f' Participant {self.participant_id}. Converted? {self.converted}'
         )
+
+
+class DailyVariantMetrics(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    date = models.DateField(auto_now_add=True)
+
+    conversion_rate = models.DecimalField(decimal_places=2, max_digits=4)
+    traffic_split = models.DecimalField(decimal_places=2, max_digits=4)
+    experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
+    variant = models.ForeignKey(Variant, on_delete=models.CASCADE)
+
+    def to_dict(self):
+        return {
+            "data": metric.date,
+            "traffic_split": metric.traffic_split,
+        }
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["date", "experiment_id"])
+        ]
