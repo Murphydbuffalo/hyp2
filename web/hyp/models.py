@@ -202,19 +202,13 @@ class Variant(models.Model):
         if self.experiment.total_interactions() == 0:
             return 0.0
 
-        return round(
-            (float(self.num_interactions) / float(self.experiment.total_interactions())) * 100,
-            2
-        )
+        return float(self.num_interactions) / float(self.experiment.total_interactions())
 
     def conversion_rate(self):
         if self.num_interactions == 0:
             return 0.0
 
-        return round(
-            (float(self.num_conversions) / float(self.num_interactions)) * 100,
-            2
-        )
+        return float(self.num_conversions) / float(self.num_interactions)
 
     def interval_width(self, mass=0.97):
         interval_start, interval_end = beta.interval(mass, self.alpha(), self.beta())

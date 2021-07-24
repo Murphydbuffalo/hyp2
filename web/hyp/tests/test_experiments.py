@@ -352,7 +352,7 @@ class TestExperiments(TestCase):
             interaction.save()
 
         variant.refresh_from_db()
-        self.assertEqual(variant.conversion_rate(), 50.0)
+        self.assertEqual(variant.conversion_rate(), 0.5)
 
     def test_variant_traffic_split_to_date(self):
         variants = self.experiment.variant_set.all()
@@ -369,7 +369,7 @@ class TestExperiments(TestCase):
             interaction.save()
 
         variants[0].refresh_from_db()
-        self.assertEqual(variants[0].traffic_split_to_date(), 100.0)
+        self.assertEqual(variants[0].traffic_split_to_date(), 1.0)
 
         variants[1].refresh_from_db()
         self.assertEqual(variants[1].traffic_split_to_date(), 0.0)
@@ -387,10 +387,10 @@ class TestExperiments(TestCase):
             interaction.save()
 
         variants[0].refresh_from_db()
-        self.assertEqual(variants[0].traffic_split_to_date(), 50.0)
+        self.assertEqual(variants[0].traffic_split_to_date(), 0.5)
 
         variants[1].refresh_from_db()
-        self.assertEqual(variants[1].traffic_split_to_date(), 50.0)
+        self.assertEqual(variants[1].traffic_split_to_date(), 0.5)
 
         variants[2].refresh_from_db()
         self.assertEqual(variants[2].traffic_split_to_date(), 0.0)
