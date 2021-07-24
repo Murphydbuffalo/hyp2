@@ -1,5 +1,6 @@
 from django.db import transaction
 from hyp.models import DailyVariantMetrics, Interaction
+from hyp.thompson_sampler import ThompsonSampler
 from datetime import datetime, timedelta
 
 import random
@@ -15,31 +16,32 @@ def generate_random_conversion_rates(experiment, lower_bound=0.02, upper_bound=0
 
 
 @transaction.atomic
-def generate_example_interactions(experiment, conversion_rates=None, days_to_backfill=90, interactions_per_day=1):
+def generate_example_interactions(experiment, conversion_rates=None, days_to_backfill=90, interactions_per_day=30):
     original_interaction_count = Interaction.objects.filter(experiment=experiment).count()
 
     if conversion_rates is None:
         conversion_rates = generate_random_conversion_rates(experiment)
 
+    variants = experiment.variant_set.all()
     for lookback_days in range(days_to_backfill, 0, -1):
         lookback_date = datetime.now().date() - timedelta(days=lookback_days)
 
-        for variant in experiment.variant_set.all():
-            for _i in range(interactions_per_day):
-                interaction = Interaction(
-                    variant=variant,
-                    experiment=experiment,
-                    customer=experiment.customer,
-                    participant_id=f'Participant {random.random()}',
-                    created_at=datetime(year=lookback_date.year, month=lookback_date.month, day=lookback_date.day),
-                )
-                interaction.save()
+        for _i in range(interactions_per_day):
+            variant = ThompsonSampler(variants).winner()
+            interaction = Interaction(
+                variant=variant,
+                experiment=experiment,
+                customer=experiment.customer,
+                participant_id=f'Participant {random.random()}',
+                created_at=datetime(year=lookback_date.year, month=lookback_date.month, day=lookback_date.day),
+            )
+            interaction.save()
 
-                # Set `converted` in separate query so that database trigger
-                # updates counter cache fields on Variant
-                if random.random() <= conversion_rates[variant.id]:
-                    interaction.converted = True
-                    interaction.save()
+            # Set `converted` in separate query so that database trigger
+            # updates counter cache fields on Variant
+            if random.random() <= conversion_rates[variant.id]:
+                interaction.converted = True
+                interaction.save()
 
     new_interaction_count = Interaction.objects.filter(experiment=experiment).count()
 
