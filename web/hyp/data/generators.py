@@ -16,7 +16,8 @@ def generate_random_conversion_rates(experiment, lower_bound=0.02, upper_bound=0
 
 
 @transaction.atomic
-def generate_example_interactions(experiment, conversion_rates=None, days_to_backfill=90, interactions_per_day=30):
+def generate_sample_data(experiment, conversion_rates=None, days_to_backfill=90, interactions_per_day=30):
+    original_metrics_count = DailyVariantMetrics.objects.filter(experiment=experiment).count()
     original_interaction_count = Interaction.objects.filter(experiment=experiment).count()
 
     if conversion_rates is None:
@@ -25,6 +26,7 @@ def generate_example_interactions(experiment, conversion_rates=None, days_to_bac
     variants = experiment.variant_set.all()
     for lookback_days in range(days_to_backfill, 0, -1):
         lookback_date = datetime.now().date() - timedelta(days=lookback_days)
+        created_at = datetime(year=lookback_date.year, month=lookback_date.month, day=lookback_date.day)
 
         for _i in range(interactions_per_day):
             variant = ThompsonSampler(variants).winner()
@@ -33,7 +35,7 @@ def generate_example_interactions(experiment, conversion_rates=None, days_to_bac
                 experiment=experiment,
                 customer=experiment.customer,
                 participant_id=f'Participant {random.random()}',
-                created_at=datetime(year=lookback_date.year, month=lookback_date.month, day=lookback_date.day),
+                created_at=created_at,
             )
             interaction.save()
 
@@ -43,19 +45,6 @@ def generate_example_interactions(experiment, conversion_rates=None, days_to_bac
                 interaction.converted = True
                 interaction.save()
 
-    new_interaction_count = Interaction.objects.filter(experiment=experiment).count()
-
-    print(f'Created {new_interaction_count - original_interaction_count} random interactions for {experiment.name}')
-
-
-@transaction.atomic
-def backfill_daily_variant_metrics(experiment, days_to_backfill=90):
-    original_metrics_count = DailyVariantMetrics.objects.filter(experiment=experiment).count()
-
-    for lookback_days in range(days_to_backfill, 0, -1):
-        lookback_date = datetime.now().date() - timedelta(days=lookback_days)
-
-        for variant in experiment.variant_set.all():
             metric = DailyVariantMetrics(
                 date=lookback_date,
                 variant_id=variant.id,
@@ -65,7 +54,8 @@ def backfill_daily_variant_metrics(experiment, days_to_backfill=90):
             )
             metric.save()
 
-
+    new_interaction_count = Interaction.objects.filter(experiment=experiment).count()
     new_metrics_count = DailyVariantMetrics.objects.filter(experiment=experiment).count()
 
+    print(f'Created {new_interaction_count - original_interaction_count} random interactions for {experiment.name}')
     print(f'Created {new_metrics_count - original_metrics_count} daily metrics for {experiment.name}')

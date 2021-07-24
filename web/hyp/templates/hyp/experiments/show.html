@@ -41,24 +41,19 @@
   am4core.ready(function() {
     am4core.useTheme(am4themes_animated);
     const chart = am4core.create("traffic-split-chart", am4charts.XYChart);
-    const data = JSON.parse(document.getElementById("traffic-split-data").textContent)
+    const splitsByVariant = JSON.parse(document.getElementById("traffic-split-data").textContent)
 
     const dateAxis = chart.xAxes.push(new am4charts.DateAxis());
     const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
 
-    // TODO: for each variant.
-    Object.keys(data).forEach(function(date, i) {
-      data[data].forEach(function(variantMetrics) {
-        createSeries("value" + i, variantData.name);
-      })
-    })
-    for (var i = 0; i < 10; i++) {
-      createSeries("value" + i, "Series #" + i);
-    }
+    Object.keys(splitsByVariant).forEach(function(variantName, i) {
+      createSeries(variantName, splitsByVariant[variantName], "traffic_split");
+      createSeries(variantName, splitsByVariant[variantName], "conversion_rate");
+    });
 
-    function createSeries(s, name) {
+    function createSeries(name, data, attributeName) {
       let series = chart.series.push(new am4charts.LineSeries());
-      series.dataFields.valueY = "value" + s;
+      series.dataFields.valueY = attributeName;
       series.dataFields.dateX = "date";
       series.name = name;
 
@@ -78,25 +73,6 @@
       segment.events.on("out", function(event) {
         processOut(event.target.parent.parent.parent);
       });
-
-      // TODO: how to best get data from server to client?
-      // Make AJAX call on page load to fetch and pass resulting
-      // payload into a function that renders graph?
-      // Would need a loading state.
-      // What if we have the data cached and want to immediately
-      // render? Could also fetch that data via AJAX, no problem.
-      // Django might provide a way to inject arbitrary data into
-      // the `script` tag, so that's an option as well, but that
-      // seems jankier. Eg harder to migrate from that world to
-      // something like React or Hotwire.
-      let data = [];
-      let value = Math.round(Math.random() * 100) + 100;
-      for (var i = 1; i < 100; i++) {
-        value += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 30 + i / 5);
-        const dataItem = { date: new Date(2018, 0, i) };
-        dataItem["value" + s] = value;
-        data.push(dataItem);
-      }
 
       series.data = data;
       return series;

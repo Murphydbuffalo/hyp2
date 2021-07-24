@@ -107,50 +107,19 @@ class Experiment(models.Model):
     def traffic_split_history(self, days=90):
         lookback_date = datetime.now().date() - timedelta(days=days)
         metrics = DailyVariantMetrics.objects.filter(
-            date=lookback_date,
+            date__gte=lookback_date,
             experiment_id=self.id,
         ).order_by("date")
 
-        # TODO: we need to create a "series" on the graph for each variant,
-        # so maybe better to group by variant and simultaneously iterate
-        # through an array for each variant?
-        by_date = {}
+        by_variant = {}
 
         for metric in metrics:
-            if metric.date in by_date:
-                by_variant[metric.date].append(metric)
+            if metric.variant.name in by_variant:
+                by_variant[metric.variant.name].append(metric.to_dict())
             else:
-                by_variant[metric.date] = []
+                by_variant[metric.variant.name] = [metric.to_dict()]
 
-        return by_date
-
-
-class DailyVariantMetrics(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    date = models.DateField(auto_now_add=True)
-
-    conversion_rate = models.DecimalField()
-    traffic_split = models.DecimalField()
-    variant = models.ForeignKey(Variant, on_delete=models.CASCADE)
-    experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
-
-    # `lookback_days` is for ease of re-creating historical data if lost
-    # and creating dummy (eg for demo accounts) or test data.
-    def create_for_experiment(experiment, lookback_days=0):
-        for variant in experiment.variant_set.all():
-            metric = DailyVariantMetrics(
-                date=datetime.now().date() - timedelta(lookback_days),
-                variant_id=variant.id,
-                experiment_id=experiment.id,
-                conversion_rate=variant.conversion_rate(),
-                traffic_split=variant.traffic_split_to_date(),
-            )
-            metric.save()
-
-    class Meta:
-        indexes = [
-            models.Index(fields=["date", "experiment_id"])
-        ]
+        return by_variant
 
 
 class VariantManager(models.Manager):
@@ -263,7 +232,7 @@ class Interaction(models.Model):
 
 class DailyVariantMetrics(models.Model):
     id = models.BigAutoField(primary_key=True)
-    date = models.DateField(auto_now_add=True)
+    date = models.DateField()
 
     conversion_rate = models.DecimalField(decimal_places=2, max_digits=4)
     traffic_split = models.DecimalField(decimal_places=2, max_digits=4)
@@ -272,8 +241,9 @@ class DailyVariantMetrics(models.Model):
 
     def to_dict(self):
         return {
-            "data": metric.date,
-            "traffic_split": metric.traffic_split,
+            "date": self.date,
+            "traffic_split": self.traffic_split,
+            "conversion_rate": self.conversion_rate,
         }
 
     class Meta:
