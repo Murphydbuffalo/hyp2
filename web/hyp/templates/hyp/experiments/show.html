@@ -48,14 +48,13 @@
 
     Object.keys(splitsByVariant).forEach(function(variantName, i) {
       createSeries(variantName, splitsByVariant[variantName], "traffic_split");
-      createSeries(variantName, splitsByVariant[variantName], "conversion_rate");
     });
 
-    function createSeries(name, data, attributeName) {
+    function createSeries(variantName, data, attributeName) {
       let series = chart.series.push(new am4charts.LineSeries());
       series.dataFields.valueY = attributeName;
       series.dataFields.dateX = "date";
-      series.name = name;
+      series.name = `${variantName} ${attributeName.replace("_", " ")}`;
 
       let segment = series.segments.template;
       segment.interactionsEnabled = true;
