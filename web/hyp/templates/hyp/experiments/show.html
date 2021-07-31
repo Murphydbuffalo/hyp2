@@ -28,8 +28,8 @@
       {% if variant.num_interactions == 0 %}
       <p>No one has interacted with this variant yet.</p>
       {% else %}
-      <p>Has received {{ variant.traffic_split_to_date }}% of traffic to date.</p>
-      <p>{{ variant.conversion_rate }}% conversion rate</p>
+      <p>Has received {% widthratio variant.traffic_split_to_date 0.01 1 %}% of traffic to date.</p>
+      <p>{% widthratio variant.conversion_rate 1 100 %}% conversion rate</p>
       {% endif %}
     </div>
     {% endfor %}
