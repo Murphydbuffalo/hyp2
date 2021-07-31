@@ -109,7 +109,7 @@ class Experiment(models.Model):
         metrics = DailyVariantMetrics.objects.filter(
             date__gte=lookback_date,
             experiment_id=self.id,
-        ).order_by("date")
+        ).select_related("variant").order_by("date")
 
         by_variant = {}
 
