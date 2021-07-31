@@ -18,7 +18,6 @@
     Uncertainty level: {{ experiment.uncertainty_level  }}
   </p>
 
-  {{ experiment.traffic_split_history|json_script:"traffic-split-data" }}
   <div id="traffic-split-chart"></div>
 
   <h2>Variants</h2>
@@ -36,6 +35,7 @@
     {% endfor %}
   </div>
 
+  {{ experiment.traffic_split_history|json_script:"traffic-split-data" }}
   <script>
   // TODO: break this into a module. TypeScript?
   am4core.ready(function() {
