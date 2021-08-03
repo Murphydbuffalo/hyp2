@@ -1,8 +1,10 @@
 {% extends "hyp/layout.html" %}
+{% load static %}
 {% block head_tags %}
   <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
   <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
   <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+  <script src={% static "js/experiment_chart.js" %}></script>
 {% endblock %}
 
 {% block content %}
@@ -36,101 +38,4 @@
   </div>
 
   {{ experiment.traffic_split_history|json_script:"traffic-split-data" }}
-  <script>
-  // TODO: break this into a module. TypeScript?
-  am4core.ready(function() {
-    am4core.useTheme(am4themes_animated);
-    const chart = am4core.create("traffic-split-chart", am4charts.XYChart);
-    chart.cursor = new am4charts.XYCursor();
-
-    const title = chart.titles.create();
-    title.text = "Traffic split by variant";
-    title.fontSize = 25;
-    title.marginBottom = 25;
-
-    const splitsByVariant = JSON.parse(document.getElementById("traffic-split-data").textContent)
-
-    const dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-    const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-
-    Object.keys(splitsByVariant).forEach(function(variantName, i) {
-      createSeries(variantName, splitsByVariant[variantName], "traffic_split");
-    });
-
-    function createSeries(variantName, data, attributeName) {
-      let series = chart.series.push(new am4charts.LineSeries());
-      series.dataFields.valueY = attributeName;
-      series.dataFields.dateX = "date";
-      series.name = variantName;
-
-      let segment = series.segments.template;
-      segment.interactionsEnabled = true;
-
-      let hoverState = segment.states.create("hover");
-      hoverState.properties.strokeWidth = 3;
-
-      let dimmed = segment.states.create("dimmed");
-      dimmed.properties.stroke = am4core.color("#dadada");
-
-      segment.events.on("over", function(event) {
-        processOver(event.target.parent.parent.parent);
-      });
-
-      segment.events.on("out", function(event) {
-        processOut(event.target.parent.parent.parent);
-      });
-
-      series.data = data;
-      return series;
-    }
-
-    chart.legend = new am4charts.Legend();
-    chart.legend.position = "right";
-    chart.legend.scrollable = true;
-
-    chart.legend.markers.template.states.create("dimmed").properties.opacity = 0.3;
-    chart.legend.labels.template.states.create("dimmed").properties.opacity = 0.3;
-
-    chart.legend.itemContainers.template.events.on("over", function(event) {
-      processOver(event.target.dataItem.dataContext);
-    });
-
-    chart.legend.itemContainers.template.events.on("out", function(event) {
-      processOut(event.target.dataItem.dataContext);
-    });
-
-    function processOver(hoveredSeries) {
-      hoveredSeries.toFront();
-
-      hoveredSeries.segments.each(function(segment) {
-        segment.setState("hover");
-      });
-
-      hoveredSeries.legendDataItem.marker.setState("default");
-      hoveredSeries.legendDataItem.label.setState("default");
-
-      chart.series.each(function(series) {
-        if (series != hoveredSeries) {
-          series.segments.each(function(segment) {
-            segment.setState("dimmed");
-          });
-          series.bulletsContainer.setState("dimmed");
-          series.legendDataItem.marker.setState("dimmed");
-          series.legendDataItem.label.setState("dimmed");
-        }
-      });
-    }
-
-    function processOut() {
-      chart.series.each(function(series) {
-        series.segments.each(function(segment) {
-          segment.setState("default");
-        });
-        series.bulletsContainer.setState("default");
-        series.legendDataItem.marker.setState("default");
-        series.legendDataItem.label.setState("default");
-      });
-    }
-  });
-  </script>
 {% endblock %}
