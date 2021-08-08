@@ -1,8 +1,47 @@
-function drawLine(chart, variantName, data, attributeName) {
+function renderDateLineChart(options) {
+  am4core.useTheme(am4themes_animated);
+  const chart = am4core.create(options.containerId, am4charts.XYChart);
+  chart.numberFormatter.numberFormat = "##%";
+
+  const title = chart.titles.create();
+  title.text = options.title;
+  title.fontSize = 25;
+  title.marginBottom = 25;
+
+  const dateAxis = chart.xAxes.push(new am4charts.DateAxis({ baseInterval: { timeUnit: "day", count: 1 }}));
+  const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+
+  Object.keys(options.data).forEach(function(lineName) {
+    let line = drawLine(chart, lineName, options.data[lineName], options.dataKey);
+    chart.series.push(line);
+  });
+
+  const cursor = new am4charts.XYCursor();
+  chart.cursor = cursor;
+
+  chart.legend = new am4charts.Legend();
+  chart.legend.position = "right";
+  chart.legend.scrollable = true;
+
+  chart.legend.markers.template.states.create("dimmed").properties.opacity = 0.3;
+  chart.legend.labels.template.states.create("dimmed").properties.opacity = 0.3;
+
+  chart.legend.itemContainers.template.events.on("over", function(event) {
+    accentHoveredLine(chart, event.target.dataItem.dataContext);
+  });
+
+  chart.legend.itemContainers.template.events.on("out", function(event) {
+    applyDefaultLineStyles(chart, event.target.dataItem.dataContext);
+  });
+
+  return chart;
+}
+
+function drawLine(chart, lineName, data, attributeName) {
   const series = new am4charts.LineSeries();
   series.dataFields.valueY = attributeName;
   series.dataFields.dateX = "date";
-  series.name = variantName;
+  series.name = lineName;
 
   const segment = series.segments.template;
   segment.interactionsEnabled = true;
@@ -57,39 +96,3 @@ function applyDefaultLineStyles(chart) {
     series.legendDataItem.label.setState("default");
   });
 }
-
-am4core.ready(function() {
-  am4core.useTheme(am4themes_animated);
-  const chart = am4core.create("traffic-split-chart", am4charts.XYChart);
-  chart.cursor = new am4charts.XYCursor();
-
-  const title = chart.titles.create();
-  title.text = "Traffic split by variant";
-  title.fontSize = 25;
-  title.marginBottom = 25;
-
-  const splitsByVariant = JSON.parse(document.getElementById("traffic-split-data").textContent)
-
-  const dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-  const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-
-  Object.keys(splitsByVariant).forEach(function(variantName, i) {
-    let line = drawLine(chart, variantName, splitsByVariant[variantName], "traffic_split");
-    chart.series.push(line);
-  });
-
-  chart.legend = new am4charts.Legend();
-  chart.legend.position = "right";
-  chart.legend.scrollable = true;
-
-  chart.legend.markers.template.states.create("dimmed").properties.opacity = 0.3;
-  chart.legend.labels.template.states.create("dimmed").properties.opacity = 0.3;
-
-  chart.legend.itemContainers.template.events.on("over", function(event) {
-    accentHoveredLine(chart, event.target.dataItem.dataContext);
-  });
-
-  chart.legend.itemContainers.template.events.on("out", function(event) {
-    applyDefaultLineStyles(chart, event.target.dataItem.dataContext);
-  });
-});

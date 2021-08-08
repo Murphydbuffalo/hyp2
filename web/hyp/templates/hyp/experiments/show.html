@@ -4,7 +4,7 @@
   <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
   <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
   <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
-  <script src={% static "js/experiment_chart.js" %}></script>
+  <script src={% static "js/charts.js" %}></script>
 {% endblock %}
 
 {% block content %}
@@ -38,4 +38,15 @@
   </div>
 
   {{ experiment.traffic_split_history|json_script:"traffic-split-data" }}
+
+  <script>
+    const splitsByVariant = JSON.parse(document.getElementById("traffic-split-data").textContent);
+
+    renderDateLineChart({
+      title: "Traffic split by variant",
+      containerId: "traffic-split-chart",
+      data: splitsByVariant,
+      dataKey: "traffic_split",
+    })
+  </script>
 {% endblock %}
