@@ -20,7 +20,13 @@
     Uncertainty level: {{ experiment.uncertainty_level  }}
   </p>
 
-  <div id="traffic-split-chart"></div>
+  <div id="chart-container">
+    <span class="toggles">
+      <button id="show-traffic-splits" class="button-primary">Traffic splits</button>
+      <button id="show-conversion-rates">Conversion rates</button>
+    </span>
+    <div id="experiment-chart"></div>
+  </div>
 
   <h2>Variants</h2>
   <div id="variants">
@@ -37,16 +43,43 @@
     {% endfor %}
   </div>
 
-  {{ experiment.traffic_split_history|json_script:"traffic-split-data" }}
+  {{ experiment.history|json_script:"experiment-metrics" }}
 
   <script>
-    const splitsByVariant = JSON.parse(document.getElementById("traffic-split-data").textContent);
+    let metricName = "traffic_split";
+    let chart;
 
-    renderDateLineChart({
-      title: "Traffic split by variant",
-      containerId: "traffic-split-chart",
-      data: splitsByVariant,
-      dataKey: "traffic_split",
-    })
+    document.querySelector("#show-traffic-splits").onclick = function(event) {
+      document.querySelector("#chart-container .toggles .button-primary").classList.remove("button-primary")
+      event.currentTarget.classList.add("button-primary")
+      metricName = "traffic_split";
+      renderChart();
+    };
+
+    document.querySelector("#show-conversion-rates").onclick = function(event) {
+      document.querySelector("#chart-container .toggles .button-primary").classList.remove("button-primary")
+      event.currentTarget.classList.add("button-primary")
+      metricName = "conversion_rate";
+      renderChart();
+    };
+
+    function renderChart() {
+      if (chart) {
+        chart.dispose();
+      }
+
+      const metricsByVariant = JSON.parse(document.getElementById("experiment-metrics").textContent);
+      let title = metricName.replace("_", " ") + " by variant";
+      title = title[0].toUpperCase() + title.slice(1);
+
+      chart = renderDateLineChart({
+        title: title,
+        containerId: "experiment-chart",
+        data: metricsByVariant,
+        dataKey: metricName,
+      });
+    }
+
+    am4core.ready(renderChart);
   </script>
 {% endblock %}

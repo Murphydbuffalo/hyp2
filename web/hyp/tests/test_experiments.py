@@ -328,7 +328,7 @@ class TestExperiments(TestCase):
 
         self.assertEqual(self.experiment.uncertainty_level(), "Low")
 
-    def test_traffic_split_history(self):
+    def test_history(self):
         for variant in self.experiment.variant_set.all():
             for i in range(150, 0, -30):
                 metric = DailyVariantMetrics(
@@ -341,7 +341,7 @@ class TestExperiments(TestCase):
                 metric.save()
 
         self.assertEqual(
-            self.experiment.traffic_split_history(days=90),
+            self.experiment.history(days=90),
             {
                 "Variant 1": [
                     {
@@ -397,7 +397,7 @@ class TestExperiments(TestCase):
             }
         )
 
-        self.assertEqual(self.experiment.traffic_split_history(days=29), {})
+        self.assertEqual(self.experiment.history(days=29), {})
 
     def test_variant_conversion_rate(self):
         variant = self.experiment.variant_set.first()
