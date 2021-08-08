@@ -103,7 +103,7 @@ class Experiment(models.Model):
         else:
             return "Low"
 
-    def traffic_split_history(self, days=90):
+    def history(self, days=90):
         lookback_date = datetime.now().date() - timedelta(days=days)
         metrics = DailyVariantMetrics.objects.filter(
             date__gte=lookback_date,

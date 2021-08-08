@@ -58,9 +58,10 @@ navbar.horizontal .auth form {
   margin-right: 2em;
 }
 
-#traffic-split-chart {
+#experiment-chart {
   width: 100%;
-  height: 400px;
+  height: 500px;
+  margin-bottom: 2em;
 }
 
 .superadmin {
