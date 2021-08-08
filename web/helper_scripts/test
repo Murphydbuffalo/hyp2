@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -euxo pipefail
+
+if [ $# -eq 0 ]; then
+  test_name='hyp/tests'
+else
+  test_name="$1"
+fi
+
+python manage.py test "$test_name" --settings web.settings.testing

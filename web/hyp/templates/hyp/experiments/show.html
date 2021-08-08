@@ -1,4 +1,12 @@
 {% extends "hyp/layout.html" %}
+{% load static %}
+{% block head_tags %}
+  <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+  <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+  <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+  <script src={% static "js/charts.js" %}></script>
+{% endblock %}
+
 {% block content %}
   <h1>{{ experiment.description }} experiment</h1>
   <p id="total-interactions">
@@ -12,6 +20,8 @@
     Uncertainty level: {{ experiment.uncertainty_level  }}
   </p>
 
+  <div id="traffic-split-chart"></div>
+
   <h2>Variants</h2>
   <div id="variants">
     {% for variant in experiment.variant_set.all %}
@@ -20,10 +30,23 @@
       {% if variant.num_interactions == 0 %}
       <p>No one has interacted with this variant yet.</p>
       {% else %}
-      <p>Has received {{ variant.traffic_split_to_date }}% of traffic to date.</p>
-      <p>{{ variant.conversion_rate }}% conversion rate</p>
+      <p>Has received {% widthratio variant.traffic_split_to_date 0.01 1 %}% of traffic to date.</p>
+      <p>{% widthratio variant.conversion_rate 1 100 %}% conversion rate</p>
       {% endif %}
     </div>
     {% endfor %}
   </div>
+
+  {{ experiment.traffic_split_history|json_script:"traffic-split-data" }}
+
+  <script>
+    const splitsByVariant = JSON.parse(document.getElementById("traffic-split-data").textContent);
+
+    renderDateLineChart({
+      title: "Traffic split by variant",
+      containerId: "traffic-split-chart",
+      data: splitsByVariant,
+      dataKey: "traffic_split",
+    })
+  </script>
 {% endblock %}

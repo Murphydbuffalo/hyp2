@@ -1,9 +1,9 @@
-from hyp.thompson_sampler import ThompsonSampler
 from django.contrib.auth.models import AbstractUser
 from django.db import models, connection
 from uuid import uuid4
 from os import environ
 from scipy.stats import beta
+from datetime import datetime, timedelta
 
 
 class Customer(models.Model):
@@ -103,9 +103,22 @@ class Experiment(models.Model):
         else:
             return "Low"
 
-    def simulated_traffic_split(self):
-        sampler = ThompsonSampler(self.variant_set.all())
-        return sampler.simulated_traffic_split()
+    def traffic_split_history(self, days=90):
+        lookback_date = datetime.now().date() - timedelta(days=days)
+        metrics = DailyVariantMetrics.objects.filter(
+            date__gte=lookback_date,
+            experiment_id=self.id,
+        ).select_related("variant").order_by("date")
+
+        by_variant = {}
+
+        for metric in metrics:
+            if metric.variant.name in by_variant:
+                by_variant[metric.variant.name].append(metric.to_dict())
+            else:
+                by_variant[metric.variant.name] = [metric.to_dict()]
+
+        return by_variant
 
 
 class VariantManager(models.Manager):
@@ -157,27 +170,13 @@ class Variant(models.Model):
         if self.experiment.total_interactions() == 0:
             return 0.0
 
-        return round(
-            (float(self.num_interactions) / float(self.experiment.total_interactions())) * 100,
-            2
-        )
-
-    # Approximately what percentage of traffic will the variant receive going forward,
-    # based on the performance of all variants so far?
-    def expected_future_traffic_split(self):
-        if self.experiment.total_interactions() == 0:
-            return 0.0
-
-        return self.experiment.simulated_traffic_split()[self.id]
+        return float(self.num_interactions) / float(self.experiment.total_interactions())
 
     def conversion_rate(self):
         if self.num_interactions == 0:
             return 0.0
 
-        return round(
-            (float(self.num_conversions) / float(self.num_interactions)) * 100,
-            2
-        )
+        return float(self.num_conversions) / float(self.num_interactions)
 
     def interval_width(self, mass=0.97):
         interval_start, interval_end = beta.interval(mass, self.alpha(), self.beta())
@@ -228,3 +227,25 @@ class Interaction(models.Model):
             f'Experiment {self.experiment_id}, Variant {self.variant_id},'
             f' Participant {self.participant_id}. Converted? {self.converted}'
         )
+
+
+class DailyVariantMetrics(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    date = models.DateField()
+
+    conversion_rate = models.DecimalField(decimal_places=2, max_digits=4)
+    traffic_split = models.DecimalField(decimal_places=2, max_digits=4)
+    experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
+    variant = models.ForeignKey(Variant, on_delete=models.CASCADE)
+
+    def to_dict(self):
+        return {
+            "date": self.date,
+            "traffic_split": self.traffic_split,
+            "conversion_rate": self.conversion_rate,
+        }
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["date", "experiment_id"])
+        ]

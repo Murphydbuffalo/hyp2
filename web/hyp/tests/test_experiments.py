@@ -1,7 +1,9 @@
 from django.test import TestCase, Client
 from django.contrib.auth.models import Permission
-from hyp.models import Customer, Experiment, HypUser, Interaction, Variant
+from hyp.models import Customer, DailyVariantMetrics, Experiment, HypUser, Interaction, Variant
 from hyp.tests.helpers import login, signup
+from datetime import datetime, timedelta
+from decimal import *
 
 import random
 import re
@@ -111,10 +113,10 @@ class TestExperiments(TestCase):
         self.assertIn('Variant 2', str(response.content))
         self.assertIn('Variant 3', str(response.content))
 
-        traffic_split_regexp = re.compile('Has received (\d+\.\d+)% of traffic to date.')
+        traffic_split_regexp = re.compile('Has received (\d+)% of traffic to date.')
         self.assertRegex(str(response.content), traffic_split_regexp)
 
-        conversion_rate_regexp = re.compile('(\d+\.\d+)% conversion rate.')
+        conversion_rate_regexp = re.compile('(\d+)% conversion rate.')
         self.assertRegex(str(response.content), conversion_rate_regexp)
 
     def test_create_success(self):
@@ -326,8 +328,76 @@ class TestExperiments(TestCase):
 
         self.assertEqual(self.experiment.uncertainty_level(), "Low")
 
-    def test_simulated_traffic_split(self):
-        pass
+    def test_traffic_split_history(self):
+        for variant in self.experiment.variant_set.all():
+            for i in range(150, 0, -30):
+                metric = DailyVariantMetrics(
+                    variant=variant,
+                    experiment=self.experiment,
+                    date=datetime.now().date() - timedelta(i),
+                    conversion_rate=0.05,
+                    traffic_split=0.33,
+                )
+                metric.save()
+
+        self.assertEqual(
+            self.experiment.traffic_split_history(days=90),
+            {
+                "Variant 1": [
+                    {
+                        "date": datetime.now().date() - timedelta(90),
+                        "traffic_split": Decimal('0.33'),
+                        "conversion_rate": Decimal('0.05'),
+                    },
+                    {
+                        "date": datetime.now().date() - timedelta(60),
+                        "traffic_split": Decimal('0.33'),
+                        "conversion_rate": Decimal('0.05'),
+                    },
+                    {
+                        "date": datetime.now().date() - timedelta(30),
+                        "traffic_split": Decimal('0.33'),
+                        "conversion_rate": Decimal('0.05'),
+                    },
+                ],
+                "Variant 2": [
+                    {
+                        "date": datetime.now().date() - timedelta(90),
+                        "traffic_split": Decimal('0.33'),
+                        "conversion_rate": Decimal('0.05'),
+                    },
+                    {
+                        "date": datetime.now().date() - timedelta(60),
+                        "traffic_split": Decimal('0.33'),
+                        "conversion_rate": Decimal('0.05'),
+                    },
+                    {
+                        "date": datetime.now().date() - timedelta(30),
+                        "traffic_split": Decimal('0.33'),
+                        "conversion_rate": Decimal('0.05'),
+                    },
+                ],
+                "Variant 3": [
+                    {
+                        "date": datetime.now().date() - timedelta(90),
+                        "traffic_split": Decimal('0.33'),
+                        "conversion_rate": Decimal('0.05'),
+                    },
+                    {
+                        "date": datetime.now().date() - timedelta(60),
+                        "traffic_split": Decimal('0.33'),
+                        "conversion_rate": Decimal('0.05'),
+                    },
+                    {
+                        "date": datetime.now().date() - timedelta(30),
+                        "traffic_split": Decimal('0.33'),
+                        "conversion_rate": Decimal('0.05'),
+                    },
+                ],
+            }
+        )
+
+        self.assertEqual(self.experiment.traffic_split_history(days=29), {})
 
     def test_variant_conversion_rate(self):
         variant = self.experiment.variant_set.first()
@@ -352,7 +422,7 @@ class TestExperiments(TestCase):
             interaction.save()
 
         variant.refresh_from_db()
-        self.assertEqual(variant.conversion_rate(), 50.0)
+        self.assertEqual(variant.conversion_rate(), 0.5)
 
     def test_variant_traffic_split_to_date(self):
         variants = self.experiment.variant_set.all()
@@ -369,7 +439,7 @@ class TestExperiments(TestCase):
             interaction.save()
 
         variants[0].refresh_from_db()
-        self.assertEqual(variants[0].traffic_split_to_date(), 100.0)
+        self.assertEqual(variants[0].traffic_split_to_date(), 1.0)
 
         variants[1].refresh_from_db()
         self.assertEqual(variants[1].traffic_split_to_date(), 0.0)
@@ -387,10 +457,10 @@ class TestExperiments(TestCase):
             interaction.save()
 
         variants[0].refresh_from_db()
-        self.assertEqual(variants[0].traffic_split_to_date(), 50.0)
+        self.assertEqual(variants[0].traffic_split_to_date(), 0.5)
 
         variants[1].refresh_from_db()
-        self.assertEqual(variants[1].traffic_split_to_date(), 50.0)
+        self.assertEqual(variants[1].traffic_split_to_date(), 0.5)
 
         variants[2].refresh_from_db()
         self.assertEqual(variants[2].traffic_split_to_date(), 0.0)
