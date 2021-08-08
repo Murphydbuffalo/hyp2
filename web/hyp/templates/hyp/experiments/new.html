@@ -16,6 +16,15 @@
       {% endif %}
 
       {{ experiment_form }}
+
+      {% if request.user.is_staff %}
+        <div class="superadmin">
+          <label for="generate_sample_data">
+            Create with sample data
+            <input type="checkbox" name="generate_sample_data"/>
+          </label>
+        </div>
+      {% endif %}
     </table>
 
      <table id="variant-form-fields">
