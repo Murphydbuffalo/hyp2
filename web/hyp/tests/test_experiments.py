@@ -111,10 +111,10 @@ class TestExperiments(TestCase):
         self.assertIn('Variant 2', str(response.content))
         self.assertIn('Variant 3', str(response.content))
 
-        traffic_split_regexp = re.compile('Has received (\d+\.\d+)% of traffic to date.')
+        traffic_split_regexp = re.compile('Has received (\d+)% of traffic to date.')
         self.assertRegex(str(response.content), traffic_split_regexp)
 
-        conversion_rate_regexp = re.compile('(\d+\.\d+)% conversion rate.')
+        conversion_rate_regexp = re.compile('(\d+)% conversion rate.')
         self.assertRegex(str(response.content), conversion_rate_regexp)
 
     def test_create_success(self):
