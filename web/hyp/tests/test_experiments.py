@@ -1,7 +1,9 @@
 from django.test import TestCase, Client
 from django.contrib.auth.models import Permission
-from hyp.models import Customer, Experiment, HypUser, Interaction, Variant
+from hyp.models import Customer, DailyVariantMetrics, Experiment, HypUser, Interaction, Variant
 from hyp.tests.helpers import login, signup
+from datetime import datetime, timedelta
+from decimal import *
 
 import random
 import re
@@ -326,8 +328,76 @@ class TestExperiments(TestCase):
 
         self.assertEqual(self.experiment.uncertainty_level(), "Low")
 
-    def traffic_split_history(self):
-        pass
+    def test_traffic_split_history(self):
+        for variant in self.experiment.variant_set.all():
+            for i in range(150, 0, -30):
+                metric = DailyVariantMetrics(
+                    variant=variant,
+                    experiment=self.experiment,
+                    date=datetime.now().date() - timedelta(i),
+                    conversion_rate=0.05,
+                    traffic_split=0.33,
+                )
+                metric.save()
+
+        self.assertEqual(
+            self.experiment.traffic_split_history(days=90),
+            {
+                "Variant 1": [
+                    {
+                        "date": datetime.now().date() - timedelta(90),
+                        "traffic_split": Decimal('0.33'),
+                        "conversion_rate": Decimal('0.05'),
+                    },
+                    {
+                        "date": datetime.now().date() - timedelta(60),
+                        "traffic_split": Decimal('0.33'),
+                        "conversion_rate": Decimal('0.05'),
+                    },
+                    {
+                        "date": datetime.now().date() - timedelta(30),
+                        "traffic_split": Decimal('0.33'),
+                        "conversion_rate": Decimal('0.05'),
+                    },
+                ],
+                "Variant 2": [
+                    {
+                        "date": datetime.now().date() - timedelta(90),
+                        "traffic_split": Decimal('0.33'),
+                        "conversion_rate": Decimal('0.05'),
+                    },
+                    {
+                        "date": datetime.now().date() - timedelta(60),
+                        "traffic_split": Decimal('0.33'),
+                        "conversion_rate": Decimal('0.05'),
+                    },
+                    {
+                        "date": datetime.now().date() - timedelta(30),
+                        "traffic_split": Decimal('0.33'),
+                        "conversion_rate": Decimal('0.05'),
+                    },
+                ],
+                "Variant 3": [
+                    {
+                        "date": datetime.now().date() - timedelta(90),
+                        "traffic_split": Decimal('0.33'),
+                        "conversion_rate": Decimal('0.05'),
+                    },
+                    {
+                        "date": datetime.now().date() - timedelta(60),
+                        "traffic_split": Decimal('0.33'),
+                        "conversion_rate": Decimal('0.05'),
+                    },
+                    {
+                        "date": datetime.now().date() - timedelta(30),
+                        "traffic_split": Decimal('0.33'),
+                        "conversion_rate": Decimal('0.05'),
+                    },
+                ],
+            }
+        )
+
+        self.assertEqual(self.experiment.traffic_split_history(days=29), {})
 
     def test_variant_conversion_rate(self):
         variant = self.experiment.variant_set.first()
