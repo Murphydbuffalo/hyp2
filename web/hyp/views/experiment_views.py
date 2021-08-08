@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from hyp.models import Experiment
 from hyp.forms import ExperimentForm, CreateVariantsFormset
+from hyp.data.generators import generate_sample_data
 
 
 @login_required
@@ -67,6 +68,9 @@ def create(request):
                 for variant in variants:
                     variant.customer_id = experiment.customer_id
                     variant.save()
+
+                if request.user.is_staff and request.POST["generate_sample_data"]:
+                    generate_sample_data(experiment)
 
                 return redirect(f'/experiments/{experiment.id}/')
             except(ValidationError):
