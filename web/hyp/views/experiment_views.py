@@ -69,7 +69,7 @@ def create(request):
                     variant.customer_id = experiment.customer_id
                     variant.save()
 
-                if request.user.is_staff and request.POST["generate_sample_data"]:
+                if request.user.is_staff and request.POST.get("generate_sample_data", False):
                     generate_sample_data(experiment)
 
                 return redirect(f'/experiments/{experiment.id}/')
