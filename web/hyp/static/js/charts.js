@@ -34,6 +34,22 @@ function renderDateLineChart(options) {
     applyDefaultLineStyles(chart, event.target.dataItem.dataContext);
   });
 
+  const firstSeriesDataCount = Object.values(options.data)[0];
+
+  if (firstSeriesDataCount == null || firstSeriesDataCount.length < 5) {
+    const noDataLabel = chart.createChild(am4core.Label);
+    noDataLabel.text = "Not enough data 😭";
+    noDataLabel.fontSize = 20;
+    noDataLabel.isMeasured = false;
+    noDataLabel.y = am4core.percent(50);
+    noDataLabel.x = am4core.percent(50);
+    noDataLabel.horizontalCenter = "middle";
+
+    const xAxisLabel = chart.chartContainer.createChild(am4core.Label);
+    xAxisLabel.text = "Date";
+    xAxisLabel.align = "center";
+  }
+
   return chart;
 }
 
