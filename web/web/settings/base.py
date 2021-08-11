@@ -37,7 +37,17 @@ INSTALLED_APPS = [
     'hyp.apps.HypConfig',
     'allauth',
     'allauth.account',
+    'django_rq',
 ]
+
+RQ_QUEUES = {
+    'default': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 0,
+        'DEFAULT_TIMEOUT': 900,
+    },
+}
 
 AUTH_USER_MODEL = 'hyp.HypUser'
 

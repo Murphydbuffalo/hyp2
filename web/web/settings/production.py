@@ -17,6 +17,13 @@ AIRBRAKE = dict(
     project_key=environ.get("AIRBRAKE_API_KEY"),
 )
 
+RQ_QUEUES = {
+    'default': {
+        'URL': environ.get('REDIS_URL'),
+        'DEFAULT_TIMEOUT': 900,
+    },
+}
+
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
@@ -31,12 +38,28 @@ LOGGING = {
             'level': 'ERROR',
             'class': 'pybrake.LoggingHandler',
         },
+        "rq_console": {
+            "level": "DEBUG",
+            "class": "rq.utils.ColorizingStreamHandler",
+            "formatter": "rq_console",
+            "exclude": ["%(asctime)s"],
+        },
+    },
+    "formatters": {
+        "rq_console": {
+            "format": "%(asctime)s %(message)s",
+            "datefmt": "%H:%M:%S",
+        },
     },
     'loggers': {
         'app': {
             'handlers': ['airbrake'],
             'level': 'ERROR',
             'propagate': True,
+        },
+        "rq.worker": {
+            "handlers": ["rq_console"],
+            "level": "INFO"
         },
     },
 }
