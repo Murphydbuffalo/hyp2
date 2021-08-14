@@ -30,38 +30,10 @@ CSRF_COOKIE_SECURE = True
 SECURE_HSTS_SECONDS = 60
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'airbrake': {
-            'level': 'ERROR',
-            'class': 'pybrake.LoggingHandler',
-        },
-        "rq_console": {
-            "level": "DEBUG",
-            "class": "rq.utils.ColorizingStreamHandler",
-            "formatter": "rq_console",
-            "exclude": ["%(asctime)s"],
-        },
-    },
-    "formatters": {
-        "rq_console": {
-            "format": "%(asctime)s %(message)s",
-            "datefmt": "%H:%M:%S",
-        },
-    },
-    'loggers': {
-        'app': {
-            'handlers': ['airbrake'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-        "rq.worker": {
-            "handlers": ["rq_console"],
-            "level": "INFO"
-        },
-    },
+LOGGING['loggers']['app']['handlers'].append('airbrake')
+LOGGING['handlers']['airbrake'] = {
+    'level': 'ERROR',
+    'class': 'pybrake.LoggingHandler',
 }
 
 MIDDLEWARE.append('pybrake.django.AirbrakeMiddleware')
