@@ -19,7 +19,7 @@ AIRBRAKE = dict(
 
 RQ_QUEUES = {
     'default': {
-        'URL': environ.get('REDIS_URL'),
+        'URL': environ.get('REDISTOGO_URL'),
         'DEFAULT_TIMEOUT': 900,
     },
 }
