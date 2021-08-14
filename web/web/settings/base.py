@@ -37,7 +37,17 @@ INSTALLED_APPS = [
     'hyp.apps.HypConfig',
     'allauth',
     'allauth.account',
+    'django_rq',
 ]
+
+RQ_QUEUES = {
+    'default': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 0,
+        'DEFAULT_TIMEOUT': 900,
+    },
+}
 
 AUTH_USER_MODEL = 'hyp.HypUser'
 
@@ -51,6 +61,41 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# TODO: make sure this logging is reasonable in Papertrail
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'loggers': {
+        'app': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        "rq.worker": {
+            "handlers": ["rq_console"],
+            "level": "INFO"
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+        },
+        "rq_console": {
+            "level": "DEBUG",
+            "class": "rq.utils.ColorizingStreamHandler",
+            "formatter": "rq_console",
+            "exclude": ["%(asctime)s"],
+        },
+    },
+    "formatters": {
+        "rq_console": {
+            "format": "%(asctime)s %(message)s",
+            "datefmt": "%H:%M:%S",
+        },
+    },
+}
 
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = "app@onhyp.com"

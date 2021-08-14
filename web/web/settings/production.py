@@ -17,28 +17,23 @@ AIRBRAKE = dict(
     project_key=environ.get("AIRBRAKE_API_KEY"),
 )
 
+RQ_QUEUES = {
+    'default': {
+        'URL': environ.get('REDISTOGO_URL'),
+        'DEFAULT_TIMEOUT': 900,
+    },
+}
+
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_HSTS_SECONDS = 60
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'airbrake': {
-            'level': 'ERROR',
-            'class': 'pybrake.LoggingHandler',
-        },
-    },
-    'loggers': {
-        'app': {
-            'handlers': ['airbrake'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-    },
+LOGGING['loggers']['app']['handlers'].append('airbrake')
+LOGGING['handlers']['airbrake'] = {
+    'level': 'ERROR',
+    'class': 'pybrake.LoggingHandler',
 }
 
 MIDDLEWARE.append('pybrake.django.AirbrakeMiddleware')

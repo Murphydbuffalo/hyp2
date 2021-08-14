@@ -249,3 +249,10 @@ class DailyVariantMetrics(models.Model):
         indexes = [
             models.Index(fields=["date", "experiment_id"])
         ]
+
+        constraints = [
+            models.UniqueConstraint(
+                name="uniq_metric_per_day_per_variant",
+                fields=["date", "variant_id"]
+            )
+        ]
