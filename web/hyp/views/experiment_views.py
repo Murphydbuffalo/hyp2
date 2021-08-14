@@ -2,10 +2,11 @@ from django.http import HttpResponse
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.db import transaction
 from hyp.models import Experiment
 from hyp.forms import ExperimentForm, CreateVariantsFormset
-from hyp.data.generators import generate_sample_data
+from hyp.jobs import sample_data
 
 
 @login_required
@@ -69,8 +70,13 @@ def create(request):
                     variant.customer_id = experiment.customer_id
                     variant.save()
 
+                flash_message = "Experiment created."
+
                 if request.user.is_staff and request.POST.get("generate_sample_data", False):
-                    generate_sample_data(experiment)
+                    sample_data.enqueue(experiment)
+                    flash_message += " Sample data should be ready in a few minutes."
+
+                messages.info(request, flash_message)
 
                 return redirect(f'/experiments/{experiment.id}/')
             except(ValidationError):

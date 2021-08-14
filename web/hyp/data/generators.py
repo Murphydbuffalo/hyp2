@@ -3,8 +3,9 @@ from hyp.models import DailyVariantMetrics, Interaction
 from hyp.thompson_sampler import ThompsonSampler
 from datetime import datetime, timedelta
 
-import random
+import logging, random
 
+logger = logging.getLogger(__name__)
 
 def generate_random_conversion_rates(experiment, lower_bound=0.02, upper_bound=0.10):
     conversion_rates = {}
@@ -60,5 +61,5 @@ def generate_sample_data(experiment, conversion_rates=None, days_to_backfill=90,
     new_interaction_count = Interaction.objects.filter(experiment=experiment).count()
     new_metrics_count = DailyVariantMetrics.objects.filter(experiment=experiment).count()
 
-    print(f'Created {new_interaction_count - original_interaction_count} random interactions for {experiment.name}')
-    print(f'Created {new_metrics_count - original_metrics_count} daily metrics for {experiment.name}')
+    logger.info(f'Created {new_interaction_count - original_interaction_count} random interactions for {experiment.name}')
+    logger.info(f'Created {new_metrics_count - original_metrics_count} daily metrics for {experiment.name}')
