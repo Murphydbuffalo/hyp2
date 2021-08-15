@@ -64,12 +64,13 @@ Here's what you need to do to get Hyp running locally on a Mac:
 10. `cd ./web`. Most of the work you do will be inside this directory. The top level directory is mainly for configuration files.
 11. Install and run PostgreSQL: `brew install postgresql` and then `brew services start postgresql`.
 If everything is set up correctly you should be able to run the server with `python manage.py runserver`. Congrats! If there are issues with your Postgres setup you can investigate by looking at the log file: `tail -n 500 /usr/local/var/log/postgres.log`.
-12. Create the development database: `createdb hyp2`. `createdb` is a command provided by Postgres.
-13. Run the database migrations: `./scripts/migrate`. By the way, this `scripts` directory is something I added for convenience. Feel free to make PRs that add new scripts or update existing ones.
-14. Create a superuser for yourself: `./scripts/user`
-15. Start the server `./scripts/server`. You should be able to login as the superuser you just created.
-16. Run the tests `./scripts/test`. If you see a warning about a `web/staticfiles` directory it's nothing to worry about. We include that directory `.gitignore` because it is meant to contain our compiled production static assets. You can make the warning go away by running `mkdir ./web/staticfiles`.
-17. Fire up a Python REPL with all of the Hyp code available for import: `./scripts/shell`.
+12. Install and run Redis: `brew install redis` and then `brew services start redis`. Redis is the back-end for the job processing tool we use, RQ. RQ is very similar to Resque from the Ruby world.
+13. Create the development database: `createdb hyp2`. `createdb` is a command provided by Postgres.
+14. Run the database migrations: `./helper_scripts/migrate`. By the way, this `helper_scripts` directory is something I added for convenience. Feel free to make PRs that add new scripts or update existing ones.
+15. Create a superuser for yourself: `./helper_scripts/user`
+16. Start the app by running `./helper_scripts/app`. You should be able to login as the superuser you just created. Under the hood this helper script is actually doing three things: starting the Django server, starting an RQ worker process, and watching all of the files in `web/hyp/static/scss` for changes. If any of the Sass files changes they'll get compiled to CSS in `web/hyp/static/css`, which is what we actually serve to clients.
+17. Run the tests `./helper_scripts/test`. If you see a warning about a `web/staticfiles` directory it's nothing to worry about. We include that directory `.gitignore` because it is meant to contain our compiled production static assets. You can make the warning go away by running `mkdir ./web/staticfiles`.
+18. Fire up a Python REPL with all of the Hyp code available for import: `./helper_scripts/shell`.
 
 If you're on a Linux system things should largely be the same, with some key differences being:
 1. You'll be using something like `apt` to fetch dependencies.
@@ -80,6 +81,9 @@ If you're on a Linux system things should largely be the same, with some key dif
 Django provides `manage.py` script inside `web` that can be used to do things
 like start the development server, run tests, open up REPLs, create and run migrations, create superusers, etc. Check out the [full list of commands here](https://docs.djangoproject.com/en/3.1/ref/django-admin/#available-commands).
 
+Most of the time you can just use the relevant script in `web/helper_scripts`,
+which will call these commands with some added conveniences. However, feel free
+to experiment with running the django commands yourself, eg:
 1. Run `python manage.py migrate` to run database migrations.
 2. Run `python manage.py runserver` to start your development server.
 3. Run `python manage.py test hyp/tests --settings web.settings.testing` to run the test suite.

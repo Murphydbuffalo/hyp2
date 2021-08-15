@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -euxo pipefail
+
+helper_scripts/sass & helper_scripts/workers & helper_scripts/server && fg
