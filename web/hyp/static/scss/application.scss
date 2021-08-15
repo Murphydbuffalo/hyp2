@@ -1,3 +1,19 @@
+@font-face {
+    font-family: "Karrik";
+    src: url("../fonts/KarrikRegular.woff") format("woff");
+    font-display: block;
+}
+
+body {
+    background: linear-gradient(222deg, #212121 0%, hsl(0, 0%, 2%) 100%) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    overflow-x: hidden;
+    font-family: "Karrik";
+}
+
 a {
   text-decoration: none;
 }
