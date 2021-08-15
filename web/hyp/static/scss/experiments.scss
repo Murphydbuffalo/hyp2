@@ -1,0 +1,15 @@
+#variants {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+}
+
+.variant-details {
+  margin-right: 2em;
+}
+
+#experiment-chart {
+  width: 100%;
+  height: 500px;
+  margin-bottom: 2em;
+}

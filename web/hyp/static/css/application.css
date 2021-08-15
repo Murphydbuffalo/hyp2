@@ -18,14 +18,6 @@ a {
   text-decoration: none;
 }
 
-.error {
-  color: red;
-}
-
-.hidden {
-  display: none;
-}
-
 navbar.vertical {
   max-width: 12%;
   width: 12%;
@@ -81,4 +73,12 @@ navbar.horizontal .auth form {
   background-color: yellow;
   border: 3px solid black;
   padding: 5px;
+}
+
+.error {
+  color: red;
+}
+
+.hidden {
+  display: none;
 }
