@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -euxo pipefail
+
+python manage.py sass hyp/static/scss hyp/static/css --watch

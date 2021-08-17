@@ -15,6 +15,7 @@ INTERNAL_IPS = [
 ]
 
 INSTALLED_APPS.append('debug_toolbar')
+INSTALLED_APPS.append('django_sass')
 
 MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
 

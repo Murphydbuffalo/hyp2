@@ -1,0 +1,20 @@
+@font-face {
+  font-family: "Karrik";
+  src: url("../fonts/KarrikRegular.woff") format("woff");
+  font-display: block;
+}
+
+body {
+  font-family: "Karrik";
+}
+
+a {
+  text-decoration: none;
+}
+
+@import "experiments";
+@import "navigation";
+@import "sign_up";
+@import "superadmin";
+@import "utils";
+@import "variables";

@@ -1,15 +1,3 @@
-a {
-  text-decoration: none;
-}
-
-.error {
-  color: red;
-}
-
-.hidden {
-  display: none;
-}
-
 navbar.vertical {
   max-width: 12%;
   width: 12%;
@@ -46,26 +34,4 @@ navbar.horizontal a {
 
 navbar.horizontal .auth form {
   display: inline-block;
-}
-
-#variants {
-  display: flex;
-  flex-direction: row;
-  justify-content: left;
-}
-
-.variant-details {
-  margin-right: 2em;
-}
-
-#experiment-chart {
-  width: 100%;
-  height: 500px;
-  margin-bottom: 2em;
-}
-
-.superadmin {
-  background-color: yellow;
-  border: 3px solid black;
-  padding: 5px;
 }
