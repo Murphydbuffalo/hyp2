@@ -7,4 +7,5 @@ lib64/**/*
 **/*.pyc
 web/staticfiles
 web/.env
+web/hyp/static/css/*.css
 /.vscode/**/*
