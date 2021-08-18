@@ -1,4 +1,5 @@
 bin/**/*
+!bin/post_compile
 !web/bin
 pyvenv.cfg
 share/

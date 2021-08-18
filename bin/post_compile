@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+cd "$1" || exit 1
+echo "-----> Compiling SCSS"
+python manage.py sass hyp/static/scss hyp/static/css -t compressed
+
+echo "-----> Collecting static files"
+python manage.py collectstatic --noinput --traceback
+
+
