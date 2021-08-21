@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
 cd "$1" || exit 1
+echo "pwd: `pwd`"
+cd web
+
 echo "-----> Compiling SCSS"
 python manage.py sass hyp/static/scss hyp/static/css -t compressed
 

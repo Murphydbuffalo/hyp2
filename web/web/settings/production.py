@@ -45,4 +45,6 @@ EMAIL_HOST_PASSWORD = environ.get('POSTMARK_ACCESS_TOKEN')
 
 DATABASES['default']['OPTIONS'] = {"sslmode": "require"}
 
+# We manually run the `collectstatic` command in `bin/postcompile`, which allows
+# us to compile Sass to CSS prior to doing so.
 DISABLE_COLLECTSTATIC=1
