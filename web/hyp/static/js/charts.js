@@ -1,5 +1,7 @@
 function renderDateLineChart(options) {
   am4core.useTheme(am4themes_animated);
+  am4core.options.autoSetClassName = true;
+
   const chart = am4core.create(options.containerId, am4charts.XYChart);
   chart.numberFormatter.numberFormat = "##%";
 
