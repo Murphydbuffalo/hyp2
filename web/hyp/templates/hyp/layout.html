@@ -38,34 +38,27 @@
 </head>
 
 <body>
-  <navbar class="horizontal">
-    <a class="logo" href={% url "home" %}>
-      {% include "hyp-logo.svg" %}
+  <navbar>
+    <a href={% url "home" %}>
+      <div id="hyp-logo" class="nav-item">
+        {% include "hyp-lightning-bolt.svg" %}
+        <h3>hyp</h3>
+      </div>
     </a>
 
-    <div class="auth">
-      {% if user.is_authenticated %}
-        <a href={% url "experiments" %}>
-          <i class="fas fa-flask"></i>
-        </a>
+    <a href={% url "experiments" %}>
+      <div class="nav-item">
+        <span class="experiment-circle"></span>
+        <span class="experiment-link">Experiments</span>
+      </div>
+    </a>
 
-        <a href={% url "profile" %}>
-          <i class="fas fa-user"></i>
-        </a>
-
-       <form action="{% url 'account_logout' %}" method="post">
-         {% csrf_token %}
-         {{ form.as_p }}
-         <input class="link" name="logout" type="submit" value="Sign out">
-        </form>
-      {% else %}
-        <p>
-          <a href={% url "account_login" %}>Sign in</a>
-          or
-          <a href={% url "account_signup" %}>Sign up</a>
-        </p>
-      {% endif %}
-    </div>
+    <a href={% url "profile" %}>
+      <div class="nav-item">
+        <span class="avatar-circle"></span>
+        <span class="settings-link">Settings</span>
+      </div>
+    </a>
   </navbar>
 
   <main role="main" class="container">

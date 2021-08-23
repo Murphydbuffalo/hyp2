@@ -2,6 +2,14 @@
 {% block content %}
   <h1>{{ user.email }}</h1>
 
+  {% if user.is_authenticated %}
+    <form action="{% url 'account_logout' %}" method="post">
+     {% csrf_token %}
+     {{ form.as_p }}
+     <input class="link" name="logout" type="submit" value="Sign out">
+    </form>
+  {% endif %}
+
   <a href={% url "api_keys" %}>
     Manage API keys
   </a>
