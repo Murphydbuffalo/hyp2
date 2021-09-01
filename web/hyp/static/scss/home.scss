@@ -1,0 +1,27 @@
+@import "variables";
+
+.inline-container {
+  display: flex;
+  flex-direction: row;
+  vertical-align: middle;
+}
+
+.card {
+  border-radius: 16px;
+  padding: 1em;
+  margin-right: 2em;
+  margin-bottom: 2em;
+}
+
+.smoke {
+  background-color: $smoke;
+}
+
+.link:hover {
+  border: 1px solid $tang;
+}
+
+.big-square {
+  height: 280px;
+  width: 280px;
+}
