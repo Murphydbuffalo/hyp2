@@ -1,0 +1,35 @@
+@import "variables";
+
+@mixin container($direction) {
+  display: flex;
+  flex-direction: $direction;
+  align-items: center;
+
+  @if $direction == column {
+    justify-content: center;
+  }
+}
+
+@mixin card($height, $width, $background-color) {
+  border-radius: 16px;
+  padding: 1em;
+  margin-right: 2em;
+  margin-bottom: 2em;
+  background-color: $background-color;
+
+  height: $height;
+  width: $width;
+
+  &:hover {
+    border: 1px solid $tang;
+  }
+}
+
+@mixin circle($background-color) {
+  display: inline-block;
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  margin-right: 1em;
+  background-color: $background-color;
+}

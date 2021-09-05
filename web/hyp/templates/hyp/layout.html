@@ -40,7 +40,7 @@
 <body>
   <navbar>
     <a href={% url "home" %}>
-      <div id="hyp-logo" class="nav-item">
+      <div id="hyp-logo">
         {% include "hyp-lightning-bolt.svg" %}
         <h3>hyp</h3>
       </div>
@@ -48,14 +48,14 @@
 
     <a href={% url "experiments" %}>
       <div class="nav-item">
-        <span class="circle experiments"></span>
+        <span class="experiments-link-icon"></span>
         <span class="circle-text">Experiments</span>
       </div>
     </a>
 
     <a href={% url "profile" %}>
       <div class="nav-item">
-        <span class="circle settings"></span>
+        <span class="settings-link-icon"></span>
         <span class="circle-text">Settings</span>
       </div>
     </a>

@@ -2,16 +2,16 @@
 {% block content %}
   <h1 class="margin-top-medium">Setting up Hyp</h1>
 
-  <div class="row-container">
+  <div id="home-container">
     <a href={% url "experiments" %}>
-      <div id="experiments" class="big-card">
+      <div id="experiments" class="card">
         <i class="fas fa-chart-line"></i>
         <p>Check out a demo experiment</p>
       </div>
     </a>
 
     <a href={% url "api_keys" %}>
-      <div id="api-keys" class="big-card">
+      <div id="api-keys" class="card">
         <i class="fas fa-key"></i>
         <p>Create an API key</p>
       </div>
