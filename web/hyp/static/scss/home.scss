@@ -1,27 +1,37 @@
 @import "variables";
 
-.inline-container {
+.row-container {
   display: flex;
   flex-direction: row;
   vertical-align: middle;
 }
 
-.card {
+.big-card {
   border-radius: 16px;
   padding: 1em;
   margin-right: 2em;
   margin-bottom: 2em;
-}
-
-.smoke {
   background-color: $smoke;
-}
 
-.link:hover {
-  border: 1px solid $tang;
-}
-
-.big-square {
   height: 280px;
   width: 280px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    border: 1px solid $tang;
+  }
+
+  i {
+    color: $tang;
+    margin-bottom: 1em;
+    font-size: 2em;
+  }
+
+  p {
+    font-size: 1.25em;
+  }
 }
