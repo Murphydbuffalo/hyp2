@@ -22,13 +22,18 @@
     }
   }
 
-  #experiment-chart {
+  #chart-container {
     @include card(600px, 100%);
+
+    #toggles {
+      .button-primary {
+        background-color: $tang;
+      }
+    }
 
     #experiment-chart {
       @include card(500px, 100%, $black);
-      padding: 1em;
-      margin: 1em;
+      padding: 0 1em;
     }
   }
 }

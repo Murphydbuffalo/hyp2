@@ -30,7 +30,7 @@
     </div>
 
     <div id="chart-container">
-      <span class="toggles">
+      <span id="toggles">
         <button id="show-traffic-splits" class="button-primary">Traffic splits</button>
         <button id="show-conversion-rates">Conversion rates</button>
       </span>
@@ -59,14 +59,14 @@
     let chart;
 
     document.querySelector("#show-traffic-splits").onclick = function(event) {
-      document.querySelector("#chart-container .toggles .button-primary").classList.remove("button-primary")
+      document.querySelector("#chart-container #toggles .button-primary").classList.remove("button-primary")
       event.currentTarget.classList.add("button-primary")
       metricName = "traffic_split";
       renderChart();
     };
 
     document.querySelector("#show-conversion-rates").onclick = function(event) {
-      document.querySelector("#chart-container .toggles .button-primary").classList.remove("button-primary")
+      document.querySelector("#chart-container #toggles .button-primary").classList.remove("button-primary")
       event.currentTarget.classList.add("button-primary")
       metricName = "conversion_rate";
       renderChart();
