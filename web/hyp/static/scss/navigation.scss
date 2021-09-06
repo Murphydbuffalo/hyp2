@@ -15,6 +15,7 @@ navbar {
   .nav-item {
     @include container(row)
     @include card(40px, 160px, $black)
+    @include clickable;
 
     margin: 1em;
     padding: 1em;

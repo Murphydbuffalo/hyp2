@@ -10,7 +10,7 @@
   }
 }
 
-@mixin card($height, $width, $background-color) {
+@mixin card($height, $width, $background-color: $smoke) {
   border-radius: 16px;
   padding: 1em;
   margin-right: 2em;
@@ -19,7 +19,9 @@
 
   height: $height;
   width: $width;
+}
 
+@mixin clickable {
   &:hover {
     border: 1px solid $tang;
   }
@@ -32,4 +34,11 @@
   border-radius: 50%;
   margin-right: 1em;
   background-color: $background-color;
+}
+
+@mixin header {
+  border-radius: 16px;
+  border: 5px solid $smoke;
+  padding: 0.25em;
+  margin-top: 2em;
 }

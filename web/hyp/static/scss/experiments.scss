@@ -1,15 +1,32 @@
-#variants {
-  display: flex;
-  flex-direction: row;
-  justify-content: left;
-}
+@import "variables";
+@import "mixins";
 
-.variant-details {
-  margin-right: 2em;
-}
+#experiment-dashboard {
+  .header {
+    @include header;
+  }
 
-#experiment-chart {
-  width: 100%;
-  height: 500px;
-  margin-bottom: 2em;
+  .row {
+    @include container(row);
+
+    #total-interactions, #uncertainty {
+      @include card(auto, 50%);
+    }
+  }
+
+  #variants {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+  }
+
+  .variant-details {
+    margin-right: 2em;
+  }
+
+  #experiment-chart {
+    width: 100%;
+    height: 500px;
+    margin-bottom: 2em;
+  }
 }

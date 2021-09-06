@@ -5,8 +5,9 @@
   @include container(row);
 
   .card {
-    @include card(280px, 280px, $smoke);
+    @include card(280px, 280px);
     @include container(column);
+    @include clickable;
 
     i {
       color: $tang;

@@ -8,39 +8,49 @@
 {% endblock %}
 
 {% block content %}
-  <h1>{{ experiment.description }} experiment</h1>
-  <p id="total-interactions">
-    {% if experiment.total_interactions > 0 %}
-    {{ experiment.total_interactions }} unique participants.
-    {% else %}
-    No one has participated in this experiment yet.
-    {% endif %}
-  </p>
-  <p id="uncertainty" class={{ experiment.uncertainty_style }}>
-    Uncertainty level: {{ experiment.uncertainty_level  }}
-  </p>
+  <div id="experiment-dashboard">
+    <h2 class="header">{{ experiment.description }} experiment</h2>
 
-  <div id="chart-container">
-    <span class="toggles">
-      <button id="show-traffic-splits" class="button-primary">Traffic splits</button>
-      <button id="show-conversion-rates">Conversion rates</button>
-    </span>
-    <div id="experiment-chart"></div>
-  </div>
+    <div class="row">
+      <div id="total-interactions">
+        <p>Unique participants</p>
+        <h2>
+          {% if experiment.total_interactions > 0 %}
+          {{ experiment.total_interactions }}
+          {% else %}
+          No one has participated in this experiment yet.
+          {% endif %}
+        </h2>
+      </div>
 
-  <h2>Variants</h2>
-  <div id="variants">
-    {% for variant in experiment.variant_set.all %}
-    <div class="variant-details">
-      <h3>{{ variant.name }}</h3>
-      {% if variant.num_interactions == 0 %}
-      <p>No one has interacted with this variant yet.</p>
-      {% else %}
-      <p>Has received {% widthratio variant.traffic_split_to_date 0.01 1 %}% of traffic to date.</p>
-      <p>{% widthratio variant.conversion_rate 1 100 %}% conversion rate</p>
-      {% endif %}
+      <div id="uncertainty">
+        <p>Uncertainty</p>
+        <h2>{{ experiment.uncertainty_level  }}</h2>
+      </div>
     </div>
-    {% endfor %}
+
+    <div id="chart-container">
+      <span class="toggles">
+        <button id="show-traffic-splits" class="button-primary">Traffic splits</button>
+        <button id="show-conversion-rates">Conversion rates</button>
+      </span>
+      <div id="experiment-chart"></div>
+    </div>
+
+    <h2>Variants</h2>
+    <div id="variants">
+      {% for variant in experiment.variant_set.all %}
+      <div class="variant-details">
+        <h3>{{ variant.name }}</h3>
+        {% if variant.num_interactions == 0 %}
+        <p>No one has interacted with this variant yet.</p>
+        {% else %}
+        <p>Has received {% widthratio variant.traffic_split_to_date 0.01 1 %}% of traffic to date.</p>
+        <p>{% widthratio variant.conversion_rate 1 100 %}% conversion rate</p>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
   </div>
 
   {{ experiment.history|json_script:"experiment-metrics" }}
