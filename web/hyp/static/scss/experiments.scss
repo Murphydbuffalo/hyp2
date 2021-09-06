@@ -23,8 +23,12 @@
   }
 
   #experiment-chart {
-    width: 100%;
-    height: 500px;
-    margin-bottom: 2em;
+    @include card(600px, 100%);
+
+    #experiment-chart {
+      @include card(500px, 100%, $black);
+      padding: 1em;
+      margin: 1em;
+    }
   }
 }
