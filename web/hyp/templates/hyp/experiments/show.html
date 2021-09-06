@@ -37,16 +37,15 @@
       <div id="experiment-chart"></div>
     </div>
 
-    <h2>Variants</h2>
     <div id="variants">
       {% for variant in experiment.variant_set.all %}
       <div class="variant-details">
-        <h3>{{ variant.name }}</h3>
+        <h2>{{ variant.name }}</h2>
         {% if variant.num_interactions == 0 %}
         <p>No one has interacted with this variant yet.</p>
         {% else %}
-        <p>Has received {% widthratio variant.traffic_split_to_date 0.01 1 %}% of traffic to date.</p>
-        <p>{% widthratio variant.conversion_rate 1 100 %}% conversion rate</p>
+        <p>Traffic to date: {% widthratio variant.traffic_split_to_date 0.01 1 %}%</p>
+        <p>Conversion rate: {% widthratio variant.conversion_rate 1 100 %}%</p>
         {% endif %}
       </div>
       {% endfor %}
