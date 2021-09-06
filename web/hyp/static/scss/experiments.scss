@@ -32,8 +32,9 @@
     }
 
     #experiment-chart {
-      @include card(500px, 100%, $black);
+      @include card(500px, 95%, $black);
       padding: 0 1em;
+      margin: 1em 0;
     }
   }
 }

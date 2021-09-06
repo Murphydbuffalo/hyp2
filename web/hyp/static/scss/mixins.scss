@@ -13,12 +13,19 @@
 @mixin card($height, $width, $background-color: $smoke) {
   border-radius: 16px;
   padding: 1em;
-  margin-right: 2em;
   margin-bottom: 2em;
+  &:not(:last-child) {
+    margin-right: 2em;
+  }
+
   background-color: $background-color;
 
   height: $height;
   width: $width;
+
+  text-overflow: clip;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 @mixin clickable {

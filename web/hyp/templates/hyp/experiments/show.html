@@ -9,7 +9,7 @@
 
 {% block content %}
   <div id="experiment-dashboard">
-    <h2 class="header">{{ experiment.description }} experiment</h2>
+    <h2 class="header">{{ experiment.description }}</h2>
 
     <div class="row">
       <div id="total-interactions">
@@ -40,7 +40,7 @@
     <div id="variants">
       {% for variant in experiment.variant_set.all %}
       <div class="variant-details">
-        <h2>{{ variant.name }}</h2>
+        <h3>{{ variant.name }}</h3>
         {% if variant.num_interactions == 0 %}
         <p>No one has interacted with this variant yet.</p>
         {% else %}
