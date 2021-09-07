@@ -2,12 +2,11 @@
 {% block content %}
   <h1>Experiments</h1>
   {% if perms.hyp.add_experiment %}
-    <div id="new-experiment-form">
-      <a href={% url "new_experiment" %}>
-        <i class="fas fa-plus"></i>
-        <p>Create an experiment<p>
-      </a>
-    </div>
+    <a id="new-experiment" href={% url "new_experiment" %}>
+      <button class="button-primary">
+        New
+      </button>
+    </a>
   {% endif %}
 
   <div id="#experiment-list">

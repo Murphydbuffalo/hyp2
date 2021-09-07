@@ -2,7 +2,9 @@
 @import "mixins";
 
 #new-experiment {
-  @include cta-card;
+  .button-primary {
+    @include primary-button;
+  }
 }
 
 #experiment-list {

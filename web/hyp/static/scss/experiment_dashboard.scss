@@ -27,7 +27,7 @@
 
     #toggles {
       .button-primary {
-        background-color: $purple;
+        @include primary-button;
       }
     }
 
