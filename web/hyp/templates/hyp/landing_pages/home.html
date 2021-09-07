@@ -3,18 +3,14 @@
   <h1>Setting up Hyp</h1>
 
   <div id="home-container">
-    <a href={% url "experiments" %}>
-      <div class="card">
-        <i class="fas fa-chart-line"></i>
-        <p>Check out a demo experiment</p>
-      </div>
+    <a class="card" href={% url "experiments" %}>
+      <i class="fas fa-chart-line"></i>
+      <p>Check out a demo experiment</p>
     </a>
 
-    <a href={% url "api_keys" %}>
-      <div class="card">
-        <i class="fas fa-key"></i>
-        <p>Create an API key</p>
-      </div>
+    <a class="card" href={% url "api_keys" %}>
+      <i class="fas fa-key"></i>
+      <p>Create an API key</p>
     </a>
   </div>
 {% endblock %}

@@ -14,19 +14,26 @@ navbar {
   background-color: $smoke;
 
   .nav-item {
-    @include container(row)
     @include card(40px, 160px, $black)
     @include clickable;
 
     margin: 1em;
     padding: 1em;
 
-    .experiments-link-icon {
-      @include circle($tang);
-    }
+    .circle-container{
+      @include container(row)
 
-    .settings-link-icon {
-      @include circle($purple);
+      .experiments-link-icon {
+        @include circle($tang);
+      }
+
+      .settings-link-icon {
+        @include circle($purple);
+      }
+
+      .circle-text {
+        display: block;
+      }
     }
   }
 

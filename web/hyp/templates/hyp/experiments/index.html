@@ -2,18 +2,21 @@
 {% block content %}
   <h1>Experiments</h1>
   {% if perms.hyp.add_experiment %}
-    <h2>
+    <div id="new-experiment-form">
       <a href={% url "new_experiment" %}>
-        New Experiment
+        <i class="fas fa-plus"></i>
+        <p>Create an experiment<p>
       </a>
-    </h2>
+    </div>
   {% endif %}
 
-  <ul class="experiment-list">
-  {% for experiment in experiments %}
-    <li>
-      <a href={% url "experiment" experiment.id %}>{{ experiment.description }}</a>
-    </li>
-  {% endfor %}
-  </ul>
+  <div id="#experiment-list">
+    <ul>
+    {% for experiment in experiments %}
+      <li>
+        <a href={% url "experiment" experiment.id %}>{{ experiment.description }}</a>
+      </li>
+    {% endfor %}
+    </ul>
+  </div>
 {% endblock %}

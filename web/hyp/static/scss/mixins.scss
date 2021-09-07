@@ -11,6 +11,7 @@
 }
 
 @mixin card($height, $width, $background-color: $smoke) {
+  display: block;
   border-radius: 16px;
   padding: 1em;
   margin-bottom: 2em;
@@ -35,7 +36,7 @@
 }
 
 @mixin circle($background-color) {
-  display: inline-block;
+  display: block;
   height: 32px;
   width: 32px;
   border-radius: 50%;

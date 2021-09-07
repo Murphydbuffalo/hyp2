@@ -1,0 +1,16 @@
+@import "variables";
+@import "mixins";
+
+#new-experiment {
+  @include cta-card;
+}
+
+#experiment-list {
+  ul {
+    @include container(row);
+
+    li {
+      @include card(120px, 60%);
+    }
+  }
+}
