@@ -22,6 +22,7 @@ navbar {
 
     .circle-container{
       @include container(row)
+      margin-top: 0.25em;
 
       .experiments-link-icon {
         @include circle($tang);
