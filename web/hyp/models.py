@@ -120,6 +120,19 @@ class Experiment(models.Model):
 
         return by_variant
 
+    def conversion_rates(self):
+        rates = [v.conversion_rate() for v in self.variant_set.all()]
+        rates.sort()
+
+        return rates
+
+    def lift(self):
+        rates = self.conversion_rates()
+        best = rates.pop()
+        worst = rates.pop(0)
+
+        return best - worst
+
 
 class VariantManager(models.Manager):
     def for_assignment(self, participant_id, access_token, experiment_id):
