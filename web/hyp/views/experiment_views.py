@@ -14,7 +14,7 @@ def index(request):
     if request.user.has_perm("hyp.view_experiment"):
         experiments = Experiment.objects.filter(
             customer_id=request.user.customer_id
-        ).order_by('-created_at')
+        ).prefetch_related("variant_set").order_by('-created_at')
 
         return render(request, 'hyp/experiments/index.html', {"experiments": experiments})
     else:
