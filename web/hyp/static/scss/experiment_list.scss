@@ -8,11 +8,20 @@
 }
 
 #experiment-list {
-  ul {
-    @include container(row);
+  @include container(column);
 
-    li {
-      @include card(120px, 60%);
+  .list-item {
+    @include card(120px, 80%);
+    @include container(row);
+    @include clickable;
+
+    .name {
+      @include card(auto, 50%);
+    }
+
+    .info {
+      @include container(column);
+      @include card(auto, 30%);
     }
   }
 }
