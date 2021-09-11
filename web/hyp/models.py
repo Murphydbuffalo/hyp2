@@ -49,7 +49,7 @@ class ApiKey(models.Model):
         ]
 
     def description(self):
-        return f'{self.label}: {self} {"" if self.is_active() else "(Deactivated)"}'
+        return f'{self.label} {"" if self.is_active() else "(Deactivated)"}'
 
     def is_active(self):
         return self.deactivated_at is None

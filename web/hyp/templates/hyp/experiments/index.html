@@ -5,9 +5,7 @@
 
     {% if perms.hyp.add_experiment %}
       <a id="new-experiment" href={% url "new_experiment" %}>
-        <button class="button-primary">
-          New
-        </button>
+        <button class="button-primary">New</button>
       </a>
     {% else %}
       <div id="spacer"></div>
