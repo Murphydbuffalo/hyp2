@@ -29,7 +29,6 @@
       @include container(column, flex-start);
 
       h5 {
-        vertical-align: middle;
         form {
           margin: 0;
           display: inline;
@@ -37,6 +36,9 @@
           button {
             border: none;
             font-size: 0.67em;
+            position: relative;
+            right: 1.5em;
+            bottom: 0.1em;
           }
         }
       }
