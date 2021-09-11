@@ -17,8 +17,11 @@
 
     {% for experiment in experiments %}
     <a class="list-item" href={% url "experiment" experiment.id %}>
+      <div class="name">
+        <h2>{{ experiment.description }}</h2>
+      </div>
+
       <div class="info">
-        <p>Variants: {{ experiment.variant_set.count  }}</p>
         <p>Unique participants: {{ experiment.total_interactions }}</p>
         <p>Uncertainty: {{ experiment.uncertainty_level  }}</p>
         {% if experiment.total_interactions > 0 %}
@@ -26,10 +29,6 @@
         {% else %}
           <p>Lift: N/A</p>
         {% endif %}
-      </div>
-
-      <div class="name">
-        <h2>{{ experiment.description }}</h2>
       </div>
     </a>
     {% endfor %}

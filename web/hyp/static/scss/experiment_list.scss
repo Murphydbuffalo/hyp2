@@ -33,11 +33,13 @@
 
     .name {
       @include card(auto, 50%);
+      margin-bottom: 0;
     }
 
     .info {
       @include container(column);
       @include card(auto, 30%);
+      margin: 1.5em 0 0 0;
     }
   }
 }
