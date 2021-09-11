@@ -44,11 +44,12 @@
   background-color: $background-color;
 }
 
-@mixin header {
+@mixin header($width: auto) {
   border-radius: 16px;
   border: 5px solid $smoke;
   padding: 0.25em;
   margin-top: 2em;
+  width: $width;
 }
 
 @mixin primary-button {

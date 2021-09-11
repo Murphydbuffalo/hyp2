@@ -1,9 +1,7 @@
 {% extends "hyp/layout.html" %}
 {% block content %}
   <div id="experiment-list">
-    <div id="header">
-      <h2>Experiments</h2>
-    </div>
+    <h2 class="header">Experiments</h2>
 
     {% if perms.hyp.add_experiment %}
       <a id="new-experiment" href={% url "new_experiment" %}>

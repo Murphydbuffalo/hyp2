@@ -2,9 +2,8 @@
 @import "mixins";
 
 #settings {
-  h1 {
-    @include header;
-    width: 90%;
+  .header {
+    @include header(90%);
   }
 
   #user-info {
