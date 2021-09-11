@@ -53,4 +53,10 @@
 
 @mixin primary-button {
   background-color: $purple;
+  color: $white;
+  font-size: 0.9em;
+
+  input {
+    margin-bottom: 0;
+  }
 }

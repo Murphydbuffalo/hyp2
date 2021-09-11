@@ -1,0 +1,27 @@
+{% extends "hyp/layout.html" %}
+{% block content %}
+  <div id="settings">
+    <h1>Settings</h1>
+
+    <div id="user-info">
+      <h3><i class="fas fa-user"></i> {{ user.email }}</h3>
+    </div>
+
+    <div id="actions">
+      {% if user.is_authenticated %}
+        <form action="{% url 'account_logout' %}" method="post">
+         {% csrf_token %}
+         {{ form.as_p }}
+
+         <button id="sign-out">
+           <input class="link" name="logout" type="submit" value="Sign out">
+         </button>
+        </form>
+      {% endif %}
+
+      <a id="api-keys" href={% url "api_keys" %}>
+        <button>Manage API keys</button>
+      </a>
+    </div>
+  </div>
+{% endblock %}
