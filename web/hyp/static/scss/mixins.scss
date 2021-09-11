@@ -35,6 +35,10 @@
   }
 }
 
+@mixin non-clickable {
+  border: 1px dashed $tang;
+}
+
 @mixin circle($background-color) {
   display: block;
   height: 32px;

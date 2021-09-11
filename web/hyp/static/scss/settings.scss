@@ -8,7 +8,7 @@
 
   #user-info {
     @include card(auto, 90%);
-    border: 1px dashed $tang;
+    @include non-clickable;
 
     h3 {
       display: inline;

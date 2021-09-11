@@ -23,11 +23,12 @@
   .list-item {
     @include card(120px, 90%);
     @include container(row, flex-start);
+    @include non-clickable;
 
     .api-key-description {
       @include container(column, flex-start);
 
-      <h5 {
+      h5 {
         vertical-align: middle;
         form {
           margin: 0;
