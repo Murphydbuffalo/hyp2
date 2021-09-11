@@ -1,14 +1,30 @@
 @import "variables";
 @import "mixins";
 
-#new-experiment {
-  .button-primary {
-    @include primary-button;
-  }
-}
-
 #experiment-list {
-  @include container(column);
+  @include container(column, flex-start);
+
+  #header {
+    @include container(row);
+    @include header;
+    width: 80%;
+
+    h1 {
+      margin: 0;
+    }
+  }
+
+  #new-experiment {
+    margin: 2em 0;
+
+    .button-primary {
+      @include primary-button;
+    }
+  }
+
+  #spacer {
+    margin: 2em 0;
+  }
 
   .list-item {
     @include card(120px, 80%);

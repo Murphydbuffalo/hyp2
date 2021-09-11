@@ -1,9 +1,9 @@
 @import "variables";
 
-@mixin container($direction) {
+@mixin container($direction, $align-items: center) {
   display: flex;
   flex-direction: $direction;
-  align-items: center;
+  align-items: $align-items;
 
   @if $direction == column {
     justify-content: center;
