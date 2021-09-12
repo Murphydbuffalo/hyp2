@@ -30,12 +30,13 @@
 
       h5 {
         form {
-          margin: 0;
+          margin: 0 0 0 1em;
           display: inline;
 
           button {
             border: none;
-            font-size: 0.67em;
+            background-color: transparent;
+            font-size: 0.6em;
             position: relative;
             right: 1.5em;
             bottom: 0.1em;
