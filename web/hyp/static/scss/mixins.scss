@@ -86,6 +86,8 @@
 
   input {
     margin-bottom: 0;
+    background-color: transparent;
+    border: none;
     @include button-text;
   }
 }
