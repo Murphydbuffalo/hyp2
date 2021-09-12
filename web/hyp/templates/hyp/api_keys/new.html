@@ -2,10 +2,9 @@
 {% block content %}
 <h3 class="header">Create API Key</h3>
 
-<form action="{% url 'create_api_key' %}" method="post">
+<form id="api-key-form" action="{% url 'create_api_key' %}" method="post">
   {% csrf_token %}
-  <label for="api_key_label">Label:</label><br>
-  <input type="text" id="api_key_label" name="api_key_label"><br>
+  <input type="text" id="api_key_label" name="api_key_label" placeholder="API Key label"><br>
   <input type="submit" value="Create">
 </form>
 {% endblock %}
