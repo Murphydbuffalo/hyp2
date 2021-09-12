@@ -9,8 +9,11 @@
   .row {
     @include container(row);
 
-    #total-interactions, #uncertainty {
+    .subheader-card {
       @include card(auto, 50%);
+      h4 {
+        margin-top: 1em;
+      }
     }
   }
 

@@ -51,7 +51,7 @@
 @mixin header($width: auto) {
   border-radius: 16px;
   border: 5px solid $smoke;
-  padding: 0.25em;
+  padding: 0.5em 0.25em;
   margin-top: 2em;
   width: $width;
 }

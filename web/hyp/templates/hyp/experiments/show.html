@@ -12,20 +12,20 @@
     <h2 class="header">{{ experiment.description }}</h2>
 
     <div class="row">
-      <div id="total-interactions">
+      <div class="subheader-card">
         <p>Unique participants</p>
-        <h2>
+        <h4>
           {% if experiment.total_interactions > 0 %}
           {{ experiment.total_interactions }}
           {% else %}
           No one has participated in this experiment yet.
           {% endif %}
-        </h2>
+        </h4>
       </div>
 
-      <div id="uncertainty">
+      <div class="subheader-card">
         <p>Uncertainty</p>
-        <h2>{{ experiment.uncertainty_level  }}</h2>
+        <h4>{{ experiment.uncertainty_level  }}</h4>
       </div>
     </div>
 
@@ -40,7 +40,7 @@
     <div id="variants">
       {% for variant in experiment.variant_set.all %}
       <div class="variant-details">
-        <h3>{{ variant.name }}</h3>
+        <h4>{{ variant.name }}</h4>
         {% if variant.num_interactions == 0 %}
         <p>No one has interacted with this variant yet.</p>
         {% else %}
