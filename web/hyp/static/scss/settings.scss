@@ -2,10 +2,6 @@
 @import "mixins";
 
 #settings {
-  .header {
-    @include header(90%);
-  }
-
   #user-info {
     @include card(auto, 90%);
     @include non-clickable;

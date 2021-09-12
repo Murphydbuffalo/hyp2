@@ -4,10 +4,6 @@
 #experiment-list {
   @include container(column, flex-start);
 
-  .header {
-    @include header(90%);
-  }
-
   #new-experiment {
     margin: 2em 0;
 

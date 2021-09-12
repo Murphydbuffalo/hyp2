@@ -3,7 +3,7 @@
 
 #experiment-dashboard {
   .header {
-    @include header;
+    @include header(auto);
   }
 
   .row {

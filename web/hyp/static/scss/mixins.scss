@@ -48,7 +48,7 @@
   background-color: $background-color;
 }
 
-@mixin header($width: auto) {
+@mixin header($width: 90%) {
   border-radius: 16px;
   border: 5px solid $smoke;
   padding: 0.5em 0.25em;

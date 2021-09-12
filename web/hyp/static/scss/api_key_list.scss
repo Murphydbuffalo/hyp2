@@ -4,10 +4,6 @@
 #api-key-list {
   @include container(column, flex-start);
 
-  .header {
-    @include header(90%);
-  }
-
   #new-api-key {
     margin: 2em 0;
 
