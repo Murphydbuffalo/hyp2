@@ -56,12 +56,41 @@
   width: $width;
 }
 
-@mixin primary-button {
-  background-color: $purple;
+@mixin button-text {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 38px;
+  letter-spacing: .1rem;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+@mixin button($background-color: $smoke) {
+  @include button-text;
+
+  display: inline-block;
+  height: 38px;
+  padding: 0 30px;
+  white-space: nowrap;
+  cursor: pointer;
+  box-sizing: border-box;
+  border-radius: 16px;
+  background-color: $background-color;
+  border: none;
   color: $white;
-  font-size: 0.9em;
+
+  &:hover {
+    border: 1px solid transparent;
+  }
 
   input {
     margin-bottom: 0;
+    @include button-text;
   }
+}
+
+@mixin primary-button {
+  @include button;
+  background-color: $purple;
 }

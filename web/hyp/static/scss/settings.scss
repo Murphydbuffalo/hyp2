@@ -26,16 +26,11 @@
 
     #sign-out {
       @include primary-button;
-      display: inline;
       margin: 0 1em 0 0;
     }
 
     #api-keys {
-      display: inline;
-      margin: 0;
-      button {
-        color: $white;
-      }
+      @include button;
     }
   }
 }

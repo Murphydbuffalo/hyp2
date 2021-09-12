@@ -26,8 +26,14 @@
     @include card(600px, 100%);
 
     #toggles {
+      button {
+        @include button($tang);
+        border-radius: 4px;
+      }
+
       .button-primary {
         @include primary-button;
+        border-radius: 4px;
       }
     }
 
