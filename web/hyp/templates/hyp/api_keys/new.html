@@ -1,6 +1,6 @@
 {% extends "hyp/layout.html" %}
 {% block content %}
-<h2>Create API Key</h2>
+<h3 class="header">Create API Key</h3>
 
 <form action="{% url 'create_api_key' %}" method="post">
   {% csrf_token %}
