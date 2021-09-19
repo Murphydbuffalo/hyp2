@@ -27,7 +27,7 @@
       {% endif %}
     </table>
 
-     <table id="variant-form-fields">
+     <table>
       {{ variant_formset.management_form }}
 
       {% if variant_formset.non_form_errors %}
@@ -40,15 +40,18 @@
       </tr>
       {% endif %}
 
-      {% for form in variant_formset %}
-      {{ form.name }}
-      <br>
-      {% endfor %}
+      <div id="variant-form-fields">
+        {% for form in variant_formset %}
+        <tr>
+          {{ form.name }}<br>
+        </tr>
+        {% endfor %}
+      </div>
     </table>
 
-    <table id="empty-form" class="hidden">
-      {{ variant_formset.empty_form.as_table }}
-    </table>
+    <div id="empty-form" class="hidden">
+      {{ variant_formset.empty_form.name }}
+    </div>
 
     <button id="add-variant">Add variant</button>
     <br>
