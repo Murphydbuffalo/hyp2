@@ -4,4 +4,8 @@
 #new-experiment-form {
   @include form;
   width: 90%;
+
+  #add-variant {
+    @include button($tang);
+  }
 }

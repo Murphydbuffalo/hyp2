@@ -15,12 +15,12 @@
       </tr>
       {% endif %}
 
-      {{ experiment_form }}
+      {{ experiment_form.name }}
 
       {% if request.user.is_staff %}
-        <div class="superadmin">
+        <div class="hidden superadmin">
           <label for="generate_sample_data">
-            Create with sample data
+            Create sample data
             <input type="checkbox" name="generate_sample_data"/>
           </label>
         </div>
@@ -29,10 +29,6 @@
 
      <table id="variant-form-fields">
       {{ variant_formset.management_form }}
-
-      <tr>
-        <h4>Variants</h4>
-      </tr>
 
       {% if variant_formset.non_form_errors %}
       <tr>
@@ -45,7 +41,8 @@
       {% endif %}
 
       {% for form in variant_formset %}
-      {{ form }}
+      {{ form.name }}
+      <br>
       {% endfor %}
     </table>
 
@@ -54,6 +51,7 @@
     </table>
 
     <button id="add-variant">Add variant</button>
+    <br>
     <br>
     <input class='button-primary' type='submit' value='Save'>
   </form>
