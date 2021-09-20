@@ -18,7 +18,7 @@
             <span>{{ api_key.description }}</span>
 
             {% if api_key.is_active and perms.hyp.change_apikey %}
-            <form action="{% url 'deactivate_api_key' api_key_id=api_key.id %}" method="patch" onsubmit="return confirm('This will break any API clients using this key. API keys cannot be reactivated. Are you sure?');">
+            <form class="inline" action="{% url 'deactivate_api_key' api_key_id=api_key.id %}" method="patch" onsubmit="return confirm('This will break any API clients using this key. API keys cannot be reactivated. Are you sure?');">
               <button type="submit">
                 <i class="fas fa-trash"></i>
               </button>

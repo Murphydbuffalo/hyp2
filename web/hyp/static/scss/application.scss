@@ -1,5 +1,4 @@
 @import "api_key_list";
-@import "api_key_form";
 @import "experiment_dashboard";
 @import "experiment_form";
 @import "experiment_list";
@@ -72,4 +71,9 @@ a {
 
 i {
   color: $tang;
+}
+
+form:not(.inline) {
+  @include form;
+  width: 90%;
 }

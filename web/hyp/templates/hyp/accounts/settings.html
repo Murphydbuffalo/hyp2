@@ -9,7 +9,7 @@
 
     <div id="actions">
       {% if user.is_authenticated %}
-        <form action="{% url 'account_logout' %}" method="post">
+        <form class="inline" action="{% url 'account_logout' %}" method="post">
          {% csrf_token %}
          {{ form.as_p }}
 
