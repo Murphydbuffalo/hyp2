@@ -37,6 +37,7 @@
 </head>
 
 <body>
+  {% if user.is_authenticated %}
   <navbar>
     <a href={% url "home" %}>
       <div id="hyp-logo">
@@ -59,6 +60,7 @@
       </div>
     </a>
   </navbar>
+  {% endif %}
 
   <main role="main" class="container">
     {% if messages %}

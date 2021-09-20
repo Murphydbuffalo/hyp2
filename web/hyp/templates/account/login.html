@@ -1,7 +1,5 @@
 {% extends "hyp/layout.html" %}
 {% block content %}
-  <h3 class="header">Welcome to Hyp</h3>
-
   {% if form.errors %}
   {% for field in form %}
       {% for error in field.errors %}
@@ -13,11 +11,21 @@
   {% endfor %}
   {% endif %}
 
-  <form id="login-form" action="{% url 'account_login' %}" method="post">
+  <form id="auth-form" action="{% url 'account_login' %}" method="post">
+    <div id="hyp-logo">
+      {% include "hyp-lightning-bolt.svg" %}
+      <h5>hyp</h5>
+    </div>
+
     {% csrf_token %}
     {% for field in form %}
     {{ field }}<br>
     {% endfor %}
     <input type="submit" value="Sign in">
+
+    <br>
+    <a id="sign-up" href="{% url 'account_signup' %}">
+      Or sign up
+    </a>
   </form>
 {% endblock %}

@@ -1,0 +1,36 @@
+@import "mixins";
+@import "variables";
+
+#auth-form {
+  margin: 8em auto 0 auto;
+  width: 50%;
+
+  input, button {
+    width: 50%;
+  }
+
+  #hyp-logo {
+    @include container(row)
+
+    margin-left: 40%;
+
+    #hyp-lightning-bolt {
+      width: 20px;
+      height: 34px;
+      overflow: visible;
+      display: block;
+      transform: translate(0px, 0px);
+      margin-right: 0.5em;
+      margin-bottom: 1em;
+    }
+
+    h5 {
+      color: $white;
+    }
+  }
+
+  #sign-up {
+    display: block;
+    margin-top: 1em;
+  }
+}
