@@ -16,6 +16,7 @@
       {% endif %}
 
       {{ experiment_form.name }}
+      {{ experiment_form.name.errors }}
 
       {% if request.user.is_staff %}
         <div class="hidden superadmin">
@@ -44,6 +45,7 @@
         {% for form in variant_formset %}
         <tr>
           {{ form.name }}<br>
+          {{ form.name.errors }}
         </tr>
         {% endfor %}
       </div>

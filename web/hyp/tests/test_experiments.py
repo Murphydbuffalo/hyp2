@@ -82,13 +82,17 @@ class TestExperiments(TestCase):
     def test_experiment_detail_page(self):
         response = self.client.get(f'/experiments/{self.experiment.id}/')
         self.assertEqual(response.status_code, 200)
-        self.assertIn('Test dank color schemes experiment', str(response.content))
-        self.assertIn('No one has participated in this experiment yet.', str(response.content))
-        self.assertIn('Uncertainty level: High', str(response.content))
+        self.assertIn('Test dank color schemes', str(response.content))
+        self.assertIn('Unique participants', str(response.content))
+        self.assertIn('0', str(response.content))
+        self.assertIn('Uncertainty', str(response.content))
+        self.assertIn('High', str(response.content))
+        self.assertIn('Traffic splits', str(response.content))
+        self.assertIn('Conversion rates', str(response.content))
         self.assertIn('Variant 1', str(response.content))
         self.assertIn('Variant 2', str(response.content))
         self.assertIn('Variant 3', str(response.content))
-        self.assertIn('No one has interacted with this variant yet.', str(response.content))
+        self.assertIn('No data', str(response.content))
 
         for _i in range(20):
             for j in range(3):
@@ -106,18 +110,18 @@ class TestExperiments(TestCase):
 
         response = self.client.get(f'/experiments/{self.experiment.id}/')
         self.assertEqual(response.status_code, 200)
-        self.assertIn('Test dank color schemes experiment', str(response.content))
-        self.assertIn('60 unique participants.', str(response.content))
-        self.assertIn('Uncertainty level: Moderate', str(response.content))
+        self.assertIn('Test dank color schemes', str(response.content))
+        self.assertIn('Unique participants', str(response.content))
+        self.assertIn('60', str(response.content))
+        self.assertIn('Uncertainty', str(response.content))
+        self.assertIn('Moderate', str(response.content))
+        self.assertIn('Traffic splits', str(response.content))
+        self.assertIn('Conversion rates', str(response.content))
         self.assertIn('Variant 1', str(response.content))
         self.assertIn('Variant 2', str(response.content))
         self.assertIn('Variant 3', str(response.content))
-
-        traffic_split_regexp = re.compile('Has received (\d+)% of traffic to date.')
-        self.assertRegex(str(response.content), traffic_split_regexp)
-
-        conversion_rate_regexp = re.compile('(\d+)% conversion rate.')
-        self.assertRegex(str(response.content), conversion_rate_regexp)
+        self.assertIn('Traffic to date', str(response.content))
+        self.assertIn('Conversion rate', str(response.content))
 
     def test_create_success(self):
         response = self.client.get('/experiments/new/')

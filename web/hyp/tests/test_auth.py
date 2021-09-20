@@ -23,7 +23,7 @@ class TestAuth(TestCase):
         response = self.client.get('/accounts/signup/', follow=True)
         self.assertEqual(response.status_code, 200)
 
-        self.assertIn('<form action="/accounts/signup/" method="post">', str(response.content))
+        self.assertIn('<form id="auth-form" action="/accounts/signup/" method="post">', str(response.content))
         self.assertIn('<input type="email" name="email"', str(response.content))
         self.assertIn('<input type="password" name="password1"', str(response.content))
         self.assertIn('<input type="password" name="password2"', str(response.content))
@@ -82,7 +82,7 @@ class TestAuth(TestCase):
 
         self.assertFalse(user.is_authenticated)
         self.assertEqual(bad_login_response.status_code, 200)
-        self.assertIn('errorlist', str(bad_login_response.content))
+        self.assertIn('class="error"', str(bad_login_response.content))
         self.assertIn(
             'The e-mail address and/or password you specified are not correct.',
             str(bad_login_response.content)
@@ -98,7 +98,7 @@ class TestAuth(TestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertNotIn('errorlist', str(response.content))
+        self.assertNotIn('class="error"', str(response.content))
 
         user = auth.get_user(self.client)
 
