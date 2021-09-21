@@ -42,7 +42,7 @@
     <a href={% url "home" %}>
       <div id="hyp-logo">
         {% include "hyp-lightning-bolt.svg" %}
-        <h5>hyp</h5>
+        <h5 id="hyp-logo-text">hyp</h5>
       </div>
     </a>
 
@@ -58,6 +58,10 @@
         <span class="settings-link-icon"></span>
         <span class="circle-text">Settings</span>
       </div>
+    </a>
+
+    <a class="nav-item mobile-only" href={% url "settings" %}>
+      <i class="user-icon fas fa-user"></i>
     </a>
   </navbar>
   {% endif %}

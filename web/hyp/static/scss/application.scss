@@ -40,6 +40,12 @@ h1, h2, h3, h4, h5, h6 {
   h6 { font-size: 1.5rem; }
 }
 
+.mobile-only {
+  @media (min-width: $mobile-width) {
+    display: none;
+  }
+}
+
 .header {
   @include header;
 }
@@ -55,6 +61,10 @@ main {
 
 main h1:first-child, h2:first-child, h3:first-child {
   margin-top: 2em;
+
+  @media (max-width: $mobile-width) {
+    margin-top: 4em;
+  }
 }
 
 p {

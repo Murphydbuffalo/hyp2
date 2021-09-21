@@ -2,7 +2,13 @@
 @import "variables";
 
 #home-container {
-  @include container(row);
+  @media (max-width: $mobile-width) {
+    @include container(column);
+  }
+
+  @media (min-width: $mobile-width) {
+    @include container(row);
+  }
 
   .card {
     @include card(280px, 280px);

@@ -15,14 +15,22 @@
   border-radius: 16px;
   padding: 1em;
   margin-bottom: 2em;
-  &:not(:last-child) {
-    margin-right: 2em;
+
+  @media (min-width: $mobile-width) {
+    &:not(:last-child) {
+      margin-right: 2em;
+    }
   }
 
   background-color: $background-color;
 
   height: $height;
   width: $width;
+
+  @media (max-width: $mobile-width) {
+    max-width: 80%;
+    height: $height / 2;
+  }
 
   text-overflow: clip;
   white-space: nowrap;

@@ -7,6 +7,15 @@ navbar {
   width: 15%;
   height: 100%;
 
+  @media (max-width: $mobile-width) {
+    width: 100%;
+    max-width: 100%;
+    height: 60px;
+    min-height: inherit;
+    @include container(row);
+    justify-content: space-between;
+  }
+
   position: fixed;
   top: 0;
   left: 0;
@@ -14,8 +23,10 @@ navbar {
   background-color: $smoke;
 
   .nav-item {
-    @include card(40px, 160px, $black)
-    @include clickable;
+    @media (min-width: $mobile-width) {
+      @include card(40px, 160px, $black)
+      @include clickable;
+    }
 
     margin: 1em;
     padding: 1em;
@@ -23,6 +34,10 @@ navbar {
     .circle-container{
       @include container(row)
       margin-top: 0.25em;
+
+      @media (max-width: $mobile-width) {
+        display: none;
+      }
 
       .experiments-link-icon {
         @include circle($tang);
@@ -36,12 +51,16 @@ navbar {
         display: block;
       }
     }
+
+    .user-icon {
+      font-size: 1.5em
+    }
   }
 
   #hyp-logo {
     @include container(row)
 
-    margin: 1em;
+    margin: 1em 0 0 1em;
     padding: 1em;
 
     #hyp-lightning-bolt {
@@ -52,6 +71,12 @@ navbar {
       transform: translate(0px, 0px);
       margin-right: 0.5em;
       margin-bottom: 1em;
+    }
+
+    #hyp-logo-text {
+      @media (max-width: $mobile-width) {
+        display: none;
+      }
     }
   }
 }
