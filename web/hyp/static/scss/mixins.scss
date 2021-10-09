@@ -120,6 +120,10 @@
     margin-bottom: 1em;
     width: 30%;
     text-align: center;
+
+    @media (max-width: $mobile-width) {
+      width: 75%;
+    }
   }
 
   input[type="submit"] {
