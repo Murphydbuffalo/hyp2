@@ -42,7 +42,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .mobile-only {
   @media (min-width: $mobile-width) {
-    display: none;
+    display: none !important;
   }
 }
 
