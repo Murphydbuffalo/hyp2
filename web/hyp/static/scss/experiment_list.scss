@@ -22,6 +22,11 @@
     @include clickable;
 
     .name {
+      @media (max-width: $mobile-width) {
+        @include card(auto, 80%);
+        margin-bottom: 0;
+      }
+
       @include card(auto, 50%);
       margin-bottom: 0;
     }
@@ -30,6 +35,10 @@
       @include container(column);
       @include card(auto, 30%);
       margin: 1.5em 0 0 0;
+
+      @media (max-width: $mobile-width) {
+        display: none;
+      }
     }
   }
 }
