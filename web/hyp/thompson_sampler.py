@@ -1,5 +1,7 @@
 import numpy as np
 
+from scipy.stats import beta
+
 
 class ThompsonSampler:
     def __init__(self, variants):
@@ -21,6 +23,14 @@ class ThompsonSampler:
 
         return {id: winner_counts[id] / float(total) for id in winner_counts.keys()}
 
+    def uncertainty(self):
+        if any([self.interval_width(v) >= 0.25 for v in self.variants]):
+            return "High"
+        elif any([self.interval_width(v) >= 0.10 for v in self.variants]):
+            return "Moderate"
+        else:
+            return "Low"
+
     # private
 
     def samples(self):
@@ -30,7 +40,7 @@ class ThompsonSampler:
 
             result = {
                 "variant": variant,
-                "sampled_parameter": np.random.beta(variant.alpha(), variant.beta())
+                "sampled_parameter": np.random.beta(self.alpha(variant), self.beta(variant))
             }
 
             samples.append(result)
@@ -42,3 +52,8 @@ class ThompsonSampler:
 
     def beta(self, variant):
         return variant.num_interactions - variant.num_conversions + 1
+
+    def interval_width(self, variant, mass=0.97):
+        interval_start, interval_end = beta.interval(mass, self.alpha(variant), self.beta(variant))
+
+        return interval_end - interval_start
