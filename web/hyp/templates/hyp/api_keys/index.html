@@ -7,8 +7,6 @@
       <a id="new-api-key" href={% url "new_api_key" %}>
         <button class="button-primary">New</button>
       </a>
-    {% else %}
-      <div id="spacer"></div>
     {% endif %}
 
     {% for api_key in api_keys %}

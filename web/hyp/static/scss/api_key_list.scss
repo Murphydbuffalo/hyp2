@@ -12,10 +12,6 @@
     }
   }
 
-  #spacer {
-    margin: 2em 0;
-  }
-
   .list-item {
     @include card(120px, 90%);
     @include container(row, flex-start);
