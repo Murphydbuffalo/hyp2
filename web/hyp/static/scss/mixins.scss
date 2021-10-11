@@ -130,3 +130,13 @@
     @include primary-button;
   }
 }
+
+@mixin logo {
+  width: 20px;
+  height: 34px;
+  overflow: visible;
+  display: block;
+  transform: translate(0px, 0px);
+  margin-right: 0.5em;
+  margin-bottom: 1em;
+}

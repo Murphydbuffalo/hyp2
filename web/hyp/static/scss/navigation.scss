@@ -64,13 +64,7 @@ navbar {
     padding: 1em;
 
     #hyp-lightning-bolt {
-      width: 20px;
-      height: 34px;
-      overflow: visible;
-      display: block;
-      transform: translate(0px, 0px);
-      margin-right: 0.5em;
-      margin-bottom: 1em;
+      @include logo;
     }
 
     #hyp-logo-text {
