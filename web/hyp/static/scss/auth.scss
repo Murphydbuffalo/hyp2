@@ -7,12 +7,14 @@
 
   input, button {
     width: 50%;
+
+    @media (max-width: $mobile-width) {
+      width: 80%;
+    }
   }
 
   #hyp-logo {
-    @include container(row)
-
-    margin-left: 40%;
+    @include container(row, $justify-content: center)
 
     #hyp-lightning-bolt {
       @include logo;
@@ -20,6 +22,10 @@
 
     h5 {
       color: $white;
+
+      @media (max-width: $mobile-width) {
+        font-size: 2em;
+      }
     }
   }
 
