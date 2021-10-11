@@ -7,8 +7,6 @@
       <a id="new-experiment" href={% url "new_experiment" %}>
         <button class="button-primary">New</button>
       </a>
-    {% else %}
-      <div id="spacer"></div>
     {% endif %}
 
     {% for experiment in experiments %}
