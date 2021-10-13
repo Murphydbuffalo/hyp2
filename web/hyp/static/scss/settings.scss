@@ -17,8 +17,7 @@
   }
 
   #actions {
-    @include container(row);
-    align-items: unset;
+    @include container(row, $align-items: unset);
 
     #sign-out {
       @include primary-button;
