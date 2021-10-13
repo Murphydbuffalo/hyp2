@@ -19,9 +19,11 @@
         </form>
       {% endif %}
 
-      <a href={% url "api_keys" %}>
-        <button id="api-keys" >Manage API keys</button>
-      </a>
+      {% if perms.hyp.view_apikey %}
+        <a href={% url "api_keys" %}>
+          <button id="api-keys" >Manage API keys</button>
+        </a>
+      {% endif %}
     </div>
   </div>
 {% endblock %}
