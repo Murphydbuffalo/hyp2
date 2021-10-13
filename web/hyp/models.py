@@ -2,8 +2,8 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models, connection
 from uuid import uuid4
 from os import environ
-from scipy.stats import beta
 from datetime import datetime, timedelta
+from hyp.thompson_sampler import ThompsonSampler
 
 
 class Customer(models.Model):
@@ -87,21 +87,8 @@ class Experiment(models.Model):
     def total_interactions(self):
         return sum([v.num_interactions for v in self.variant_set.all()])
 
-    def uncertainty_style(self):
-        if self.uncertainty_level() == "High":
-            return "high-uncertainty"
-        elif self.uncertainty_level() == "Moderate":
-            return "moderate-uncertainty"
-        else:
-            return "low-uncertainty"
-
     def uncertainty_level(self):
-        if any([v.interval_width() >= 0.25 for v in self.variant_set.all()]):
-            return "High"
-        elif any([v.interval_width() >= 0.10 for v in self.variant_set.all()]):
-            return "Moderate"
-        else:
-            return "Low"
+        return ThompsonSampler(self.variant_set.all()).uncertainty()
 
     def history(self, days=90):
         lookback_date = datetime.now().date() - timedelta(days=days)
@@ -173,12 +160,6 @@ class Variant(models.Model):
     def __str__(self):
         return self.name
 
-    def alpha(self):
-        return self.num_conversions + 1
-
-    def beta(self):
-        return self.num_interactions + 1
-
     def traffic_split_to_date(self):
         if self.experiment.total_interactions() == 0:
             return 0.0
@@ -190,11 +171,6 @@ class Variant(models.Model):
             return 0.0
 
         return float(self.num_conversions) / float(self.num_interactions)
-
-    def interval_width(self, mass=0.97):
-        interval_start, interval_end = beta.interval(mass, self.alpha(), self.beta())
-
-        return interval_end - interval_start
 
 
 class InteractionManager(models.Manager):
