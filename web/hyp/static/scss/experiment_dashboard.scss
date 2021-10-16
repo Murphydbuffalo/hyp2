@@ -27,6 +27,7 @@
 
   #chart-container {
     @include card(600px, 100%);
+    box-sizing: border-box;
 
     #toggles {
       button {
