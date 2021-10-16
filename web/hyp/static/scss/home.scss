@@ -11,7 +11,7 @@
   }
 
   .card {
-    @include card(280px, 280px);
+    @include card($height: 280px, $width: 280px);
     @include container(column);
     @include clickable;
 

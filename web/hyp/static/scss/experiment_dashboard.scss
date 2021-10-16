@@ -10,7 +10,8 @@
     @include container(row);
 
     .subheader-card {
-      @include card(auto, 50%);
+      @include card($width: 50%);
+
       h4 {
         margin-top: 1em;
       }
@@ -21,12 +22,12 @@
     @include container(row);
 
     .variant-details {
-      @include card(auto, 33%);
+      @include card($width: 33%);
     }
   }
 
   #chart-container {
-    @include card(600px, 100%);
+    @include card($height: 600px, $width: 100%);
     box-sizing: border-box;
 
     #toggles {
@@ -42,7 +43,7 @@
     }
 
     #experiment-chart {
-      @include card(500px, 95%, $black);
+      @include card($height: 500px, $width: 95%, $background-color: $black);
       padding: 0 1em;
       margin: 1em 0;
     }

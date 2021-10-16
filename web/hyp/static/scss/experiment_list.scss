@@ -13,23 +13,23 @@
   }
 
   .list-item {
-    @include card(120px, 90%);
+    @include card($height: 120px, $width: 90%);
     @include container(row);
     @include clickable;
 
     .name {
       @media (max-width: $mobile-width) {
-        @include card(auto, 80%);
+        @include card($width: 80%);
         margin-bottom: 0;
       }
 
-      @include card(auto, 50%);
+      @include card($width: 50%);
       margin-bottom: 0;
     }
 
     .info {
       @include container(column);
-      @include card(auto, 30%);
+      @include card($width: 30%);
       margin: 1.5em 0 0 0;
 
       @media (max-width: $mobile-width) {

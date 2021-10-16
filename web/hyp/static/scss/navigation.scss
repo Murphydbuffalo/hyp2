@@ -10,7 +10,7 @@ navbar {
 
   .nav-item {
     @media (min-width: $mobile-width) {
-      @include card(40px, 160px, $black)
+      @include card($height: 40px, $width: 160px, $background-color: $black)
       @include clickable;
     }
 

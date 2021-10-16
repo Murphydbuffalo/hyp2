@@ -3,7 +3,7 @@
 
 #settings {
   #user-info {
-    @include card(auto, 90%);
+    @include card($width: 90%);
     @include non-clickable;
 
     h5 {

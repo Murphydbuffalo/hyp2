@@ -13,7 +13,7 @@
   }
 
   .list-item {
-    @include card(120px, 90%);
+    @include card($height: 120px, $width: 90%);
     @include container(row, flex-start);
     @include non-clickable;
 

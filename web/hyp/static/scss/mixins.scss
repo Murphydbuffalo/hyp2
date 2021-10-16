@@ -12,7 +12,7 @@
   }
 }
 
-@mixin card($height, $width, $background-color: $smoke) {
+@mixin card($width, $height: auto, $background-color: $smoke) {
   display: block;
   border-radius: 16px;
   padding: 1em;
