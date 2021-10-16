@@ -23,6 +23,13 @@ body {
   color: $white;
   line-height: 1.2em;
   font-weight: 400;
+  display: grid;
+  grid-template-columns: 15fr 85fr;
+
+  @media (max-width: $mobile-width) {
+    grid-template-columns: 1fr;
+    grid-template-rows: 60px auto;
+  }
 }
 
 h1, h2, h3, h4, h5, h6 {
