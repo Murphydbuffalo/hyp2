@@ -7,7 +7,6 @@
 @import "mixins";
 @import "navigation";
 @import "settings";
-@import "superadmin";
 @import "utils";
 @import "variables";
 
@@ -47,16 +46,6 @@ h1, h2, h3, h4, h5, h6 {
   h6 { font-size: 1.5rem; }
 }
 
-.mobile-only {
-  @media (min-width: $mobile-width) {
-    display: none !important;
-  }
-}
-
-.header {
-  @include header;
-}
-
 main {
   position: relative;
   width: 100%;
@@ -93,4 +82,8 @@ i {
 form:not(.inline) {
   @include form;
   width: 90%;
+}
+
+.header {
+  @include header;
 }
