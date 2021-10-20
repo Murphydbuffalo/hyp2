@@ -1,0 +1,80 @@
+@import "variables";
+@import "mixins";
+
+@font-face {
+  font-family: "Karrik";
+  src: url("../fonts/KarrikRegular.woff") format("woff");
+  font-display: block;
+}
+
+body {
+  font-family: "Karrik";
+  background-color: $black;
+  color: $white;
+  line-height: 1.2em;
+  font-weight: 400;
+  display: grid;
+  grid-template-columns: 15fr 85fr;
+
+  @media (max-width: $mobile-width) {
+    grid-template-columns: 1fr;
+    grid-template-rows: 60px auto;
+  }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+  font-weight: 300;
+}
+
+@media (min-width: 550px) {
+  h1 { font-size: 5.0rem; }
+  h2 { font-size: 4.2rem; }
+  h3 { font-size: 3.6rem; }
+  h4 { font-size: 3.0rem; }
+  h5 { font-size: 2.4rem; }
+  h6 { font-size: 1.5rem; }
+}
+
+main {
+  position: relative;
+  width: 100%;
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+main h1:first-child, h2:first-child, h3:first-child {
+  margin-top: 2em;
+
+  @media (max-width: $mobile-width) {
+    margin-top: 4em;
+  }
+}
+
+p {
+  margin-top: 0;
+}
+
+a {
+  text-decoration: none;
+  color: $white;
+  &:visited {
+    color: $white;
+  }
+}
+
+i {
+  color: $tang;
+}
+
+form:not(.inline) {
+  @include form;
+  width: 90%;
+}
+
+.header {
+  @include header;
+}
