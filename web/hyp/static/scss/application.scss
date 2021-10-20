@@ -1,12 +1,32 @@
+/*
+We write our CSS according to Maintainable CSS: https://maintainablecss.com/
+
+This means we organize our styles into modules (collections of components),
+components, and states (which typically modify the normal styles, eg an error state)
+
+To avoid difficulties overriding selectors with a high specificity we use
+flat, class-based selectors of the form `.module-component-state`.
+
+Sadly, the `django-sass` library doesn't allow for importing files from a parent
+directory, so we don't nest our Sass files in directories like `modules/`.
+*/
+
+/* Modules */
 @import "auth";
-@import "base";
 @import "api_key_list";
 @import "experiment_dashboard";
 @import "experiment_form";
 @import "experiment_list";
 @import "home";
-@import "mixins";
 @import "navigation";
 @import "settings";
+
+/* Components */
+@import "mixins";
+
+/* States */
+
+/* Miscellaneous */
+@import "base";
 @import "utils";
 @import "variables";
