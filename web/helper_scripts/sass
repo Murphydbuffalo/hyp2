@@ -2,4 +2,4 @@
 
 set -euxo pipefail
 
-python manage.py sass hyp/static/scss hyp/static/css --watch
+python manage.py sass hyp/static/scss/application.scss hyp/static/css/application.css --watch

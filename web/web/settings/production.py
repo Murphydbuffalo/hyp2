@@ -45,6 +45,7 @@ EMAIL_HOST_PASSWORD = environ.get('POSTMARK_ACCESS_TOKEN')
 
 DATABASES['default']['OPTIONS'] = {"sslmode": "require"}
 
-# We manually run the `collectstatic` command in `bin/postcompile`, which allows
-# us to compile Sass to CSS prior to doing so.
+# We manually run the `collectstatic` command in `bin/post_compile`, which is a
+# script Heroku runs before deploying the app. This allows us to compile Sass to
+# CSS prior to running `collectstatic`.
 DISABLE_COLLECTSTATIC=1
