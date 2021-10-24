@@ -128,7 +128,7 @@ class TestExperiments(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn('New Experiment', str(response.content))
         self.assertIn(
-            '<form method="post" class="newExperimentForm" action="/experiments/create/">',
+            '<form method="post" class="shared-form" action="/experiments/create/">',
             str(response.content)
         )
         self.assertIn('<input type="text" name="name"', str(response.content))
