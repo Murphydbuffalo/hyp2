@@ -26,9 +26,9 @@
     </div>
 
     <div class="experimentDetails-chartContainer">
-      <span class="experimentDetails-chartToggles">
-        <button id="show-traffic-splits" class="button-primary">Traffic splits</button>
-        <button id="show-conversion-rates">Conversion rates</button>
+      <span>
+        <button id="show-traffic-splits" class="experimentDetails-chartToggles-isActive">Traffic splits</button>
+        <button id="show-conversion-rates" class="experimentDetails-chartToggles-isInactive">Conversion rates</button>
       </span>
       <div id="experiment-chart" class="experimentDetails-chart"></div>
     </div>
@@ -54,20 +54,6 @@
     let metricName = "traffic_split";
     let chart;
 
-    document.querySelector("#show-traffic-splits").onclick = function(event) {
-      document.querySelector(".experimentDetails-chartToggles .button-primary").classList.remove("button-primary")
-      event.currentTarget.classList.add("button-primary")
-      metricName = "traffic_split";
-      renderChart();
-    };
-
-    document.querySelector("#show-conversion-rates").onclick = function(event) {
-      document.querySelector(".experimentDetails-chartToggles .button-primary").classList.remove("button-primary")
-      event.currentTarget.classList.add("button-primary")
-      metricName = "conversion_rate";
-      renderChart();
-    };
-
     function renderChart() {
       if (chart) {
         chart.dispose();
@@ -84,6 +70,30 @@
         dataKey: metricName,
       });
     }
+
+    function toggleActiveChartButton(event) {
+      const activeToggleClassName = "experimentDetails-chartToggles-isActive";
+      const inactiveToggleClassName = "experimentDetails-chartToggles-isInactive";
+      const activeToggle = document.querySelector("." + activeToggleClassName);
+      const inactiveToggle = document.querySelector("." + inactiveToggleClassName);
+
+      activeToggle.classList.add(inactiveToggleClassName);
+      activeToggle.classList.remove(activeToggleClassName);
+      inactiveToggle.classList.add(activeToggleClassName);
+      inactiveToggle.classList.remove(inactiveToggleClassName);
+    }
+
+    document.querySelector("#show-traffic-splits").onclick = function(event) {
+      toggleActiveChartButton(event);
+      metricName = "traffic_split";
+      renderChart();
+    };
+
+    document.querySelector("#show-conversion-rates").onclick = function(event) {
+      toggleActiveChartButton(event);
+      metricName = "conversion_rate";
+      renderChart();
+    };
 
     am4core.ready(renderChart);
   </script>

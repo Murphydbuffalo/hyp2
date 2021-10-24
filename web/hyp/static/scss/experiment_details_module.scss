@@ -26,17 +26,15 @@
   box-sizing: border-box;
 }
 
-.experimentDetails-chartToggles {
-  button {
-    @include button($black);
-    color: lighten($smoke, 50%);
-    border-radius: 4px;
-  }
+.experimentDetails-chartToggles-isInactive {
+  @include button($black);
+  color: lighten($smoke, 50%);
+  border-radius: 4px;
+}
 
-  .button-primary {
-    @include primary-button;
-    border-radius: 4px;
-  }
+.experimentDetails-chartToggles-isActive {
+  @include primary-button;
+  border-radius: 4px;
 }
 
 .experimentDetails-chart {
