@@ -5,6 +5,10 @@
   margin: 8em auto 0 auto;
   width: 50%;
 
+  @media (max-width: $mobile-width) {
+    width: 80%;
+  }
+
   input, button {
     width: 50%;
 
