@@ -128,7 +128,7 @@ class TestExperiments(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn('New Experiment', str(response.content))
         self.assertIn(
-            '<form method="post" id="new-experiment-form" action="/experiments/create/">',
+            '<form method="post" class="newExperimentForm" action="/experiments/create/">',
             str(response.content)
         )
         self.assertIn('<input type="text" name="name"', str(response.content))
@@ -141,7 +141,7 @@ class TestExperiments(TestCase):
             'variant_set-TOTAL_FORMS': ['2'],
             'variant_set-INITIAL_FORMS': ['0'],
             'variant_set-MIN_NUM_FORMS': ['2'],
-            'variant_set-MAX_NUM_FORMS': ['10'],
+            'variant_set-MAX_NUM_FORMS': ['5'],
             'variant_set-0-name': ['byee'],
             'variant_set-0-id': [''],
             'variant_set-0-experiment': [''],
@@ -167,7 +167,7 @@ class TestExperiments(TestCase):
             'variant_set-TOTAL_FORMS': ['2'],
             'variant_set-INITIAL_FORMS': ['0'],
             'variant_set-MIN_NUM_FORMS': ['2'],
-            'variant_set-MAX_NUM_FORMS': ['10'],
+            'variant_set-MAX_NUM_FORMS': ['5'],
             'variant_set-0-name': ['byee'],
             'variant_set-0-id': [''],
             'variant_set-0-experiment': [''],
@@ -187,7 +187,7 @@ class TestExperiments(TestCase):
             'variant_set-TOTAL_FORMS': ['2'],
             'variant_set-INITIAL_FORMS': ['0'],
             'variant_set-MIN_NUM_FORMS': ['2'],
-            'variant_set-MAX_NUM_FORMS': ['10'],
+            'variant_set-MAX_NUM_FORMS': ['5'],
             'variant_set-0-name': [''],
             'variant_set-0-id': [''],
             'variant_set-0-experiment': [''],
@@ -207,7 +207,7 @@ class TestExperiments(TestCase):
             'variant_set-TOTAL_FORMS': ['2'],
             'variant_set-INITIAL_FORMS': ['0'],
             'variant_set-MIN_NUM_FORMS': ['2'],
-            'variant_set-MAX_NUM_FORMS': ['10'],
+            'variant_set-MAX_NUM_FORMS': ['5'],
             'variant_set-0-name': ['DUPLICATE'],
             'variant_set-0-id': [''],
             'variant_set-0-experiment': [''],
@@ -226,7 +226,7 @@ class TestExperiments(TestCase):
             'variant_set-TOTAL_FORMS': ['2'],
             'variant_set-INITIAL_FORMS': ['0'],
             'variant_set-MIN_NUM_FORMS': ['2'],
-            'variant_set-MAX_NUM_FORMS': ['10'],
+            'variant_set-MAX_NUM_FORMS': ['5'],
             'variant_set-0-name': ['byee'],
             'variant_set-0-id': [''],
             'variant_set-0-experiment': [''],

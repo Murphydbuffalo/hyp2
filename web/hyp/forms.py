@@ -48,7 +48,7 @@ CreateVariantsFormset = inlineformset_factory(
     widgets={"name": TextInput(attrs={"placeholder": "Variant name"})},
     can_delete=False,
     min_num=2,
-    max_num=10,
+    max_num=5,
     extra=0,
     formset=BaseVariantFormSet,
 )

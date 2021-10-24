@@ -4,3 +4,7 @@
   border-radius: 16px;
   padding: 5px;
 }
+
+.hidden {
+  @include hidden;
+}

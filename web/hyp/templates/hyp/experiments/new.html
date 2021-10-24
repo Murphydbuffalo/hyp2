@@ -3,10 +3,10 @@
 {% block content %}
   <h3 class="header">New Experiment</h3>
 
-  <form method="post" id="new-experiment-form" action="{% url 'create_experiment' %}">
+  <form method="post" class="newExperimentForm" action="{% url 'create_experiment' %}">
     {% csrf_token %}
 
-    <table id="experiment-form-fields">
+    <table class="newExperimentForm-formFields">
       {% if unique_error %}
       <tr>
       <ul class="errorlist">
@@ -41,7 +41,7 @@
       </tr>
       {% endif %}
 
-      <div id="variant-form-fields">
+      <div class="newExperimentForm-variantFormFields">
         {% for form in variant_formset %}
         <tr>
           {{ form.name }}<br>
@@ -51,14 +51,15 @@
       </div>
     </table>
 
-    <div id="empty-form" class="hidden">
+    <div class="newExperimentForm-emptyVariantForm" class="hidden">
       {{ variant_formset.empty_form.name }}
     </div>
 
-    <button id="add-variant">Add variant</button>
+    <button class="newExperimentForm-addVariant">Add variant</button>
     <br>
     <br>
-    <input class='button-primary' type='submit' value='Save'>
+
+    <input type='submit' value='Save'>
   </form>
 
   <script src={% static "js/experiment_form.js" %}></script>
