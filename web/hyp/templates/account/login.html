@@ -11,12 +11,12 @@
   {% endfor %}
   {% endif %}
 
-  <form id="auth-form" action="{% url 'account_login' %}" method="post">
-    <div id="hyp-logo">
-      <div id="hyp-lightning-bolt">
+  <form class="authForm" action="{% url 'account_login' %}" method="post">
+    <div class="authForm-logoContainer">
+      <div class="authForm-logoIcon">
       {% include "hyp-lightning-bolt.svg" %}
       </div>
-      <h5>hyp</h5>
+      <h5 class="authForm-logoText">hyp</h5>
     </div>
 
     {% csrf_token %}
@@ -26,7 +26,7 @@
     <input type="submit" value="Sign in">
 
     <br>
-    <a id="sign-up" href="{% url 'account_signup' %}">
+    <a class="authForm-signUp" href="{% url 'account_signup' %}">
       Or sign up
     </a>
   </form>

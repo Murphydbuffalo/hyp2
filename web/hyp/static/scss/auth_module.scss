@@ -1,0 +1,40 @@
+@import "mixins";
+@import "variables";
+
+.authForm {
+  margin: 8em auto 0 auto;
+  width: 50%;
+
+  @media (max-width: $mobile-width) {
+    width: 80%;
+  }
+
+  input, button {
+    width: 50%;
+
+    @media (max-width: $mobile-width) {
+      width: 80%;
+    }
+  }
+}
+
+.authForm-logoContainer {
+  @include container(row, $justify-content: center)
+}
+
+.authForm-logoIcon {
+  @include lightning-bolt;
+}
+
+.authForm-logoText {
+  color: $white;
+
+  @media (max-width: $mobile-width) {
+    font-size: 2em;
+  }
+}
+
+.authForm-signUp {
+  display: block;
+  margin-top: 1em;
+}

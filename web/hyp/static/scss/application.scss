@@ -24,7 +24,7 @@ directory, so we don't nest our Sass files in directories like `modules/`.
 */
 
 /* Modules */
-@import "auth";
+@import "auth_module";
 @import "api_key_list";
 @import "experiment_dashboard";
 @import "experiment_form";
