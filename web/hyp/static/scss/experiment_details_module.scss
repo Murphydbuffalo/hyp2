@@ -1,0 +1,52 @@
+@import "variables";
+@import "mixins";
+
+.experimentDetails {
+  .header {
+    @include header(auto);
+  }
+}
+
+.experimentDetails-subheader {
+  @include container(row);
+}
+
+.experimentDetails-subheaderCard {
+  @include card($width: 50%);
+
+  h4 {
+    margin-top: 1em;
+  }
+}
+
+.experimentDetails-variants {
+  @include container(row);
+}
+
+.experimentDetails-variantCard {
+  @include card($width: 33%);
+}
+
+.experimentDetails-chartContainer {
+  @include card($height: 600px, $width: 100%);
+  box-sizing: border-box;
+}
+
+.experimentDetails-chartToggles {
+  button {
+    @include button($tang);
+    color: $smoke;
+    border-radius: 4px;
+  }
+
+  .button-primary {
+    @include primary-button;
+    border-radius: 4px;
+  }
+}
+
+.experimentDetails-chart {
+  @include card($height: 500px, $width: 95%, $background-color: $black);
+  padding: 0 1em;
+  margin: 1em 0;
+}

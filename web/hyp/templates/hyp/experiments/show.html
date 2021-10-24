@@ -8,34 +8,34 @@
 {% endblock %}
 
 {% block content %}
-  <div id="experiment-dashboard">
+  <div class="experimentDetails">
     <h3 class="header">{{ experiment.description }}</h3>
 
-    <div class="row">
-      <div class="subheader-card">
+    <div class="experimentDetails-subheader">
+      <div class="experimentDetails-subheaderCard">
         <p>Unique participants</p>
         <h4>
           {{ experiment.total_interactions }}
         </h4>
       </div>
 
-      <div class="subheader-card">
+      <div class="experimentDetails-subheaderCard">
         <p>Uncertainty</p>
         <h4>{{ experiment.uncertainty_level  }}</h4>
       </div>
     </div>
 
-    <div id="chart-container">
-      <span id="toggles">
+    <div class="experimentDetails-chartContainer">
+      <span class="experimentDetails-chartToggles">
         <button id="show-traffic-splits" class="button-primary">Traffic splits</button>
         <button id="show-conversion-rates">Conversion rates</button>
       </span>
-      <div id="experiment-chart"></div>
+      <div id="experiment-chart" class="experimentDetails-chart"></div>
     </div>
 
-    <div id="variants">
+    <div class="experimentDetails-variants">
       {% for variant in experiment.variant_set.all %}
-      <div class="variant-details">
+      <div class="experimentDetails-variantCard">
         <h4>{{ variant.name }}</h4>
         {% if variant.num_interactions == 0 %}
         <p>No data</p>
@@ -55,14 +55,14 @@
     let chart;
 
     document.querySelector("#show-traffic-splits").onclick = function(event) {
-      document.querySelector("#chart-container #toggles .button-primary").classList.remove("button-primary")
+      document.querySelector(".experimentDetails-chartToggles .button-primary").classList.remove("button-primary")
       event.currentTarget.classList.add("button-primary")
       metricName = "traffic_split";
       renderChart();
     };
 
     document.querySelector("#show-conversion-rates").onclick = function(event) {
-      document.querySelector("#chart-container #toggles .button-primary").classList.remove("button-primary")
+      document.querySelector(".experimentDetails-chartToggles .button-primary").classList.remove("button-primary")
       event.currentTarget.classList.add("button-primary")
       metricName = "conversion_rate";
       renderChart();
