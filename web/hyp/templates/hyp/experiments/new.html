@@ -1,7 +1,7 @@
 {% extends "hyp/layout.html" %}
 {% load static %}
 {% block content %}
-  <h3 class="header">New Experiment</h3>
+  <h3>New Experiment</h3>
 
   <form method="post" class="newExperimentForm" action="{% url 'create_experiment' %}">
     {% csrf_token %}

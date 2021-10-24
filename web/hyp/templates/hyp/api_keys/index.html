@@ -1,7 +1,7 @@
 {% extends "hyp/layout.html" %}
 {% block content %}
   <div class="apiKeyList">
-    <h3 class="header">API Keys</h3>
+    <h3>API Keys</h3>
 
     {% if perms.hyp.add_apikey %}
       <a href={% url "new_api_key" %}>
