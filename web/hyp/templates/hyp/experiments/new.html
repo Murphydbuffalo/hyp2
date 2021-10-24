@@ -28,7 +28,7 @@
       {% endif %}
     </table>
 
-     <table>
+     <div>
       {{ variant_formset.management_form }}
 
       {% if variant_formset.non_form_errors %}
@@ -43,23 +43,25 @@
 
       <div class="newExperimentForm-variantFormFields">
         {% for form in variant_formset %}
-        <tr>
-          {{ form.name }}<br>
-          {{ form.name.errors }}
-        </tr>
+        <div>{{ form.name }}</div>
+        <div>{{ form.name.errors }}</div>
         {% endfor %}
       </div>
-    </table>
-
-    <div class="newExperimentForm-emptyVariantForm" class="hidden">
-      {{ variant_formset.empty_form.name }}
     </div>
 
-    <button class="newExperimentForm-addVariant">Add variant</button>
-    <br>
-    <br>
+    <div class="newExperimentForm-emptyVariantForm" class="hidden">
+      <div class="newVariantInputContainer">
+        {{ variant_formset.empty_form.name }}
+      </div>
+    </div>
 
-    <input type='submit' value='Save'>
+    <div>
+      <button class="newExperimentForm-addVariant">Add variant</button>
+    </div>
+
+    <div>
+      <input type='submit' value='Save'>
+    </div>
   </form>
 
   <script src={% static "js/experiment_form.js" %}></script>

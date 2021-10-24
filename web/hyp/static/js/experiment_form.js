@@ -7,7 +7,7 @@ document.onreadystatechange = function(_event) {
     event.preventDefault();
     currentNumForms++;
 
-    const clonedInput = document.querySelector(".newExperimentForm-emptyVariantForm input").cloneNode(true);
+    const clonedInput = document.querySelector(".newExperimentForm-emptyVariantForm .newVariantInputContainer").cloneNode(true);
     const newInputHTML = clonedInput.outerHTML.replace(/__prefix__/g, currentNumForms - 1);
     document.querySelector(".newExperimentForm-variantFormFields").insertAdjacentHTML("beforeend", newInputHTML);
     document.querySelector("#id_variant_set-TOTAL_FORMS").value = currentNumForms;
