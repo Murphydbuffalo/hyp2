@@ -1,0 +1,21 @@
+@import "variables";
+
+@mixin error {
+  color: red;
+}
+
+@mixin hidden {
+  display: none;
+}
+
+@mixin mobile-only {
+  @media (min-width: $mobile-width) {
+    display: none;
+  }
+}
+
+@mixin no-mobile {
+  @media (max-width: $mobile-width) {
+    display: none;
+  }
+}

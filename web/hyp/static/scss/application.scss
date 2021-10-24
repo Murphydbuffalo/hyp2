@@ -1,8 +1,20 @@
 /*
 We write our CSS according to Maintainable CSS: https://maintainablecss.com/
 
-This means we organize our styles into modules (collections of components),
-components, and states (which typically modify the normal styles, eg an error state)
+This means we organize our styles into modules, components, states, and modifiers.
+
+Modules are collections of components. They don't make sense/break if you remove
+one of the constituent components. You might use multiple modules in a page, but
+removing any one module shouldn't break the others.
+
+Components are independent and reusable.
+
+Some examples:
+"In a website the header, registration form, shopping basket, article, product list,
+navigation and homepage promo can all be considered to be modules."
+
+"A logo module might consist of copy, an image and a link, each of which are components.
+Without the image the logo is broken, without the link the logo is incomplete."
 
 To avoid difficulties overriding selectors with a high specificity we use
 flat, class-based selectors of the form `.module-component-state`.
@@ -18,13 +30,14 @@ directory, so we don't nest our Sass files in directories like `modules/`.
 @import "experiment_form";
 @import "experiment_list";
 @import "home";
-@import "navigation";
+@import "navbar_module";
 @import "settings";
 
 /* Components */
 @import "mixins";
 
 /* States */
+@import "states";
 
 /* Miscellaneous */
 @import "base";

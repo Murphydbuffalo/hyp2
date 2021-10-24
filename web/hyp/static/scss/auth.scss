@@ -17,7 +17,7 @@
     @include container(row, $justify-content: center)
 
     #hyp-lightning-bolt {
-      @include logo;
+      @include lightning-bolt;
     }
 
     h5 {

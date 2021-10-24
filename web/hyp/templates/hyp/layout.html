@@ -38,30 +38,26 @@
 
 <body>
   {% if user.is_authenticated %}
-  <navbar>
-    <a href={% url "home" %}>
-      <div id="hyp-logo">
+  <navbar class="navbar">
+    <a class="navbar-logoContainer" href={% url "home" %}>
+      <div class="navbar-logoIcon">
         {% include "hyp-lightning-bolt.svg" %}
-        <h5 id="hyp-logo-text">hyp</h5>
       </div>
+      <h5 class="navbar-logoText">hyp</h5>
     </a>
 
-    <a class="nav-item" href={% url "experiments" %}>
-      <div class="circle-container">
-        <span class="experiments-link-icon"></span>
-        <span class="circle-text">Experiments</span>
-      </div>
+    <a class="navbar-itemContainer" href={% url "experiments" %}>
+      <span class="navbar-itemIcon--experiments"></span>
+      <span class="navbar-itemText">Experiments</span>
     </a>
 
-    <a class="nav-item" href={% url "settings" %}>
-      <div class="circle-container">
-        <span class="settings-link-icon"></span>
-        <span class="circle-text">Settings</span>
-      </div>
+    <a class="navbar-itemContainer" href={% url "settings" %}>
+      <span class="navbar-itemIcon--settings"></span>
+      <span class="navbar-itemText">Settings</span>
     </a>
 
-    <a class="nav-item mobile-only" href={% url "settings" %}>
-      <i class="user-icon fas fa-user"></i>
+    <a class="navbar-itemContainer-isMobile" href={% url "settings" %}>
+      <i class="navbar-itemText-isMobile fas fa-user"></i>
     </a>
   </navbar>
   {% endif %}
