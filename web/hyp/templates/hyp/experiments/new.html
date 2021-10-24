@@ -3,7 +3,7 @@
 {% block content %}
   <h3>New Experiment</h3>
 
-  <form method="post" class="newExperimentForm" action="{% url 'create_experiment' %}">
+  <form method="post" class="shared-form" action="{% url 'create_experiment' %}">
     {% csrf_token %}
 
     <table class="newExperimentForm-formFields">

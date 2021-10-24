@@ -98,29 +98,3 @@
   @include button;
   background-color: $purple;
 }
-
-@mixin form {
-  padding: 4em 1em;
-  background-color: $smoke;
-  border-radius: 16px;
-  color: $grey;
-  text-align: center;
-
-  input {
-    line-height: 2em;
-    background-color: $black;
-    border-radius: 16px;
-    border: none;
-    margin-bottom: 1em;
-    width: 30%;
-    text-align: center;
-
-    @media (max-width: $mobile-width) {
-      width: 75%;
-    }
-  }
-
-  input[type="submit"] {
-    @include primary-button;
-  }
-}

@@ -1,22 +1,11 @@
 @import "mixins";
 @import "variables";
 
-.authForm {
-  margin: 8em auto 0 auto;
-  width: 50%;
-  @include form;
-
-  @media (max-width: $mobile-width) {
-    width: 80%;
-  }
-
-  input, button {
-    width: 50%;
-
-    @media (max-width: $mobile-width) {
-      width: 80%;
-    }
-  }
+.authFormContainer {
+  width: 100%;
+  margin-top: 8em;
+  display: flex;
+  justify-content: center;
 }
 
 .authForm-logoContainer {

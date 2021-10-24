@@ -1,11 +1,6 @@
 @import "mixins";
 @import "variables";
 
-.newExperimentForm {
-  @include form;
-  width: 90%;
-}
-
 .newExperimentForm-addVariant {
   @include button($tang);
   margin-bottom: 2em;

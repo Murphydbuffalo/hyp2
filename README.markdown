@@ -170,6 +170,7 @@ such, all of these components are considered to be part of a `.shared` module,
 eg `.shared-logoIcon`.
 
 I think of mixins (defined in `mixins.scss`) as either helper functions that
-take arguments (eeg `flex-container`) or as a set of styles that doesn't visually make sense on its
-own (eg `clickable`).
+take arguments (eg `flex-container`) or as a set of styles that doesn't visually make sense on its
+own (eg `clickable`). As of this writing there are a few notable exceptions to this:
+`button` and `primary-button`. Those mixins could make sense as shared components with modifiers.
 

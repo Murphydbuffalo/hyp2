@@ -1,7 +1,0 @@
-@import "mixins";
-@import "variables";
-
-.newApiKeyForm {
-  @include form;
-  width: 90%;
-}

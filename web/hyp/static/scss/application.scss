@@ -1,7 +1,6 @@
 /* Modules */
 @import "auth_module";
 @import "api_key_list_module";
-@import "api_key_form_module";
 @import "experiment_details_module";
 @import "experiment_form_module";
 @import "experiment_list_module";
@@ -10,6 +9,7 @@
 @import "settings_module";
 
 /* Components shared across multiple modules */
+@import "form_component";
 @import "logo_icon_component";
 
 /* States */
