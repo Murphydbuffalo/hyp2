@@ -34,13 +34,13 @@ directory, so we don't nest our Sass files in directories like `modules/`.
 @import "navbar_module";
 @import "settings";
 
-/* Components */
-@import "mixins";
+/* Components shared across multiple modules */
 
 /* States */
 @import "states";
 
 /* Miscellaneous */
 @import "base";
+@import "mixins";
 @import "utils";
 @import "variables";
