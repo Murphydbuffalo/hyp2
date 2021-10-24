@@ -2,15 +2,15 @@
 {% block content %}
   <h3 class="header">Setting up Hyp</h3>
 
-  <div id="home-container">
-    <a class="card" href={% url "experiments" %}>
-      <i class="fas fa-chart-line"></i>
-      <p>Check out a demo experiment</p>
+  <div class="home">
+    <a class="home-card" href={% url "experiments" %}>
+      <i class="home-cardIcon fas fa-chart-line"></i>
+      <p class="home-cardText">Check out a demo experiment</p>
     </a>
 
-    <a class="card" href={% url "api_keys" %}>
-      <i class="fas fa-key"></i>
-      <p>Create an API key</p>
+    <a class="home-card" href={% url "api_keys" %}>
+      <i class="home-cardIcon fas fa-key"></i>
+      <p class="home-cardText">Create an API key</p>
     </a>
   </div>
 {% endblock %}

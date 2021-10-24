@@ -1,0 +1,27 @@
+@import "mixins";
+@import "variables";
+
+.home {
+  @media (max-width: $mobile-width) {
+    @include container(column);
+  }
+
+  @media (min-width: $mobile-width) {
+    @include container(row);
+  }
+}
+
+.home-card {
+  @include card($height: 280px, $width: 280px);
+  @include container(column);
+  @include clickable;
+}
+
+.home-cardIcon {
+  margin-bottom: 1em;
+  font-size: 2em;
+}
+
+.home-cardText {
+  font-size: 1.25em;
+}
