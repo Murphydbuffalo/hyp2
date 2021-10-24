@@ -1,31 +1,28 @@
 {% extends "hyp/layout.html" %}
 {% block content %}
-  <div id="api-key-list">
+  <div class="apiKeyList">
     <h3 class="header">API Keys</h3>
 
     {% if perms.hyp.add_apikey %}
-      <a id="new-api-key" href={% url "new_api_key" %}>
-        <button class="button-primary">New</button>
+      <a href={% url "new_api_key" %}>
+        <button class="apiKeyList-newApiKeyButton">New</button>
       </a>
     {% endif %}
 
     {% for api_key in api_keys %}
-      <div class="list-item">
-        <div class="api-key-description">
-          <h5>
-            <span>{{ api_key.description }}</span>
+      <div class="apiKeyList-listItem">
+        <h5>
+          <span>{{ api_key.description }}</span>
 
-            {% if api_key.is_active and perms.hyp.change_apikey %}
-            <form class="inline" action="{% url 'deactivate_api_key' api_key_id=api_key.id %}" method="patch" onsubmit="return confirm('This will break any API clients using this key. API keys cannot be reactivated. Are you sure?');">
-              <button type="submit">
-                <i class="fas fa-trash"></i>
-              </button>
-            </form>
-            {% endif %}
-          </h5>
-          <p>{{ api_key }}</p>
-        </div>
-
+          {% if api_key.is_active and perms.hyp.change_apikey %}
+          <form class="apiKeyList-deleteListItem" action="{% url 'deactivate_api_key' api_key_id=api_key.id %}" method="patch" onsubmit="return confirm('This will break any API clients using this key. API keys cannot be reactivated. Are you sure?');">
+            <button type="submit">
+              <i class="fas fa-trash"></i>
+            </button>
+          </form>
+          {% endif %}
+        </h5>
+        <p>{{ api_key }}</p>
       </div>
     {% endfor %}
   </div>

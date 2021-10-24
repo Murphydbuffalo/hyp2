@@ -1,21 +1,21 @@
 {% extends "hyp/layout.html" %}
 {% block content %}
-  <div id="experiment-list">
+  <div class="experimentList">
     <h3 class="header">Experiments</h3>
 
     {% if perms.hyp.add_experiment %}
-      <a id="new-experiment" href={% url "new_experiment" %}>
-        <button class="button-primary">New</button>
+      <a href={% url "new_experiment" %}>
+        <button class="experimentList-newExperimentButton">New</button>
       </a>
     {% endif %}
 
     {% for experiment in experiments %}
-    <a class="list-item" href={% url "experiment" experiment.id %}>
-      <div class="name">
+    <a class="experimentList-listItem" href={% url "experiment" experiment.id %}>
+      <div class="experimentList-listItemName">
         <h4>{{ experiment.description }}</h4>
       </div>
 
-      <div class="info">
+      <div class="experimentList-listItemInfo">
         <p>Unique participants: {{ experiment.total_interactions }}</p>
         <p>Uncertainty: {{ experiment.uncertainty_level  }}</p>
         {% if experiment.total_interactions > 0 %}

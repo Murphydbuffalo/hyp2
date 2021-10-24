@@ -1,0 +1,37 @@
+@import "variables";
+@import "mixins";
+
+.experimentList {
+  @include container(column, flex-start);
+}
+
+.experimentList-newExperimentButton {
+  margin: 2em 0;
+  @include primary-button;
+}
+
+.experimentList-listItem {
+  @include card($height: 120px, $width: 90%);
+  @include container(row);
+  @include clickable;
+}
+
+.experimentList-listItemName {
+  @media (max-width: $mobile-width) {
+    @include card($width: 80%);
+    margin-bottom: 0;
+  }
+
+  @include card($width: 50%);
+  margin-bottom: 0;
+}
+
+.experimentList-listItemInfo {
+  @include container(column);
+  @include card($width: 30%);
+  margin: 1.5em 0 0 0;
+
+  @media (max-width: $mobile-width) {
+    display: none;
+  }
+}
