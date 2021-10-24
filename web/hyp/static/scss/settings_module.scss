@@ -1,0 +1,29 @@
+@import "variables";
+@import "mixins";
+
+.settings-userInfo {
+  @include card($width: 90%);
+  @include non-clickable;
+
+  h5 {
+    display: inline;
+    vertical-align: middle;
+
+    i {
+      margin-right: 0.25em;
+    }
+  }
+}
+
+.settings-actionsContainer {
+  @include container(row, $align-items: unset);
+}
+
+.settings-signOutAction {
+  @include primary-button;
+  margin: 0 1em 0 0;
+}
+
+.settings-manageApiKeysAction {
+  @include button;
+}
