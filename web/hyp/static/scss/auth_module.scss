@@ -20,7 +20,7 @@
 }
 
 .authForm-logoContainer {
-  @include container(row, $justify-content: center)
+  @include flexbox-container(row, $justify-content: center)
 }
 
 .authForm-logoText {

@@ -16,7 +16,7 @@
 }
 
 .settings-actionsContainer {
-  @include container(row, $align-items: unset);
+  @include flexbox-container(row, $align-items: unset);
 }
 
 .settings-signOutAction {

@@ -12,7 +12,7 @@
   background-color: $smoke;
 
   @media (max-width: $mobile-width) {
-    @include container(row, $justify-content: space-between);
+    @include flexbox-container(row, $justify-content: space-between);
     height: 60px;
     min-height: 60px;
     width: 100%;
@@ -20,7 +20,7 @@
 }
 
 .navbar-logoContainer {
-  @include container(row)
+  @include flexbox-container(row)
 
   margin: 1em 0 0 1em;
   padding: 1em;
@@ -36,7 +36,7 @@
   @include card($height: 40px, $width: 160px, $background-color: $black)
   @include clickable;
   @include no-mobile;
-  @include container(row)
+  @include flexbox-container(row)
 }
 
 .navbar-itemIcon--experiments {

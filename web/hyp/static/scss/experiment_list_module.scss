@@ -2,7 +2,7 @@
 @import "mixins";
 
 .experimentList {
-  @include container(column, flex-start);
+  @include flexbox-container(column, flex-start);
 }
 
 .experimentList-newExperimentButton {
@@ -12,7 +12,7 @@
 
 .experimentList-listItem {
   @include card($height: 120px, $width: 90%);
-  @include container(row);
+  @include flexbox-container(row);
   @include clickable;
 }
 
@@ -27,7 +27,7 @@
 }
 
 .experimentList-listItemInfo {
-  @include container(column);
+  @include flexbox-container(column);
   @include card($width: 30%);
   margin: 1.5em 0 0 0;
 

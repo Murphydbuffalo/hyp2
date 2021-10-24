@@ -2,7 +2,7 @@
 @import "mixins";
 
 .experimentDetails-subheader {
-  @include container(row);
+  @include flexbox-container(row);
 }
 
 .experimentDetails-subheaderCard {
@@ -14,7 +14,7 @@
 }
 
 .experimentDetails-variants {
-  @include container(row);
+  @include flexbox-container(row);
 }
 
 .experimentDetails-variantCard {

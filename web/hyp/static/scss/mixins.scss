@@ -1,6 +1,6 @@
 @import "variables";
 
-@mixin container($direction, $align-items: center, $justify-content: null) {
+@mixin flexbox-container($direction, $align-items: center, $justify-content: null) {
   display: flex;
   flex-direction: $direction;
   align-items: $align-items;
