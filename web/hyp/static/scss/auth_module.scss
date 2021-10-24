@@ -4,6 +4,7 @@
 .authForm {
   margin: 8em auto 0 auto;
   width: 50%;
+  @include form;
 
   @media (max-width: $mobile-width) {
     width: 80%;
