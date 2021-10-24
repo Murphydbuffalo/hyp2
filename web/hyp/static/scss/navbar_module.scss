@@ -26,10 +26,6 @@
   padding: 1em;
 }
 
-.navbar-logoIcon {
-  @include lightning-bolt;
-}
-
 .navbar-logoText {
   @include no-mobile;
 }

@@ -22,10 +22,6 @@
   @include container(row, $justify-content: center)
 }
 
-.authForm-logoIcon {
-  @include lightning-bolt;
-}
-
 .authForm-logoText {
   color: $white;
 
