@@ -35,6 +35,7 @@ directory, so we don't nest our Sass files in directories like `modules/`.
 @import "settings_module";
 
 /* Components shared across multiple modules */
+@import "header_component";
 
 /* States */
 @import "states";

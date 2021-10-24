@@ -1,12 +1,6 @@
 @import "variables";
 @import "mixins";
 
-.experimentDetails {
-  .header {
-    @include header(auto);
-  }
-}
-
 .experimentDetails-subheader {
   @include container(row);
 }
