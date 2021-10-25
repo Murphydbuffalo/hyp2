@@ -1,19 +1,30 @@
 {% extends "hyp/layout.html" %}
 {% block content %}
-  <h1>Experiments</h1>
-  {% if perms.hyp.add_experiment %}
-    <h2>
-      <a href={% url "new_experiment" %}>
-        New Experiment
-      </a>
-    </h2>
-  {% endif %}
+  <div class="experimentList">
+    <h3>Experiments</h3>
 
-  <ul class="experiment-list">
-  {% for experiment in experiments %}
-    <li>
-      <a href={% url "experiment" experiment.id %}>{{ experiment.description }}</a>
-    </li>
-  {% endfor %}
-  </ul>
+    {% if perms.hyp.add_experiment %}
+      <a class="experimentList-newExperimentButtonContainer" href={% url "new_experiment" %}>
+        <button class="shared-primaryButton">New</button>
+      </a>
+    {% endif %}
+
+    {% for experiment in experiments %}
+    <a class="experimentList-listItem" href={% url "experiment" experiment.id %}>
+      <div class="experimentList-listItemName">
+        <h4>{{ experiment.description }}</h4>
+      </div>
+
+      <div class="experimentList-listItemInfo">
+        <p>Unique participants: {{ experiment.total_interactions }}</p>
+        <p>Uncertainty: {{ experiment.uncertainty_level  }}</p>
+        {% if experiment.total_interactions > 0 %}
+          <p>Lift: {% widthratio experiment.lift 0.01 1 %}%</p>
+        {% else %}
+          <p>Lift: N/A</p>
+        {% endif %}
+      </div>
+    </a>
+    {% endfor %}
+  </div>
 {% endblock %}

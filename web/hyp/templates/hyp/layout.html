@@ -21,7 +21,6 @@
 <meta property='twitter:card' content='summary_large_image'>
 
 <link rel="stylesheet" media="all" href={% static "css/vendor/normalize.css" %} />
-<link rel="stylesheet" media="all" href={% static "css/vendor/skeleton.css" %} />
 <link rel="stylesheet" media="all" href={% static "css/application.css" %} />
 <script async defer src="https://kit.fontawesome.com/936caaa440.js" crossorigin="anonymous"></script>
 
@@ -38,37 +37,32 @@
 </head>
 
 <body>
-  <navbar class="horizontal">
-    <a class="logo" href={% url "home" %}>
-      {% include "hyp-logo.svg" %}
+  {% if user.is_authenticated %}
+  <navbar class="navbar">
+    <a class="navbar-logoContainer" href={% url "home" %}>
+      <div class="shared-logoIcon">
+        {% include "hyp-lightning-bolt.svg" %}
+      </div>
+      <h5 class="navbar-logoText">hyp</h5>
     </a>
 
-    <div class="auth">
-      {% if user.is_authenticated %}
-        <a href={% url "experiments" %}>
-          <i class="fas fa-flask"></i>
-        </a>
+    <a class="navbar-itemContainer" href={% url "experiments" %}>
+      <span class="navbar-itemIcon--experiments"></span>
+      <span class="navbar-itemText">Experiments</span>
+    </a>
 
-        <a href={% url "profile" %}>
-          <i class="fas fa-user"></i>
-        </a>
+    <a class="navbar-itemContainer" href={% url "settings" %}>
+      <span class="navbar-itemIcon--settings"></span>
+      <span class="navbar-itemText">Settings</span>
+    </a>
 
-       <form action="{% url 'account_logout' %}" method="post">
-         {% csrf_token %}
-         {{ form.as_p }}
-         <input class="link" name="logout" type="submit" value="Sign out">
-        </form>
-      {% else %}
-        <p>
-          <a href={% url "account_login" %}>Sign in</a>
-          or
-          <a href={% url "account_signup" %}>Sign up</a>
-        </p>
-      {% endif %}
-    </div>
+    <a class="navbar-itemContainer-isMobile" href={% url "settings" %}>
+      <i class="navbar-itemText-isMobile fas fa-user"></i>
+    </a>
   </navbar>
+  {% endif %}
 
-  <main role="main" class="container">
+  <main role="main">
     {% if messages %}
     <ul class="messages">
     {% for message in messages %}

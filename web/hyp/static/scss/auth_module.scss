@@ -1,0 +1,26 @@
+@import "mixins";
+@import "variables";
+
+.authFormContainer {
+  width: 100%;
+  margin-top: 8em;
+  display: flex;
+  justify-content: center;
+}
+
+.authForm-logoContainer {
+  @include flexbox-container(row, $justify-content: center)
+}
+
+.authForm-logoText {
+  color: $white;
+
+  @media (max-width: $mobile-width) {
+    font-size: 2em;
+  }
+}
+
+.authForm-signUp {
+  display: block;
+  margin-top: 1em;
+}

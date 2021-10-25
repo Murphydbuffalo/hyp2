@@ -1,6 +1,6 @@
 from hyp.models import Experiment, HypUser, Variant
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
-from django.forms import modelform_factory, inlineformset_factory, BaseInlineFormSet
+from django.forms import ModelForm, TextInput, inlineformset_factory, BaseInlineFormSet
 from django.core.exceptions import ValidationError
 
 
@@ -16,7 +16,13 @@ class HypUserCreationForm(UserCreationForm):
         fields = ("username", "email")
 
 
-ExperimentForm = modelform_factory(Experiment, fields=["name"])
+class ExperimentForm(ModelForm):
+    class Meta:
+        model = Experiment
+        fields = ("name",)
+        widgets = {
+            "name": TextInput(attrs={"placeholder": "Experiment name"})
+        }
 
 
 class BaseVariantFormSet(BaseInlineFormSet):
@@ -26,7 +32,7 @@ class BaseVariantFormSet(BaseInlineFormSet):
             return
         names = []
         for form in self.forms:
-            name = form.cleaned_data.get('name')
+            name = form.cleaned_data.get("name")
             if name in names:
                 raise ValidationError("Each variant must have a unique name.")
             names.append(name)
@@ -39,9 +45,10 @@ CreateVariantsFormset = inlineformset_factory(
     Experiment,
     Variant,
     fields=["name"],
+    widgets={"name": TextInput(attrs={"placeholder": "Variant name"})},
     can_delete=False,
     min_num=2,
-    max_num=10,
+    max_num=5,
     extra=0,
     formset=BaseVariantFormSet,
 )

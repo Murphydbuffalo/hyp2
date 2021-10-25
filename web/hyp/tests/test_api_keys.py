@@ -22,7 +22,7 @@ class TestApiKeys(TestCase):
     def test_create_api_key(self):
         response = self.client.get('/api_keys/', follow=True)
         self.assertIn('API Keys', str(response.content))
-        self.assertIn('Create API Key', str(response.content))
+        self.assertIn('New', str(response.content))
         self.assertNotIn((self.wunder_key.access_token), str(response.content))
         self.assertEqual(ApiKey.objects.count(), 1)
 
@@ -56,8 +56,8 @@ class TestApiKeys(TestCase):
         response = self.client.get('/api_keys/', follow=True)
 
         self.assertEqual(response.status_code, 200)
-        self.assertNotIn('Create', str(response.content))
-        self.assertIn('Deactivate', str(response.content))
+        self.assertNotIn('New', str(response.content))
+        self.assertIn('fa-trash', str(response.content))
 
         response = self.client.post(
             '/api_keys/create/',

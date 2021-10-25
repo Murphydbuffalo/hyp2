@@ -9,6 +9,7 @@
 7. [Postman](#postman)
 8. [Accessibility](#accessibility)
 9. [Internationalization](#internationalization)
+10. [CSS](#css)
 
 ## Intro
 Low risk, intuitive product experimentation. Inform your product decisions with evidence from your users by trying out multiple variations of your features.
@@ -128,3 +129,47 @@ for JS-heavy code.
 
 ## Internationalization
 We aim to make it easy to provide translations for all of our copy. Via I18n and Google Translate? It's a TODO.
+
+## CSS
+We write our CSS according to Maintainable CSS: https://maintainablecss.com/
+
+This means we organize our styles into modules, components, states, and modifiers.
+
+Modules are collections of components. They don't make sense/break if you remove
+one of the constituent components. You might use multiple modules in a page, but
+removing any one module shouldn't break the others.
+
+Components are independent and reusable.
+
+Some examples:
+"In a website the header, registration form, shopping basket, article, product list,
+navigation and homepage promo can all be considered to be modules."
+
+"A logo module might consist of copy, an image and a link, each of which are components.
+Without the image the logo is broken, without the link the logo is incomplete."
+
+To avoid difficulties overriding selectors with a high specificity we use
+flat, class-based selectors of the form `.module-component-state`.
+
+### Filename conventions
+Sadly, the `django-sass` library doesn't allow for importing files from a parent
+directory, so we don't nest our Sass files in directories like `modules/`.
+
+Instead we add `_module` or `_component` to the end of our SCSS filenames.
+
+### When to use a module vs a component vs a mixin
+Admittedly it's pretty confusing to figure out which of these things your
+styles should belong to.
+
+I put most styles in a file for a given module, eg `auth_module.scss`. That
+file will include the various components that make up that module.
+
+I create separate Sass files for components when those styles are for small but
+visually sensical pieces of UI that are shared across multiple modules. As
+such, all of these components are considered to be part of a `.shared` module,
+eg `.shared-logoIcon`.
+
+I think of mixins (defined in `mixins.scss`) as either helper functions that
+take arguments (eg `flex-container`) or as a set of styles that doesn't visually make sense on its
+own (eg `clickable`).
+

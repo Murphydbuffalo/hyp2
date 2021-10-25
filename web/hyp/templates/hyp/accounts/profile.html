@@ -1,8 +1,0 @@
-{% extends "hyp/layout.html" %}
-{% block content %}
-  <h1>{{ user.email }}</h1>
-
-  <a href={% url "api_keys" %}>
-    Manage API keys
-  </a>
-{% endblock %}

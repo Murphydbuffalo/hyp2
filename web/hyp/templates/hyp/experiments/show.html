@@ -8,39 +8,44 @@
 {% endblock %}
 
 {% block content %}
-  <h1>{{ experiment.description }} experiment</h1>
-  <p id="total-interactions">
-    {% if experiment.total_interactions > 0 %}
-    {{ experiment.total_interactions }} unique participants.
-    {% else %}
-    No one has participated in this experiment yet.
-    {% endif %}
-  </p>
-  <p id="uncertainty">
-    Uncertainty level: {{ experiment.uncertainty_level  }}
-  </p>
+  <div class="experimentDetails">
+    <h3>{{ experiment.description }}</h3>
 
-  <div id="chart-container">
-    <span class="toggles">
-      <button id="show-traffic-splits" class="button-primary">Traffic splits</button>
-      <button id="show-conversion-rates">Conversion rates</button>
-    </span>
-    <div id="experiment-chart"></div>
-  </div>
+    <div class="experimentDetails-subheader">
+      <div class="experimentDetails-subheaderCard">
+        <p>Unique participants</p>
+        <h4>
+          {{ experiment.total_interactions }}
+        </h4>
+      </div>
 
-  <h2>Variants</h2>
-  <div id="variants">
-    {% for variant in experiment.variant_set.all %}
-    <div class="variant-details">
-      <h3>{{ variant.name }}</h3>
-      {% if variant.num_interactions == 0 %}
-      <p>No one has interacted with this variant yet.</p>
-      {% else %}
-      <p>Has received {% widthratio variant.traffic_split_to_date 0.01 1 %}% of traffic to date.</p>
-      <p>{% widthratio variant.conversion_rate 1 100 %}% conversion rate</p>
-      {% endif %}
+      <div class="experimentDetails-subheaderCard">
+        <p>Uncertainty</p>
+        <h4>{{ experiment.uncertainty_level  }}</h4>
+      </div>
     </div>
-    {% endfor %}
+
+    <div class="experimentDetails-chartContainer">
+      <span>
+        <button id="show-traffic-splits" class="shared-primaryButton--square">Traffic splits</button>
+        <button id="show-conversion-rates" class="shared-inactiveButton--square">Conversion rates</button>
+      </span>
+      <div id="experiment-chart" class="experimentDetails-chart"></div>
+    </div>
+
+    <div class="experimentDetails-variants">
+      {% for variant in experiment.variant_set.all %}
+      <div class="experimentDetails-variantCard">
+        <h4>{{ variant.name }}</h4>
+        {% if variant.num_interactions == 0 %}
+        <p>No data</p>
+        {% else %}
+        <p>Traffic to date: {% widthratio variant.traffic_split_to_date 0.01 1 %}%</p>
+        <p>Conversion rate: {% widthratio variant.conversion_rate 1 100 %}%</p>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
   </div>
 
   {{ experiment.history|json_script:"experiment-metrics" }}
@@ -48,20 +53,6 @@
   <script>
     let metricName = "traffic_split";
     let chart;
-
-    document.querySelector("#show-traffic-splits").onclick = function(event) {
-      document.querySelector("#chart-container .toggles .button-primary").classList.remove("button-primary")
-      event.currentTarget.classList.add("button-primary")
-      metricName = "traffic_split";
-      renderChart();
-    };
-
-    document.querySelector("#show-conversion-rates").onclick = function(event) {
-      document.querySelector("#chart-container .toggles .button-primary").classList.remove("button-primary")
-      event.currentTarget.classList.add("button-primary")
-      metricName = "conversion_rate";
-      renderChart();
-    };
 
     function renderChart() {
       if (chart) {
@@ -79,6 +70,30 @@
         dataKey: metricName,
       });
     }
+
+    function toggleActiveChartButton(event) {
+      const activeToggleClassName = "shared-primaryButton--square";
+      const inactiveToggleClassName = "shared-inactiveButton--square";
+      const activeToggle = document.querySelector("." + activeToggleClassName);
+      const inactiveToggle = document.querySelector("." + inactiveToggleClassName);
+
+      activeToggle.classList.add(inactiveToggleClassName);
+      activeToggle.classList.remove(activeToggleClassName);
+      inactiveToggle.classList.add(activeToggleClassName);
+      inactiveToggle.classList.remove(inactiveToggleClassName);
+    }
+
+    document.querySelector("#show-traffic-splits").onclick = function(event) {
+      toggleActiveChartButton(event);
+      metricName = "traffic_split";
+      renderChart();
+    };
+
+    document.querySelector("#show-conversion-rates").onclick = function(event) {
+      toggleActiveChartButton(event);
+      metricName = "conversion_rate";
+      renderChart();
+    };
 
     am4core.ready(renderChart);
   </script>

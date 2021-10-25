@@ -1,0 +1,61 @@
+@import "mixins";
+@import "states";
+@import "variables";
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  min-height: 100vh;
+  width: 255px;
+  background-color: $smoke;
+
+  @media (max-width: $mobile-width) {
+    @include flexbox-container(row, $justify-content: space-between);
+    height: 60px;
+    min-height: 60px;
+    width: 100%;
+  }
+}
+
+.navbar-logoContainer {
+  @include flexbox-container(row)
+
+  margin: 1em 0 0 1em;
+  padding: 1em;
+}
+
+.navbar-logoText {
+  @include no-mobile;
+}
+
+.navbar-itemContainer {
+  margin: 1em;
+
+  @include card($height: 40px, $width: 160px, $background-color: $black)
+  @include clickable;
+  @include no-mobile;
+  @include flexbox-container(row)
+}
+
+.navbar-itemIcon--experiments {
+  @include circle($tang);
+}
+
+.navbar-itemIcon--settings {
+  @include circle($purple);
+}
+
+.navbar-itemText {
+  display: block;
+}
+
+.navbar-itemContainer-isMobile {
+  @include mobile-only;
+  margin-right: 2.5em;
+}
+
+.navbar-itemText-isMobile {
+  font-size: 1.5em
+}

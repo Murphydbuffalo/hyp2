@@ -1,20 +1,23 @@
-@font-face {
-  font-family: "Karrik";
-  src: url("../fonts/KarrikRegular.woff") format("woff");
-  font-display: block;
-}
+/* Modules */
+@import "auth_module";
+@import "api_key_list_module";
+@import "experiment_details_module";
+@import "experiment_form_module";
+@import "experiment_list_module";
+@import "home_module";
+@import "navbar_module";
+@import "settings_module";
 
-body {
-  font-family: "Karrik";
-}
+/* Components shared across multiple modules */
+@import "button_component";
+@import "form_component";
+@import "logo_icon_component";
 
-a {
-  text-decoration: none;
-}
+/* States */
+@import "states";
 
-@import "experiments";
-@import "navigation";
-@import "sign_up";
-@import "superadmin";
+/* Miscellaneous */
+@import "base";
+@import "mixins";
 @import "utils";
 @import "variables";

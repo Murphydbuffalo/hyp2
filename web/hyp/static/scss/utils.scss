@@ -1,7 +1,10 @@
-.error {
-  color: red;
+.superadmin {
+  background-color: yellow;
+  border: 3px solid black;
+  border-radius: 16px;
+  padding: 5px;
 }
 
 .hidden {
-  display: none;
+  @include hidden;
 }

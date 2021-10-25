@@ -49,7 +49,7 @@ class ApiKey(models.Model):
         ]
 
     def description(self):
-        return f'{self.label}: {self} {"" if self.is_active() else "(Deactivated)"}'
+        return f'{self.label} {"" if self.is_active() else "(Deactivated)"}'
 
     def is_active(self):
         return self.deactivated_at is None
@@ -106,6 +106,19 @@ class Experiment(models.Model):
                 by_variant[metric.variant.name] = [metric.to_dict()]
 
         return by_variant
+
+    def conversion_rates(self):
+        rates = [v.conversion_rate() for v in self.variant_set.all()]
+        rates.sort()
+
+        return rates
+
+    def lift(self):
+        rates = self.conversion_rates()
+        best = rates.pop()
+        worst = rates.pop(0)
+
+        return best - worst
 
 
 class VariantManager(models.Manager):

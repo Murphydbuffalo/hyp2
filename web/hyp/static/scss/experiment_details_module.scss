@@ -1,0 +1,33 @@
+@import "variables";
+@import "mixins";
+
+.experimentDetails-subheader {
+  @include flexbox-container(row);
+}
+
+.experimentDetails-subheaderCard {
+  @include card($width: 50%);
+
+  h4 {
+    margin-top: 1em;
+  }
+}
+
+.experimentDetails-variants {
+  @include flexbox-container(row);
+}
+
+.experimentDetails-variantCard {
+  @include card($width: 33%);
+}
+
+.experimentDetails-chartContainer {
+  @include card($height: 600px, $width: 100%);
+  box-sizing: border-box;
+}
+
+.experimentDetails-chart {
+  @include card($height: 500px, $width: 95%, $background-color: $black);
+  padding: 0 1em;
+  margin: 1em 0;
+}

@@ -1,12 +1,12 @@
 {% extends "hyp/layout.html" %}
 {% load static %}
 {% block content %}
-  <h1>New Experiment</h1>
+  <h3>New Experiment</h3>
 
-  <form method="post" id="new-experiment-form" action="{% url 'create_experiment' %}">
+  <form method="post" class="shared-form" action="{% url 'create_experiment' %}">
     {% csrf_token %}
 
-    <table id="experiment-form-fields">
+    <table class="newExperimentForm-formFields">
       {% if unique_error %}
       <tr>
       <ul class="errorlist">
@@ -15,24 +15,21 @@
       </tr>
       {% endif %}
 
-      {{ experiment_form }}
+      {{ experiment_form.name }}
+      {{ experiment_form.name.errors }}
 
       {% if request.user.is_staff %}
-        <div class="superadmin">
+        <div class="hidden superadmin">
           <label for="generate_sample_data">
-            Create with sample data
+            Create sample data
             <input type="checkbox" name="generate_sample_data"/>
           </label>
         </div>
       {% endif %}
     </table>
 
-     <table id="variant-form-fields">
+     <div>
       {{ variant_formset.management_form }}
-
-      <tr>
-        <h2>Variants</h2>
-      </tr>
 
       {% if variant_formset.non_form_errors %}
       <tr>
@@ -44,18 +41,27 @@
       </tr>
       {% endif %}
 
-      {% for form in variant_formset %}
-      {{ form }}
-      {% endfor %}
-    </table>
+      <div class="newExperimentForm-variantFormFields">
+        {% for form in variant_formset %}
+        <div>{{ form.name }}</div>
+        <div>{{ form.name.errors }}</div>
+        {% endfor %}
+      </div>
+    </div>
 
-    <table id="empty-form" class="hidden">
-      {{ variant_formset.empty_form.as_table }}
-    </table>
+    <div class="newExperimentForm-emptyVariantForm" class="hidden">
+      <div class="newVariantInputContainer">
+        {{ variant_formset.empty_form.name }}
+      </div>
+    </div>
 
-    <button id="add-variant">Add variant</button>
-    <br>
-    <input class='button-primary' type='submit' value='Save'>
+    <div class="newExperimentForm-addVariantButtonContainer">
+      <button type="button" id="newExperimentForm-addVariant" class="shared-secondaryButton">Add variant</button>
+    </div>
+
+    <div>
+      <input type='submit' value='Save'>
+    </div>
   </form>
 
   <script src={% static "js/experiment_form.js" %}></script>
