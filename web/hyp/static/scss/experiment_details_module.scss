@@ -28,7 +28,7 @@
 
 .experimentDetails-chartToggles-isInactive {
   @include button($black);
-  color: lighten($smoke, 50%);
+  color: $light-smoke;
   border-radius: 4px;
 }
 
