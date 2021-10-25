@@ -4,8 +4,8 @@
     <h3>Experiments</h3>
 
     {% if perms.hyp.add_experiment %}
-      <a href={% url "new_experiment" %}>
-        <button class="experimentList-newExperimentButton">New</button>
+      <a class="experimentList-newExperimentButtonContainer" href={% url "new_experiment" %}>
+        <button class="shared-primaryButton">New</button>
       </a>
     {% endif %}
 

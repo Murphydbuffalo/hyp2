@@ -5,9 +5,8 @@
   @include flexbox-container(column, flex-start);
 }
 
-.experimentList-newExperimentButton {
-  margin: 2em 0;
-  @include primary-button;
+.experimentList-newExperimentButtonContainer {
+  margin-bottom: 2em;
 }
 
 .experimentList-listItem {

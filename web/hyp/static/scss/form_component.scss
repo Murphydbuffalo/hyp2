@@ -27,6 +27,19 @@
     }
   }
 
+  /*
+    Ideally we would not use the `primary-button` mixin or nested selectors for
+    these styles. We're doing so because we dynamically render forms in our
+    templates, and as a result don't currently have direct control over the input
+    HTML.
+
+    I'm sure we could find a way to change that, maybe by telling Django what classes
+    to use when generating form input HTML, or by wrapping the dynamically generated
+    inputs in divs with classes of our choosing.
+
+    That being said, I think this is fine for now. We can always clean this up
+    later if we feele the ROI is there.
+  */
   input[type="submit"] {
     @include primary-button;
   }

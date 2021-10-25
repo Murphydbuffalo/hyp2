@@ -1,0 +1,60 @@
+@mixin button-text {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 38px;
+  letter-spacing: .1rem;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+@mixin button($background-color: $smoke) {
+  @include button-text;
+
+  display: inline-block;
+  height: 38px;
+  padding: 0 30px;
+  white-space: nowrap;
+  cursor: pointer;
+  box-sizing: border-box;
+  border-radius: 16px;
+  background-color: $background-color;
+  border: none;
+  color: $white;
+
+  &:hover {
+    border: 1px solid transparent;
+  }
+
+  input {
+    margin-bottom: 0;
+    background-color: transparent;
+    border: none;
+    @include button-text;
+  }
+}
+
+@mixin primary-button {
+  @include button($purple);
+}
+
+.shared-button, .shared-button--square {
+  @include button;
+}
+
+.shared-primaryButton, .shared-primaryButton--square {
+  @include primary-button;
+}
+
+.shared-secondaryButton, .shared-secondaryButton--square {
+  @include button($tang);
+}
+
+.shared-inactiveButton, .shared-inactiveButton--square {
+  @include button($black);
+  color: $light-smoke;
+}
+
+.shared-button--square, .shared-primaryButton--square, .shared-secondaryButton--square {
+  border-radius: 4px;
+}

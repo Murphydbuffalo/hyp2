@@ -1,12 +1,7 @@
 @import "mixins";
 @import "variables";
 
-.newExperimentForm-addVariant {
-  @include button($tang);
-  margin-bottom: 2em;
-  width: 30%;
-
-  @media (max-width: $mobile-width) {
-    width: 75%;
-  }
+.newExperimentForm-addVariantButtonContainer {
+  margin: 1em 0;
+  width: 100%;
 }

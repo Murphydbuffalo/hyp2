@@ -13,15 +13,17 @@
          {% csrf_token %}
          {{ form.as_p }}
 
-         <button class="settings-signOutAction">
-           <input name="logout" type="submit" value="Sign out">
-         </button>
+         <span class="settings-signOutActionContainer">
+           <button class="shared-primaryButton">
+             <input name="logout" type="submit" value="Sign out">
+           </button>
+         </span>
         </form>
       {% endif %}
 
       {% if perms.hyp.view_apikey %}
         <a href={% url "api_keys" %}>
-          <button class="settings-manageApiKeysAction" >Manage API keys</button>
+          <button class="shared-button" >Manage API keys</button>
         </a>
       {% endif %}
     </div>

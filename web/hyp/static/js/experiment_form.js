@@ -3,7 +3,7 @@ document.onreadystatechange = function(_event) {
   const minNumForms = parseInt(document.querySelector("#id_variant_set-MIN_NUM_FORMS").value);
   const maxNumForms = parseInt(document.querySelector("#id_variant_set-MAX_NUM_FORMS").value);
 
-  document.querySelector(".newExperimentForm-addVariant").onclick = function(event) {
+  document.querySelector("#newExperimentForm-addVariant").onclick = function(event) {
     event.preventDefault();
     currentNumForms++;
 

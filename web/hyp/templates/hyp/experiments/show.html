@@ -27,8 +27,8 @@
 
     <div class="experimentDetails-chartContainer">
       <span>
-        <button id="show-traffic-splits" class="experimentDetails-chartToggles-isActive">Traffic splits</button>
-        <button id="show-conversion-rates" class="experimentDetails-chartToggles-isInactive">Conversion rates</button>
+        <button id="show-traffic-splits" class="shared-primaryButton--square">Traffic splits</button>
+        <button id="show-conversion-rates" class="shared-inactiveButton--square">Conversion rates</button>
       </span>
       <div id="experiment-chart" class="experimentDetails-chart"></div>
     </div>
@@ -72,8 +72,8 @@
     }
 
     function toggleActiveChartButton(event) {
-      const activeToggleClassName = "experimentDetails-chartToggles-isActive";
-      const inactiveToggleClassName = "experimentDetails-chartToggles-isInactive";
+      const activeToggleClassName = "shared-primaryButton--square";
+      const inactiveToggleClassName = "shared-inactiveButton--square";
       const activeToggle = document.querySelector("." + activeToggleClassName);
       const inactiveToggle = document.querySelector("." + inactiveToggleClassName);
 

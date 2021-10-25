@@ -19,11 +19,6 @@
   @include flexbox-container(row, $align-items: unset);
 }
 
-.settings-signOutAction {
-  @include primary-button;
+.settings-signOutActionContainer {
   margin: 0 1em 0 0;
-}
-
-.settings-manageApiKeysAction {
-  @include button;
 }

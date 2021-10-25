@@ -5,9 +5,8 @@
   @include flexbox-container(column, flex-start);
 }
 
-.apiKeyList-newApiKeyButton {
-  margin: 2em 0;
-  @include primary-button;
+.apiKeyList-newApiKeyButtonContainer {
+  margin-bottom: 2em;
 }
 
 .apiKeyList-listItem {
