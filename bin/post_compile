@@ -4,8 +4,7 @@ cd "$1" || exit 1
 cd web
 
 echo "-----> Compiling SCSS"
-python manage.py sass hyp/static/scss/application.scss
-hyp/static/css/application.css -t compressed
+python manage.py sass hyp/static/scss/application.scss hyp/static/css/application.css -t compressed
 
 echo "-----> Collecting static files"
 python manage.py collectstatic --noinput --traceback
