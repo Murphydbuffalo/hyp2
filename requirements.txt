@@ -16,7 +16,7 @@ django-allauth==0.44.0
 django-debug-toolbar==3.2.1
 django-rq==2.4.1
 django-sass==1.0.1
-flake8==3.8.4
+flake8==4.0.1
 flake8-bandit==2.1.2
 flake8-bugbear==20.11.1
 flake8-polyfill==1.0.2
@@ -39,7 +39,7 @@ psycopg2==2.8.6
 pybrake==1.0.4
 pycodestyle==2.6.0
 pycparser==2.20
-pyflakes==2.2.0
+pyflakes==2.4.0
 PyJWT==2.0.1
 pyparsing==2.4.7
 python-dateutil==2.8.1
