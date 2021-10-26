@@ -35,7 +35,7 @@ pandas==1.2.2
 pathspec==0.8.1
 pbr==5.5.1
 Pillow==8.3.2
-psycopg2==2.8.6
+psycopg2==2.9.1
 pybrake==1.0.4
 pycodestyle==2.8.0
 pycparser==2.20
