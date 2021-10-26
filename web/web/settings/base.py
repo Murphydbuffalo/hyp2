@@ -63,7 +63,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# TODO: make sure this logging is reasonable in Papertrail
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
