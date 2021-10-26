@@ -1,5 +1,5 @@
 from .base import * # noqa F403
-from .base import MIDDLEWARE, DATABASES
+from .base import MIDDLEWARE, DATABASES, LOGGING
 from os import environ
 
 DEBUG = False
@@ -48,4 +48,4 @@ DATABASES['default']['OPTIONS'] = {"sslmode": "require"}
 # We manually run the `collectstatic` command in `bin/post_compile`, which is a
 # script Heroku runs before deploying the app. This allows us to compile Sass to
 # CSS prior to running `collectstatic`.
-DISABLE_COLLECTSTATIC=1
+DISABLE_COLLECTSTATIC = 1
