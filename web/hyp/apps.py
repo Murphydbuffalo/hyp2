@@ -1,11 +1,4 @@
 from django.apps import AppConfig
-from hyp.jobs.variant_metrics import enqueue_all
-
-import django_rq, logging
-
-logger = logging.getLogger(__name__)
-
-scheduler = django_rq.get_scheduler('default')
 
 
 class HypConfig(AppConfig):
@@ -13,6 +6,13 @@ class HypConfig(AppConfig):
 
     def ready(self):
         from hyp import signals # noqa F401
+        from hyp.jobs.variant_metrics import enqueue_all
+
+        import django_rq, logging
+
+        logger = logging.getLogger(__name__)
+
+        scheduler = django_rq.get_scheduler('default')
 
         logger.info(f'App starting up, calling HypConfig.ready()')
 
