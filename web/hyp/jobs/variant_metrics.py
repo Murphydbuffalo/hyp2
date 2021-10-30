@@ -3,7 +3,8 @@ from django.db import transaction
 from hyp.models import DailyVariantMetrics, Variant
 from hyp.jobs.job_utils import retries
 
-import django_rq, logging
+import django_rq
+import logging
 
 logger = logging.getLogger(__name__)
 

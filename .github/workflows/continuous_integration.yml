@@ -34,6 +34,10 @@ jobs:
           --health-retries 5
         ports:
           - 5432:5432
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v2
@@ -57,6 +61,8 @@ jobs:
         DB_PORT: 5432
         DB_USER: runner
         DB_PASSWORD: gethyped
+        REDIS_HOST: localhost
+        REDIS_PORT: 6379
       working-directory: ./web
       run: python manage.py migrate
     - name: Run tests
@@ -66,6 +72,8 @@ jobs:
         DB_PORT: 5432
         DB_USER: runner
         DB_PASSWORD: gethyped
+        REDIS_HOST: localhost
+        REDIS_PORT: 6379
       working-directory: ./web
       run: python manage.py test hyp/tests --settings=web.settings.testing
   deploy:
