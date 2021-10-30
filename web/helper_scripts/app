@@ -2,4 +2,4 @@
 
 set -euxo pipefail
 
-helper_scripts/sass & helper_scripts/workers & helper_scripts/server && fg
+helper_scripts/sass & helper_scripts/scheduler & helper_scripts/workers & helper_scripts/server && fg
