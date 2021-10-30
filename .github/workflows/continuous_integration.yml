@@ -34,6 +34,8 @@ jobs:
           --health-retries 5
         ports:
           - 5432:5432
+      redis:
+        image: redis
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v2
