@@ -8,6 +8,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 def enqueue_scheduled_jobs(sender, **kwargs):
     from hyp.jobs.variant_metrics import enqueue_all
     from hyp.models import IdempotencyKey
