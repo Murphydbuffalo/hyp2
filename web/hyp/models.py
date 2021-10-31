@@ -245,3 +245,22 @@ class DailyVariantMetrics(models.Model):
                 fields=["date", "variant_id"]
             )
         ]
+
+
+class IdempotencyKey(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    created_at = models.DateTimeField('created at', auto_now_add=True)
+    updated_at = models.DateTimeField('updated at', auto_now=True)
+    key = models.TextField()
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["key"])
+        ]
+
+        constraints = [
+            models.UniqueConstraint(
+                name="uniq_idempotency_key",
+                fields=["key"]
+            )
+        ]
