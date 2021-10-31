@@ -176,5 +176,5 @@ own (eg `clickable`).
 ## Scheduled jobs
 We use scheduled jobs to do things like calculate daily summary metrics for experiments. For this to work there must be a separate scheduler process running (that process will poll redis for jobs and enqueue them at the appropriate time).
 
-In product we have a separate `scheduler` dyno that's always running. If you want to use scheduled jobs in development you can run the `scheduler` script in `helper_scripts`.
+In production we have a separate `scheduler` dyno that's always running. If you want to use scheduled jobs in development you can run the `scheduler` script in `helper_scripts`.
 
