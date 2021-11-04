@@ -67,19 +67,19 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'loggers': {
-        'app': {
+        'hyp': {
             'handlers': ['console'],
-            'level': 'INFO',
+            'level': 'DEBUG',
             'propagate': True,
         },
         "rq.worker": {
             "handlers": ["rq_console"],
-            "level": "INFO"
+            "level": "DEBUG"
         },
     },
     'handlers': {
         'console': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'class': 'logging.StreamHandler',
         },
         "rq_console": {
