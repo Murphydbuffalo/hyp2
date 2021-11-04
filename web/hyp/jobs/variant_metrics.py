@@ -8,6 +8,10 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+# We've scheduled this to run every day via CRON job
+# Can inspect the job via
+# scheduler = django_rq.get_scheduler('default')
+# jobs = list(scheduler.get_jobs())
 def enqueue_all():
     for variant in Variant.objects.all():
         enqueue(variant)
