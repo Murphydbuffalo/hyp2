@@ -8,6 +8,13 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+# We've scheduled this to run every day at 8:00AM UTC via a CRON job
+# So for US time zones this will run at midnight/1:00AM/2:00AM/3:00AM or
+# 1:00AM/2:00AM/3:00AM/4:00AM depending on daylight savings time.
+# https://crontab.guru/every-day-at-2am
+# Can inspect the job via
+# scheduler = django_rq.get_scheduler('default')
+# jobs = list(scheduler.get_jobs())
 def enqueue_all():
     for variant in Variant.objects.all():
         enqueue(variant)
