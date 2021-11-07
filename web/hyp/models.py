@@ -258,14 +258,18 @@ class IdempotencyKey(models.Model):
     @classmethod
     @transaction.atomic
     def call_once(cls, func, key):
+        if key is None:
+            return func()
+
         logger = logging.getLogger(__name__)
 
         if IdempotencyKey.objects.filter(key=key).exists():
             logger.info(f'Not performing duplicate work for idempotency key {key}')
         else:
-            func()
+            result = func()
             IdempotencyKey(key=key).save()
             logger.info(f'Performed idempotent work for idempotency key {key}')
+            return result
 
     class Meta:
         indexes = [

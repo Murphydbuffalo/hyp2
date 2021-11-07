@@ -51,6 +51,29 @@ class TestIdempotencyKey(TestCase):
         self.assertEqual(self.my_list, [1, 2, 3, 4, 5, 6, 7, 8])
         self.assertEqual(IdempotencyKey.objects.count(), 3)
 
+    def test_no_key(self):
+        self.my_list = []
+
+        IdempotencyKey.call_once(
+            func=lambda: self.anExampleFunction(1, 2, 3),
+            key=None,
+        )
+
+        IdempotencyKey.call_once(
+            func=lambda: self.anExampleFunction(4, 5, 6),
+            key=None,
+        )
+
+        self.assertEqual(self.my_list, [1, 2, 3, 4, 5, 6])
+        self.assertEqual(IdempotencyKey.objects.count(), 0)
+
+    def returnTrue(self):
+        return True
+
+    def test_return_value(self):
+        result = IdempotencyKey.call_once(func=self.returnTrue, key="foo")
+        self.assertEqual(True, result)
+
     # Try to create a pair of users where we simulate one being invalid
     # The idempotency key should perform this work in a transaction,
     # meaning neither gets created
