@@ -8,11 +8,11 @@ logger = logging.getLogger(__name__)
 
 
 # Force callers to specify if they don't want a job to be idempotent
-def enqueue(idempotency_key, func):
+def enqueue(idempotency_key, func, args):
      logger.info(f'Enqueuing job for function {func.__name__} with idempotency key {idempotency_key}')
 
      return IdempotencyKey.call_once(
-          func=lambda: django_rq.enqueue(func, retry=retries()),
+          func=lambda: django_rq.enqueue(func, *args, retry=retries()),
           key=idempotency_key,
      )
 
