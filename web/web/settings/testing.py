@@ -12,3 +12,13 @@ INTERNAL_IPS = [
 ]
 
 STATICFILES_STORAGE = ''
+
+RQ_QUEUES = {
+    'default': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 0,
+        'DEFAULT_TIMEOUT': 900,
+        'ASYNC': False,
+    },
+}

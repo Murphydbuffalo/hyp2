@@ -1,9 +1,11 @@
 from django.contrib.auth.models import AbstractUser
-from django.db import models, connection
+from django.db import models, connection, transaction
 from uuid import uuid4
 from os import environ
 from datetime import datetime, timedelta
 from hyp.thompson_sampler import ThompsonSampler
+
+import logging
 
 
 class Customer(models.Model):
@@ -252,6 +254,22 @@ class IdempotencyKey(models.Model):
     created_at = models.DateTimeField('created at', auto_now_add=True)
     updated_at = models.DateTimeField('updated at', auto_now=True)
     key = models.TextField()
+
+    @classmethod
+    @transaction.atomic
+    def call_once(cls, func, key):
+        if key is None:
+            return func()
+
+        logger = logging.getLogger(__name__)
+
+        if IdempotencyKey.objects.filter(key=key).exists():
+            logger.info(f'Not performing duplicate work for idempotency key {key}')
+        else:
+            result = func()
+            IdempotencyKey(key=key).save()
+            logger.info(f'Performed idempotent work for idempotency key {key}')
+            return result
 
     class Meta:
         indexes = [
