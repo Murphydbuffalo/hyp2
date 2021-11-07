@@ -257,7 +257,7 @@ class IdempotencyKey(models.Model):
 
     @classmethod
     @transaction.atomic
-    def call_once(self, func, key):
+    def call_once(cls, func, key):
         logger = logging.getLogger(__name__)
 
         if IdempotencyKey.objects.filter(key=key).exists():
