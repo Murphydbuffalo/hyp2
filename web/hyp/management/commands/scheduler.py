@@ -19,7 +19,6 @@ def register_scheduled_jobs():
         log(f'Function {job.func.__name__}')
 
 
-
 class Command(rqscheduler.Command):
     def handle(self, *args, **kwargs):
         # Sadly, RQ scheduler duplicates enqueued jobs every time the
