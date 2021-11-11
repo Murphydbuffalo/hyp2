@@ -15,7 +15,8 @@ def enqueue_all():
         job = enqueue(
             idempotency_key=f'{date}-metrics-for-variant-{variant.id}',
             func=create_variant_metrics,
-            args=(variant, date)
+            args=(variant, date),
+            safe_to_retry=True,
         )
 
         if job is not None:
