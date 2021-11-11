@@ -5,7 +5,7 @@ from django_rq.management.commands import rqscheduler
 import logging
 
 scheduler = get_scheduler()
-log = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 def register_scheduled_jobs():
     # Every day at 8:00AM UTC: https://crontab.guru/every-day-at-2am
@@ -13,10 +13,10 @@ def register_scheduled_jobs():
     # 1:00AM/2:00AM/3:00AM/4:00AM depending on daylight savings time.
     scheduler.cron("0 8 * * *", func=enqueue_all)
 
-    log("The following jobs have been scheduled:") 
+    logger.info("The following jobs have been scheduled:") 
 
     for job in get_scheduled_jobs():
-        log(f'Function {job.func.__name__}')
+        logger.info(f'Function {job.func.__name__}')
 
 
 class Command(rqscheduler.Command):
