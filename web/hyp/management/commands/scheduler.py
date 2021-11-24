@@ -7,6 +7,7 @@ import logging
 scheduler = get_scheduler()
 logger = logging.getLogger(__name__)
 
+
 def register_scheduled_jobs():
     # Every day at 8:00AM UTC: https://crontab.guru/every-day-at-2am
     # So for US time zones this will run at midnight/1:00AM/2:00AM/3:00AM or
