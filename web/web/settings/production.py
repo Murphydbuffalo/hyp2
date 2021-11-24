@@ -1,6 +1,7 @@
 from .base import * # noqa F403
-from .base import MIDDLEWARE, DATABASES, LOGGING
+from .base import MIDDLEWARE
 from os import environ
+from urllib.parse import urlparse
 
 DEBUG = False
 
@@ -16,6 +17,19 @@ AIRBRAKE = dict(
     project_id=environ.get("AIRBRAKE_PROJECT_ID"),
     project_key=environ.get("AIRBRAKE_API_KEY"),
 )
+
+parsed_database_url = urlparse(environ.get("DATABASE_URL"))
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': parsed_database_url.hostname,
+        'PORT': parsed_database_url.port,
+        'USER': parsed_database_url.username,
+        'PASSWORD': parsed_database_url.password,
+        'NAME': parsed_database_url.path[1:],
+        'OPTIONS': {"sslmode": "require"},
+    }
+}
 
 RQ_QUEUES = {
     'default': {
@@ -75,8 +89,6 @@ EMAIL_HOST = 'smtp.postmarkapp.com'
 EMAIL_PORT = '587'
 EMAIL_HOST_USER = environ.get('POSTMARK_ACCESS_TOKEN')
 EMAIL_HOST_PASSWORD = environ.get('POSTMARK_ACCESS_TOKEN')
-
-DATABASES['default']['OPTIONS'] = {"sslmode": "require"}
 
 # We manually run the `collectstatic` command in `bin/post_compile`, which is a
 # script Heroku runs before deploying the app. This allows us to compile Sass to
