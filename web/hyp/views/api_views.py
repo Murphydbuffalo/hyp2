@@ -3,11 +3,13 @@ from uuid import UUID
 from http import HTTPStatus
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.db import transaction
 from hyp.models import Variant, Interaction
 from hyp.thompson_sampler import ThompsonSampler
 
 
 @csrf_exempt
+@transaction.atomic
 def variant_assignment(request, participant_id, experiment_id):
     validator = validateRequest(request, allowed_methods=["POST"])
     if validator["success"] is True:
@@ -50,6 +52,7 @@ def variant_assignment(request, participant_id, experiment_id):
 
 
 @csrf_exempt
+@transaction.atomic
 def record_conversion(request, participant_id, experiment_id):
     validator = validateRequest(request, allowed_methods=["PUT", "PATCH"])
     if validator["success"] is True:
