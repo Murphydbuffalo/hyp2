@@ -177,15 +177,26 @@ class Variant(models.Model):
 
 class InteractionManager(models.Manager):
     def record_conversion(self, access_token, experiment_id, participant_id):
+        result = { "interaction_id": None }
+
         with connection.cursor() as cursor:
-            return cursor.execute("""
+            cursor.execute("""
             UPDATE hyp_interaction as i
             SET converted = TRUE
             FROM hyp_apikey as k
             WHERE k.customer_id = i.customer_id
             AND k.access_token = %s AND k.deactivated_at IS NULL
-            AND i.experiment_id = %s AND i.participant_id = %s;
+            AND i.experiment_id = %s AND i.participant_id = %s
+            RETURNING i.id;
             """, [access_token, experiment_id, participant_id])
+
+            query_result = cursor.fetchone()
+
+            if query_result is not None:
+                result["interaction_id"] = query_result[0]
+
+        return result
+
 
 
 class Interaction(models.Model):

@@ -57,13 +57,21 @@ def record_conversion(request, participant_id, experiment_id):
     else:
         return validator["error"]
 
-    Interaction.objects.record_conversion(
+    result = Interaction.objects.record_conversion(
         access_token=token,
         experiment_id=experiment_id,
         participant_id=str(participant_id)
     )
 
-    return apiResponse(payload={"id": experiment_id})
+    if result["interaction_id"] is None:
+        return apiResponse(
+            status=404,
+            message=f'No variant assignment for participant {participant_id} in experiment {experiment_id} was found. Participants must be assigned to a variant before conversion can be recorded.'
+        )
+
+    return apiResponse(payload={
+        "converted": True
+    })
 
 # private
 
