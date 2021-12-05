@@ -44,8 +44,8 @@ def variant_assignment(request, participant_id, experiment_id):
         variant = already_assigned_variant
 
     return apiResponse(payload={
-        "id": variant.id,
-        "name": variant.name
+        "variant_id": variant.id,
+        "variant_name": variant.name
     })
 
 
