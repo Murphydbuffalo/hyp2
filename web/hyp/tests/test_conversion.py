@@ -48,12 +48,29 @@ class TestConversion(TestCase):
 
         self.assertEqual(interaction.converted, True)
         self.assertEqual(response.json()["message"], "success")
-        self.assertEqual(response.json()["payload"]["id"], self.exp.id)
+        self.assertEqual(response.json()["payload"]["converted"], True)
 
         self.var1.refresh_from_db()
 
         self.assertEqual(self.var1.num_interactions, 1)
         self.assertEqual(self.var1.num_conversions, 1)
+
+    def test_not_found(self):
+        response = self.client.patch(
+            '/api/v1/convert/danmurphy/999',
+            HTTP_X_HYP_TOKEN=self.access_token
+        )
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json()["message"], "No variant assignment for participant danmurphy in experiment 999 was found. Participants must be assigned to a variant before conversion can be recorded.")
+        self.assertEqual(Interaction.objects.count(), 0)
+
+        response = self.client.patch(
+            f'/api/v1/convert/fooeykablooey/{self.exp.id}',
+            HTTP_X_HYP_TOKEN=self.access_token
+        )
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json()["message"], f'No variant assignment for participant fooeykablooey in experiment {self.exp.id} was found. Participants must be assigned to a variant before conversion can be recorded.')
+        self.assertEqual(Interaction.objects.count(), 0)
 
     def test_bad_access_token(self):
         response = self.client.patch(f'/api/v1/convert/danmurphy/{self.exp.id}')

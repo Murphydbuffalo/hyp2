@@ -40,8 +40,8 @@ class TestAssignment(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(query.count(), 1)
         self.assertEqual(response.json()["message"], "success")
-        self.assertEqual(response.json()["payload"]["id"], variant.id)
-        self.assertEqual(response.json()["payload"]["name"], variant.name)
+        self.assertEqual(response.json()["payload"]["variant_id"], variant.id)
+        self.assertEqual(response.json()["payload"]["variant_name"], variant.name)
 
         variant.refresh_from_db()
         self.assertEqual(variant.num_interactions, 1)
@@ -56,8 +56,8 @@ class TestAssignment(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(query.count(), 1)
         self.assertEqual(response.json()["message"], "success")
-        self.assertEqual(response.json()["payload"]["id"], variant.id)
-        self.assertEqual(response.json()["payload"]["name"], variant.name)
+        self.assertEqual(response.json()["payload"]["variant_id"], variant.id)
+        self.assertEqual(response.json()["payload"]["variant_name"], variant.name)
 
         variant.refresh_from_db()
         self.assertEqual(variant.num_interactions, 1)
@@ -70,7 +70,7 @@ class TestAssignment(TestCase):
         )
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.json()["message"], (
-            "No experiment variants visible to your access token match that ID."
+            "No experiment with ID 999 was found." 
         ))
         self.assertEqual(response.json()["payload"], "")
 
