@@ -177,7 +177,7 @@ class Variant(models.Model):
 
 class InteractionManager(models.Manager):
     def record_conversion(self, access_token, experiment_id, participant_id):
-        result = { "interaction_id": None }
+        result = {"interaction_id": None}
 
         with connection.cursor() as cursor:
             cursor.execute("""
@@ -196,7 +196,6 @@ class InteractionManager(models.Manager):
                 result["interaction_id"] = query_result[0]
 
         return result
-
 
 
 class Interaction(models.Model):
