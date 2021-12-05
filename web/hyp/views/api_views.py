@@ -24,7 +24,7 @@ def variant_assignment(request, participant_id, experiment_id):
     if len(variants) == 0:
         return apiResponse(
             status=404,
-            message="No experiment with that ID was found."
+            message=f'No experiment with ID {experiment_id} was found.'
         )
 
     already_assigned_variant = next((v for v in variants if v.interaction_id is not None), None)
