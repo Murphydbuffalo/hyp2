@@ -70,7 +70,7 @@ class TestAssignment(TestCase):
         )
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.json()["message"], (
-            "No experiment variants visible to your access token match that ID."
+            "No experiment with that ID was found." 
         ))
         self.assertEqual(response.json()["payload"], "")
 
