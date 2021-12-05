@@ -17,7 +17,7 @@ def variant_assignment(request, participant_id, experiment_id):
 
     variants = Variant.objects.for_assignment(
         access_token=token,
-        participant_id=participant_id,
+        participant_id=str(participant_id),
         experiment_id=experiment_id
     )
 
@@ -37,7 +37,7 @@ def variant_assignment(request, participant_id, experiment_id):
             variant_id=variant.id,
             experiment_id=experiment_id,
             customer_id=customer_id,
-            participant_id=participant_id,
+            participant_id=str(participant_id),
         ).save()
 
     else:
@@ -60,7 +60,7 @@ def record_conversion(request, participant_id, experiment_id):
     Interaction.objects.record_conversion(
         access_token=token,
         experiment_id=experiment_id,
-        participant_id=participant_id
+        participant_id=str(participant_id)
     )
 
     return apiResponse(payload={"id": experiment_id})
