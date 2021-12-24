@@ -10,19 +10,21 @@
         <strong class="error">{{ error|escape }}</strong>
   {% endfor %}
   {% endif %}
-
-  <form class="shared-form" action="{% url 'account_signup' %}" method="post">
-    <div class="authForm-logoContainer">
-      <div class="shared-logoIcon">
-      {% include "hyp-lightning-bolt.svg" %}
+  <div class="authFormContainer">
+    <form class="shared-form" action="{% url 'account_signup' %}" method="post">
+      <div class="authForm-logoContainer">
+        <div class="shared-logoIcon">
+        {% include "hyp-lightning-bolt.svg" %}
+        </div>
+        <h5 class="authForm-logoText">hyp</h5>
       </div>
-      <h5 class="authForm-logoText">hyp</h5>
-    </div>
-
-    {% csrf_token %}
-    {% for field in form %}
-    {{ field }}<br>
-    {% endfor %}
-    <input type="submit" value="Sign up">
-  </form>
+      <div class="authForm-inputWrapper">
+        {% csrf_token %}
+        {% for field in form %}
+        {{ field }}<br>
+        {% endfor %}
+      </div>
+      <input type="submit" value="Sign up">
+    </form>
+  </div>
 {% endblock %}
