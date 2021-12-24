@@ -19,12 +19,14 @@
         </div>
         <h5 class="authForm-logoText">hyp</h5>
       </div>
-
-      {% csrf_token %}
-      {% for field in form %}
-      {{ field }}<br>
-      {% endfor %}
+      <div class="authForm-inputWrapper">
+        {% csrf_token %}
+        {% for field in form %}
+        {{ field }}<br>
+        {% endfor %}
+      </div>
       <input type="submit" value="Sign in">
+      
 
       <br>
       <a class="authForm-signUp" href="{% url 'account_signup' %}">
