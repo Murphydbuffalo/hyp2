@@ -9,12 +9,12 @@
   color: $grey;
   text-align: center;
   width: 350px;
-  box-shadow: 0px 4px 24px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 4px 32px 16px rgba(0, 0, 0, 0.35);
   transition: .25s;
   will-change: transform;
 
   &:hover {
-    box-shadow: 0px 4px 64px 4px rgba(0, 0, 0, 0.45);
+    box-shadow: 0px 4px 64px 16px rgba(0, 0, 0, 0.5);
     transform: scale(1.01);
   }
 

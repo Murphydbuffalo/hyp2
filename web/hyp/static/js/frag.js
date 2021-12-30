@@ -23,11 +23,11 @@ void main(void)
 		float strength = smoothstep(0.5, 0.0, dist);
     
     // where does the hue start
-    float hue = u_time * 0.02 + seed;
+    float hue = u_time * 0.05 + seed;
     
     // make two hsv colors
-    vec3 hsv1 = vec3(hue,        0.9,  0.85);
-    vec3 hsv2 = vec3(hue + 0.07, 0.85, 0.75);
+    vec3 hsv1 = vec3(hue,        0.1, 0.15);
+    vec3 hsv2 = vec3(hue + 0.8, 0.15, 0.25);
     
     // convert them to RGB
     vec3 rgb1 = hsv2rgb(hsv1);
