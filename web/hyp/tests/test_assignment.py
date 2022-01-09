@@ -63,14 +63,14 @@ class TestAssignment(TestCase):
         self.assertEqual(variant.num_interactions, 1)
         self.assertEqual(variant.num_conversions, 0)
 
-    def test_no_variants_found(self):
+    def test_no_experiment_found(self):
         response = self.client.post(
             '/api/v1/assign/danmurphy/999',
             HTTP_X_HYP_TOKEN=self.access_token
         )
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.json()["message"], (
-            "No experiment with ID 999 was found." 
+            "No experiment with ID 999 was found."
         ))
         self.assertEqual(response.json()["payload"], "")
 
