@@ -19,7 +19,7 @@ django-rq==2.4.1
 django-sass==1.0.1
 flake8==4.0.1
 flake8-bandit==2.1.2
-flake8-bugbear==20.11.1
+flake8-bugbear==22.1.11
 flake8-polyfill==1.0.2
 gitdb==4.0.5
 GitPython==3.1.24
