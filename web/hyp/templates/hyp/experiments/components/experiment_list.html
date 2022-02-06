@@ -1,0 +1,19 @@
+<turbo-frame id="experiments">
+    {% for experiment in experiments %}
+    <a class="experimentList-listItem" href={% url "experiment" experiment.id %} data-turbo-frame="_top">
+    <div class="experimentList-listItemName">
+        <h4>{{ experiment.description }}</h4>
+    </div>
+
+    <div class="experimentList-listItemInfo">
+        <p>Unique participants: {{ experiment.total_interactions }}</p>
+        <p>Uncertainty: {{ experiment.uncertainty_level  }}</p>
+        {% if experiment.total_interactions > 0 %}
+        <p>Lift: {% widthratio experiment.lift 0.01 1 %}%</p>
+        {% else %}
+        <p>Lift: N/A</p>
+        {% endif %}
+    </div>
+    </a>
+    {% endfor %}
+</turbo-frame>

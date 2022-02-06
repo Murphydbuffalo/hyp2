@@ -1,4 +1,8 @@
 {% extends "hyp/layout.html" %}
+{% block head_tags %}
+{% include "turbo/head.html" %}
+{% endblock %}
+
 {% block content %}
   <div class="experimentList">
     <h3>Experiments</h3>
@@ -9,22 +13,7 @@
       </a>
     {% endif %}
 
-    {% for experiment in experiments %}
-    <a class="experimentList-listItem" href={% url "experiment" experiment.id %}>
-      <div class="experimentList-listItemName">
-        <h4>{{ experiment.description }}</h4>
-      </div>
-
-      <div class="experimentList-listItemInfo">
-        <p>Unique participants: {{ experiment.total_interactions }}</p>
-        <p>Uncertainty: {{ experiment.uncertainty_level  }}</p>
-        {% if experiment.total_interactions > 0 %}
-          <p>Lift: {% widthratio experiment.lift 0.01 1 %}%</p>
-        {% else %}
-          <p>Lift: N/A</p>
-        {% endif %}
-      </div>
-    </a>
-    {% endfor %}
+    <turbo-frame id="experiments" src={% url "get_experiments" %}>
+    </turbo-frame>
   </div>
 {% endblock %}
