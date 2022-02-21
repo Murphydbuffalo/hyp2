@@ -11,7 +11,7 @@ croniter==1.0.15
 cryptography==3.4.6
 cycler==0.10.0
 defusedxml==0.7.1
-Django==3.2.5
+Django==3.2.12
 django-allauth==0.44.0
 django-debug-toolbar==3.2.1
 django-model-utils==4.2.0
