@@ -54,6 +54,10 @@ class TestExperiments(TestCase):
         response = self.client.get('/experiments/')
         self.assertEqual(response.status_code, 200)
         self.assertIn('Experiments', str(response.content))
+
+    def test_experiments_list(self):
+        response = self.client.get('/experiments/getexperimentlist/')
+        self.assertEqual(response.status_code, 200)
         self.assertIn('Test dank color schemes', str(response.content))
         self.assertIn('Chill vibez', str(response.content))
         self.assertNotIn('wunerin bout choo', str(response.content))

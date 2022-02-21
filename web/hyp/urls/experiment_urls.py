@@ -3,7 +3,7 @@ from hyp.views import experiment_views
 
 urlpatterns = [
     path('', experiment_views.index, name='experiments'),
-    path('get/', experiment_views.get, name='get_experiments'),
+    path('getexperimentlist/', experiment_views.get_experiment_list, name='get_experiment_list'),
     path('<int:experiment_id>/', experiment_views.show, name='experiment'),
     path('new/', experiment_views.new, name='new_experiment'),
     path('create/', experiment_views.create, name='create_experiment'),

@@ -17,13 +17,14 @@ def index(request):
         raise PermissionDenied
 
 @login_required
-def get(request):
+def get_experiment_list(request):
     if request.user.has_perm("hyp.view_experiment"):
         experiments = Experiment.objects.filter(
             customer_id=request.user.customer_id
         ).prefetch_related("variant_set").order_by('-created_at')
 
-        return render(request, 'hyp/experiments/components/experiment_list.html', {"experiments": experiments})
+        url = "hyp/experiments/components/experiment_list.html"
+        return render(request, url, {"experiments": experiments})
     else:
         raise PermissionDenied
 
