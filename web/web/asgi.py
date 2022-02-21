@@ -15,7 +15,6 @@ from turbo.consumers import TurboStreamsConsumer
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'web.settings')
 
-#application = get_asgi_application()
 application = ProtocolTypeRouter({
   'http': get_asgi_application(),
   'websocket': TurboStreamsConsumer
