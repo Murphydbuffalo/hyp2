@@ -63,4 +63,10 @@ i {
   color: $tang;
 }
 
+.errorlist {
+  list-style-type: none;
+  margin-top: -0.5em;
+  color: lighten($red, 10%);
+}
+
 /* TODO: use consistent box-sizing style */
