@@ -63,7 +63,7 @@ sqlparse==0.4.2
 stevedore==3.3.0
 tdigest==0.5.2.2
 toml==0.10.2
-typed-ast==1.4.2
+typed-ast==1.5.1
 typing-extensions==3.7.4.3
 urllib3==1.26.7
 whitenoise==5.2.0
