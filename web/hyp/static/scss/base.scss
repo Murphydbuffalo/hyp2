@@ -7,6 +7,10 @@
   font-display: block;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: "Karrik";
   background-color: $black;
