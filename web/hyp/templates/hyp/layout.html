@@ -36,8 +36,11 @@
 {% endblock %}
 </head>
 
+
+{% block body %}
 <body>
   {% if user.is_authenticated %}
+  {% block navigation %}
   <navbar class="navbar">
     <a class="navbar-logoContainer" href={% url "home" %}>
       <div class="shared-logoIcon">
@@ -60,8 +63,10 @@
       <i class="navbar-itemText-isMobile fas fa-user"></i>
     </a>
   </navbar>
+  {% endblock %}
   {% endif %}
 
+  {% block main %}
   <main role="main">
     {% if messages %}
     <ul class="messages">
@@ -74,5 +79,7 @@
     {% block content %}
     {% endblock %}
   </main>
+  {% endblock %}
 </body>
+{% endblock %}
 </html>
