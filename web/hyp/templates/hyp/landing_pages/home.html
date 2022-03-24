@@ -51,6 +51,7 @@
       </ul>
     </div>
 
+    {% if not user.is_authenticated %}
     <form
       action="https://buttondown.email/api/emails/embed-subscribe/hyp"
       method="post"
@@ -62,6 +63,7 @@
       <input class="home-signUpEmailInput" placeholder="Your email address" size="40" type="email" name="email" id="bd-email" />
       <input class="home-signUpSubmitButton" type="submit" value="Sign up for the Alpha" />
     </form>
+    {% endif %}
     <p class="home-footer">Made with ❤️ in Boulder, CO</p>
   </div>
 </body>
