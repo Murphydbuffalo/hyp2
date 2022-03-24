@@ -13,9 +13,16 @@
       </div>
       <h5 class="navbar-logoText">hyp</h5>
     </a>
+
+    {% if user.is_authenticated %}
+    <a href={% url "experiments" %}>
+      <button class="home-signUpSubmitButton">Experiments</button>
+    </a>
+    {% else %}
     <a href="#join-the-alpha">
       <button class="home-signUpSubmitButton">Join the Alpha</button>
     </a>
+    {% endif %}
   </div>
 
   <div class="home-hero">
