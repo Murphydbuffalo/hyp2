@@ -1,27 +1,225 @@
 @import "mixins";
 @import "variables";
 
-.home {
-  @media (max-width: $mobile-width) {
-    @include flexbox-container(column);
+.home-container {
+  overflow-x: clip;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(222deg, #212121 0%, hsl(0, 0%, 2%) 100%) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.home-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 40px;
+  width: -webkit-fill-available;
+}
+
+.home-signUpSubmitButton {
+  padding: 24px;
+  border-radius: 12px;
+  background-color: $purple;
+  font-size: 16px;
+  color: white;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  transition: 0.3s;
+  text-align: center;
+  white-space: normal;
+}
+
+.home-signUpSubmitButton:hover {
+  background-color: #4a14a9;
+}
+
+.home-signUpSubmitButton:focus {
+  background-color: #3c1188;
+}
+
+@media only screen and (max-width: $mobile-width) {
+  .home-header {
+    flex-direction: column;
   }
 
-  @media (min-width: $mobile-width) {
-    @include flexbox-container(row);
+  .home-signUpSubmitButton {
+    display: none;
   }
 }
 
-.home-card {
-  @include card($height: 280px, $width: 280px);
-  @include flexbox-container(column);
-  @include clickable;
+.home-hero {
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  margin: 0;
 }
 
-.home-cardIcon {
-  margin-bottom: 1em;
-  font-size: 2em;
+.home-hero:hover > .home-heroAppUi {
+  transform: skew(0deg, 0deg) scale(1.1);
 }
 
-.home-cardText {
-  font-size: 1.25em;
+.home-heroTitle {
+  font-size: 56px;
+  letter-spacing: -.75px;
+  text-align: center;
+  line-height: 1.2em;
+  color: white;
+  margin: 0;
+  max-width: 640px;
+}
+
+.home-heroDescription {
+  font-size: 18px;
+  letter-spacing: -.5px;
+  text-align: center;
+  line-height: 1.6em;
+  color: #929292;
+  margin: 32px 0 0 0;
+  max-width: 640px;
+}
+
+.home-heroAppUi {
+  display: grid;
+  place-items: center;
+  z-index: -1;
+  margin-top: 5rem;
+  width: 75%;
+  transform: skew(-1.75deg, -.5deg);
+  filter: drop-shadow(0 0 .75rem rgba(255, 142, 56, .90));
+  transition: ease-in-out 1s;
+}
+
+.home-heroMockup {
+  width: 100%;
+  border-radius: 24px;
+}
+
+@media only screen and (max-width: $mobile-width) {
+  .home-heroTitle {
+    font-size: 32px;
+  }
+
+  .home-heroAppUi {
+    width: 90%;
+  }
+}
+
+.home-ellipse {
+  width: 200%;
+  height: 1600px;
+  max-height: 1600px;
+  background: linear-gradient(306deg, #ffbb00 0%, hsl(0, 88%, 68%) 100%);
+  border-radius: 1400px / 500px;
+  margin: -88px;
+  z-index: -1;
+  overflow-x: hidden;
+  padding: 0 0 48px 0;
+}
+
+.home-detailsContainer {
+  display: grid;
+  place-items: center;
+  margin-top: -1900px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.home-listContainer {
+  display: grid;
+  place-items: center;
+  padding: 40px;
+  max-width: 860px;
+}
+
+.home-featureList {
+  display: grid;
+}
+
+.home-featureListItem {
+  font-size: 28px;
+  color: $dark-red;
+  padding-left: 16px;
+  line-height: 1.1em;
+}
+
+.home-featureListDescription {
+  font-size: 18px;
+  color: $dark-red;
+  opacity: .65;
+  margin: 8px 0 32px;
+  padding-left: 16px;
+}
+
+li::marker {
+  content: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='18' width='18'><path d='M17.0421 0.40831C18.0593 1.12201 18.3054 2.5252 17.5917 3.54243L8.12015 17.0423C7.69896 17.6426 7.01165 18 6.27832 18C5.545 18 4.85768 17.6426 4.43649 17.0423L0.408325 11.3011C-0.305382 10.2839 -0.0593457 8.88071 0.957863 8.167C1.97507 7.45328 3.37826 7.69932 4.09196 8.71654L6.27828 11.8326L13.908 0.9579C14.6217 -0.0593297 16.0249 -0.305389 17.0421 0.40831Z' fill='%23552620'/></svg>");
+}
+
+@media only screen and (max-width: $mobile-width) {
+  .home-detailsContainer {
+    margin-top: -1900px;;
+  }
+
+  .home-listContainer {
+    padding: 24px 24px 24px 4px;
+  }
+
+  .home-featureListItem {
+    font-size: 21px;
+  }
+
+  .home-featureListDescription {
+    font-size: 14px;
+  }
+  .home-detailsContainer::after {
+    height: 250%;
+  }
+}
+
+.home-signUpContainer {
+  display: flex;
+  width: fit-content;
+  flex-direction: row;
+  background-color: $dark-red;
+  border-radius: 40px;
+  box-shadow: 0px 8px 24px 8px rgba(0, 0, 0, 0.15);
+  padding: 48px;
+  margin-top: 24px;
+  gap: 16px;
+  transition: 0.25s;
+  z-index: 1;
+  will-change: transform;
+  scroll-margin: 200px;
+}
+
+.home-signUpContainer:hover {
+  box-shadow: 0px 8px 32px 16px rgba(0, 0, 0, 0.25);
+  transform: scale(1.05);
+}
+
+@media only screen and (max-width: $mobile-width) {
+  .home-signUpContainer {
+    flex-direction: column;
+    width: 50vw;
+  }
+}
+
+.home-signUpEmailInput {
+  padding: 24px;
+  border-radius: 12px;
+  border: none;
+  background-color: #ebebeb;
+  font-size: 16px;
+}
+
+.home-footer {
+  width: 100%;
+  text-align: center;
+  margin: 164px 0 40px;
+  color: $dark-red;
 }
