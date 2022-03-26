@@ -94,5 +94,5 @@ jobs:
           ssh-keyscan heroku.com >> ~/.ssh/known_hosts
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null
           ssh-add - <<< "${{ secrets.HEROKU_SSH_PRIVATE_KEY }}"
-          git remote add heroku git@heroku.com:hyyyp.git
+          git remote add heroku https://git@heroku.com:hyyyp.git
           git push heroku main
