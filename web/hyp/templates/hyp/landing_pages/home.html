@@ -29,7 +29,11 @@
     <h1 class="home-heroTitle">Run product experiments at ⚡️lightning speed⚡️</h1>
     <h4 class="home-heroDescription">Forget A/B testing, Hyp continually adjusts traffic during experiments so you don't send customers to underperforming variants. All with a developer friendly API and none of the feature bloat you'll find in other testing tools.</h4>
     <div class="home-heroAppUi">
+      {% if variant == "Animated screenshot" %}
       <img class="home-heroMockup" src="{% static 'images/dashboard.png' %}" alt="Screenshot of the Hyp experiment dashboard."/>
+      {% elif variant == "Demo video" %}
+      <h1>PUT A VIDEO HERE</h1>
+      {% endif %}
     </div>
   </div>
 
