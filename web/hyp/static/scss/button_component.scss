@@ -23,7 +23,7 @@
   color: $white;
 
   &:hover {
-    border: 1px solid transparent;
+    background-color: darken($background-color, 10%);
   }
 
   input {
