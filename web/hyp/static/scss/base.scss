@@ -7,6 +7,10 @@
   font-display: block;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: "Karrik";
   background-color: $black;
@@ -61,6 +65,12 @@ a {
 
 i {
   color: $tang;
+}
+
+.errorlist {
+  list-style-type: none;
+  margin-top: -0.5em;
+  color: lighten($red, 10%);
 }
 
 /* TODO: use consistent box-sizing style */
