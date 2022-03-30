@@ -1,16 +1,70 @@
 {% extends "hyp/layout.html" %}
-{% block content %}
-  <h3>Setting up Hyp</h3>
+{% load static %}
 
-  <div class="home">
-    <a class="home-card" href={% url "experiments" %}>
-      <i class="home-cardIcon fas fa-chart-line"></i>
-      <p class="home-cardText">Check out a demo experiment</p>
+{% block navigation %}
+{% endblock %}
+
+{% block body %}
+<body class="home-container">
+  <div class="home-header">
+    <a class="navbar-logoContainer" href={% url "home" %}>
+      <div class="shared-logoIcon">
+        {% include "hyp-lightning-bolt.svg" %}
+      </div>
+      <h5 class="navbar-logoText">hyp</h5>
     </a>
 
-    <a class="home-card" href={% url "api_keys" %}>
-      <i class="home-cardIcon fas fa-key"></i>
-      <p class="home-cardText">Create an API key</p>
+    {% if user.is_authenticated %}
+    <a href={% url "experiments" %}>
+      <button class="home-signUpSubmitButton">Experiments</button>
     </a>
+    {% else %}
+    <a href="#join-the-alpha">
+      <button class="home-signUpSubmitButton">Join the Alpha</button>
+    </a>
+    {% endif %}
   </div>
+
+  <div class="home-hero">
+    <h1 class="home-heroTitle">Run product experiments at ⚡️lightning speed⚡️</h1>
+    <h4 class="home-heroDescription">Forget A/B testing, Hyp continually adjusts traffic during experiments so you don't send customers to underperforming variants. All with a developer friendly API and none of the feature bloat you'll find in other testing tools.</h4>
+    <div class="home-heroAppUi">
+      <img class="home-heroMockup" src="{% static 'images/dashboard.png' %}" alt="Screenshot of the Hyp experiment dashboard."/>
+    </div>
+  </div>
+
+  <div class="home-ellipse"></div>
+
+  <div class="home-detailsContainer" id="details">
+    <div class="home-listContainer">
+      <ul class="home-featureList">
+        <li class="home-featureListItem">Automatically send more traffic to the variations of your product that work best</li>
+        <p class="home-featureListDescription">Don't waste valuable user sessions on variations that aren't performing well.</p>
+        <li class="home-featureListItem">Transparent pricing that's affordable for startups</li>
+        <p class="home-featureListDescription">Product experimentation doesn't have to break the bank.</p>
+        <li class="home-featureListItem">Leverage the data you actually have</li>
+        <p class="home-featureListDescription">The more data the better, but you don't need a massive amount of traffic to start making informed product decisions.</p>
+        <li class="home-featureListItem">Clear, intuitive explanations of experiment results</li>
+        <p class="home-featureListDescription">No statistics degree required to understand your results.</p>
+        <li class="home-featureListItem">A great developer experience</li>
+        <p class="home-featureListDescription">Thorough documentation, a robust sandbox environment, and a blazing fast API</p>
+      </ul>
+    </div>
+
+    {% if not user.is_authenticated %}
+    <form
+      action="https://buttondown.email/api/emails/embed-subscribe/hyp"
+      method="post"
+      target="popupwindow"
+      onsubmit="window.open('https://buttondown.email/hyp', 'popupwindow')"
+      class="home-signUpContainer"
+      id="join-the-alpha"
+      >
+      <input class="home-signUpEmailInput" placeholder="Your email address" size="40" type="email" name="email" id="bd-email" />
+      <input class="home-signUpSubmitButton" type="submit" value="Sign up for the Alpha" />
+    </form>
+    {% endif %}
+    <p class="home-footer">Made with ❤️ in Boulder, CO</p>
+  </div>
+</body>
 {% endblock %}
