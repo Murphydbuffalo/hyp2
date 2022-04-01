@@ -2,7 +2,7 @@ accumulation-tree==0.6.2
 appdirs==1.4.4
 asgiref==3.5.0
 attrs==21.4.0
-bandit==1.7.0
+bandit==1.7.4
 certifi==2021.10.8
 cffi==1.15.0
 chardet==4.0.0
