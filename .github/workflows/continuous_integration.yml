@@ -89,6 +89,9 @@ jobs:
       - name: push to Heroku
         run: |
           touch ~/.netrc
+          echo "machine api.heroku.com" >> ~/.netrc
+          echo "  login dan_murphy@hey.com" >> ~/.netrc
+          echo "  password ${{ secrets.HEROKU_PASSWORD }}" >> ~/.netrc
           echo "machine git.heroku.com" >> ~/.netrc
           echo "  login dan_murphy@hey.com" >> ~/.netrc
           echo "  password ${{ secrets.HEROKU_PASSWORD }}" >> ~/.netrc
