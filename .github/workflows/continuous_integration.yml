@@ -88,12 +88,12 @@ jobs:
           ref: main
       - name: push to Heroku
         run: |
-          touch ~/.netrc
-          echo "machine api.heroku.com" >> ~/.netrc
-          echo "  login dan_murphy@hey.com" >> ~/.netrc
-          echo "  password ${{ secrets.HEROKU_PASSWORD }}" >> ~/.netrc
-          echo "machine git.heroku.com" >> ~/.netrc
-          echo "  login dan_murphy@hey.com" >> ~/.netrc
-          echo "  password ${{ secrets.HEROKU_PASSWORD }}" >> ~/.netrc
+          touch .netrc
+          echo "machine api.heroku.com" >> .netrc
+          echo "  login dan_murphy@hey.com" >> .netrc
+          echo "  password ${{ secrets.HEROKU_PASSWORD }}" >> .netrc
+          echo "machine git.heroku.com" >> .netrc
+          echo "  login dan_murphy@hey.com" >> .netrc
+          echo "  password ${{ secrets.HEROKU_PASSWORD }}" >> .netrc
           git remote add heroku https://git.heroku.com/hyyyp.git
           git push heroku main
