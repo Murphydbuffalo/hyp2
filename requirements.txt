@@ -51,7 +51,7 @@ Pillow==9.0.1
 psycopg2==2.9.1
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
-pybrake==1.0.5
+pybrake==1.0.6
 pycodestyle==2.8.0
 pycparser==2.20
 pyflakes==2.4.0
