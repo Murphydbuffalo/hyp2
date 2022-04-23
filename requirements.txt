@@ -80,7 +80,7 @@ stevedore==3.3.0
 tdigest==0.5.2.2
 toml==0.10.2
 turbo-django==0.2.5
-Twisted==21.7.0
+Twisted==22.2.0
 txaio==21.2.1
 typed-ast==1.5.2
 typing-extensions==3.7.4.3
