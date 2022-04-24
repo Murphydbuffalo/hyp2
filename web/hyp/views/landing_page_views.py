@@ -2,15 +2,28 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from os import environ
 from hyp_client.v1 import HypClient
+from uuid import uuid4
 
 def index(request):
     hyp = HypClient(environ.get('HYP_API_TOKEN'))
-    user_id = 1
-    experiment_id = 12 # landing page graphic experiment
-    response = hyp.assignment(participant_id=user_id, experiment_id=experiment_id)
-    variant = "Animated screenshot"
+    participant_id = get_participant_id(request)
+    variant = hyp.try_assignment(
+        participant_id=participant_id,
+        experiment_id=12,
+        fallback="Animated screenshot"
+    )
 
-    if response["message"] == "success":
-        variant = response["payload"]["variant_name"]
+    response = render(request, 'hyp/landing_pages/home.html', { "variant": variant })
+    response.set_cookie("hyp_participant_id", participant_id, max_age=31536000)
 
-    return render(request, 'hyp/landing_pages/home.html', { "variant": variant })
+    return response
+
+def get_participant_id(request):
+    cookie_participant_id = request.COOKIES.get("hyp_participant_id")
+
+    if request.user.is_authenticated:
+        return request.user.id
+    elif cookie_participant_id is not None:
+        return cookie_participant_id
+    else:
+        return uuid4().hex
