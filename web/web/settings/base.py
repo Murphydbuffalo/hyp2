@@ -72,6 +72,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
+        'hyp_python_client': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
         "rq.worker": {
             "handlers": ["rq_console"],
             "level": "DEBUG"
