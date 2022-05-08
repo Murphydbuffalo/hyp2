@@ -100,6 +100,17 @@
   border-radius: 24px;
 }
 
+.home-heroVideo {
+  margin-top: 5rem;
+  width: 100%;
+}
+
+.home-heroIframe {
+  width: 50vw;
+  height: 400px;
+  border-radius: 4px;
+}
+
 @media only screen and (max-width: $mobile-width) {
   .home-heroTitle {
     font-size: 32px;

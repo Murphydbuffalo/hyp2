@@ -28,9 +28,16 @@
   <div class="home-hero">
     <h1 class="home-heroTitle">Run product experiments at ⚡️lightning speed⚡️</h1>
     <h4 class="home-heroDescription">Forget A/B testing, Hyp continually adjusts traffic during experiments so you don't send customers to underperforming variants. All with a developer friendly API and none of the feature bloat you'll find in other testing tools.</h4>
+    {% if variant == "Animated screenshot" %}
     <div class="home-heroAppUi">
       <img class="home-heroMockup" src="{% static 'images/dashboard.png' %}" alt="Screenshot of the Hyp experiment dashboard."/>
     </div>
+    {% elif variant == "Demo video" %}
+    <div class="home-heroVideo">
+      <iframe class="home-heroIframe" src="https://www.loom.com/embed/1f6d2ea6a61d478a9f85e55a4a468d69" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen>
+      </iframe>
+    </div>
+    {% endif %}
   </div>
 
   <div class="home-ellipse"></div>
