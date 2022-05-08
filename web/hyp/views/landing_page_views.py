@@ -21,8 +21,9 @@ def index(request):
 def get_participant_id(request):
     cookie_participant_id = request.COOKIES.get("hyp_participant_id")
 
+    # Don't let signed up users participate in an experiment about signing up
     if request.user.is_authenticated:
-        return request.user.id
+        return None
     elif cookie_participant_id is not None:
         return cookie_participant_id
     else:
