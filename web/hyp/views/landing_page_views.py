@@ -6,15 +6,16 @@ from uuid import uuid4
 
 def index(request):
     hyp = HypClient(environ.get('HYP_API_TOKEN'))
+    experiment_id = 12
     participant_id = get_participant_id(request)
     variant = hyp.try_assignment(
         participant_id=participant_id,
-        experiment_id=12,
+        experiment_id=experiment_id,
         fallback="Animated screenshot"
     )
 
     response = render(request, 'hyp/landing_pages/home.html', { "variant": variant })
-    response.set_cookie("hyp_participant_id", participant_id, max_age=31536000)
+    response.set_cookie(f'hyp_experiment_{experiment_id}_participant_id', participant_id, max_age=31536000)
 
     return response
 
