@@ -56,7 +56,7 @@ pybrake==1.0.6
 pycodestyle==2.8.0
 pycparser==2.20
 pyflakes==2.4.0
-PyJWT==2.3.0
+PyJWT==2.5.0
 pyOpenSSL==22.0.0
 pyparsing==2.4.7
 python-dateutil==2.8.1
