@@ -67,7 +67,7 @@ pyudorandom==1.0.0
 PyYAML==5.4.1
 redis==3.5.3
 regex==2022.3.15
-requests==2.25.1
+requests==2.31.0
 requests-oauthlib==1.3.0
 rq==1.10.0
 rq-scheduler==0.11.0
